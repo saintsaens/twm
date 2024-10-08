@@ -1,0 +1,14 @@
+{
+  "name": "ecommerce",
+  "version": "1.0.0",
+  "description": "Portfolio project from Codecademy",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Flavien",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}
