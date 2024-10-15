@@ -3,12 +3,15 @@
   "version": "1.0.0",
   "description": "Portfolio project from Codecademy",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "start": "node app.js"
   },
   "author": "Flavien",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.21.0"
+    "express": "^4.21.0",
+    "pg": "^8.13.0"
   }
 }
