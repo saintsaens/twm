@@ -15,6 +15,18 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 });
 
+app.get('/items', (req, res) => {
+  let filteredItems = [...items];
+  const { type, rarity } = req.query;
+  if (type) {
+    filteredItems = filteredItems.filter(item => item.type === type);
+  }
+  if (rarity) {
+    filteredItems = filteredItems.filter(item => item.rarity === rarity);
+  }
+
+  res.json(filteredItems);
+});
 app.listen(port, () => {
   console.log(`App listening on port ${port}`)
 });
