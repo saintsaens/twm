@@ -27,6 +27,17 @@ app.get('/items', (req, res) => {
 
   res.json(filteredItems);
 });
+
+app.get('/items/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const item = items.find(item => item.id === id);
+  
+  if (item) {
+    res.json(item);
+  } else {
+    res.status(404).send('Item not found');
+  }
+});
 app.listen(port, () => {
   console.log(`App listening on port ${port}`)
 });
