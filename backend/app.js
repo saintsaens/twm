@@ -71,6 +71,25 @@ app.post('/items', async (req, res) => {
   }
 });
 
+app.delete('/items/:id', async (req, res) => {
+  const id = parseInt(req.params.id);
+
+  try {
+    const query = 'DELETE FROM items WHERE id = $1 RETURNING *;';
+    
+    const result = await db.query(query, [id]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).send('Item not found');
+    }
+
+    res.status(204).send();
+  } catch (error) {
+    console.error('Error deleting item:', error);
+    res.status(500).json({ error: 'Failed to delete item' });
+  }
+});
+
 app.listen(port, () => {
   console.log(`App listening on port ${port}`)
 });
