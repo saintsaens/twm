@@ -10,15 +10,6 @@ pool.connect((err, client, release) => {
       return console.error('Error acquiring client', err.stack);
     }
     console.log('Connected to PostgreSQL database successfully!');
-  
-    // Run a test query
-    client.query('SELECT NOW()', (err, result) => {
-      release();
-      if (err) {
-        return console.error('Error executing query', err.stack);
-      }
-      console.log('Test query result:', result.rows[0]);
-    });
   });
  
 export const query = (text, params, callback) => {
