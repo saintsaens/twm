@@ -1,31 +1,36 @@
 import express from 'express';
+import * as db from './db/index.js'
 const app = express()
 const port = 3001
 
 // Middleware to parse JSON request bodies
 app.use(express.json());
 
-// Mock data
-let items = [
-  { id: 1, name: 'Sword of Power', type: 'weapon', rarity: 'legendary', price: 1000 },
-  { id: 2, name: 'Shield of Valor', type: 'armor', rarity: 'epic', price: 800 },
-];
-
 app.get('/', (req, res) => {
   res.send('Hello World!')
 });
 
-app.get('/items', (req, res) => {
-  let filteredItems = [...items];
-  const { type, rarity } = req.query;
-  if (type) {
-    filteredItems = filteredItems.filter(item => item.type === type);
-  }
-  if (rarity) {
-    filteredItems = filteredItems.filter(item => item.rarity === rarity);
-  }
+app.get('/items', async (req, res, next) => {
+  try {
+    let query = 'SELECT * FROM items WHERE TRUE'; // TRUE allows for dynamic AND conditions
+    const params = [];
+    let index = 1;
 
-  res.json(filteredItems);
+    if (req.query.type) {
+      query += ` AND type::text ILIKE $${index++}`;
+      params.push(req.query.type);
+    }
+
+    if (req.query.rarity) {
+      query += ` AND rarity::text ILIKE $${index++}`;
+      params.push(req.query.rarity);
+    }
+
+    const result = await db.query(query, params);
+    res.send(result.rows);
+  } catch (error) {
+    next(error);
+  }
 });
 
 app.get('/items/:id', (req, res) => {
