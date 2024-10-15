@@ -71,6 +71,45 @@ app.post('/items', async (req, res) => {
   }
 });
 
+app.put('/items/:id', async (req, res) => {
+  const id = parseInt(req.params.id);
+  const { name, type, rarity, price } = req.body;
+
+  if (!name && !type && !rarity && !price) {
+    return res.status(400).json({ error: 'No fields to update' });
+  }
+
+  try {
+    const query = `
+      UPDATE items
+      SET 
+        name = COALESCE($1, name),
+        type = COALESCE($2::item_type, type),
+        rarity = COALESCE($3::rarity_type, rarity),
+        price = COALESCE($4::money, price)
+      WHERE id = $5
+      RETURNING *;`;
+
+    const result = await db.query(query, [
+      name || null,
+      type || null,
+      rarity || null,
+      price || null,
+      id
+    ]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).send('Item not found');
+    }
+
+    res.json(result.rows[0]); // Return the updated item
+  } catch (error) {
+    console.error('Error updating item:', error);
+    res.status(500).json({ error: 'Failed to update item' });
+  }
+});
+
+
 app.delete('/items/:id', async (req, res) => {
   const id = parseInt(req.params.id);
 
