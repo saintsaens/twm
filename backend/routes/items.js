@@ -44,7 +44,6 @@ router.get('/:id', async (req, res) => {
     }
   });
   
-  
   router.post('/', async (req, res) => {
     try {
       const newItem = req.body;
@@ -109,7 +108,6 @@ router.get('/:id', async (req, res) => {
       res.status(500).json({ error: 'Failed to update item' });
     }
   });
-  
   
   router.delete('/:id', async (req, res) => {
     const id = parseInt(req.params.id);
