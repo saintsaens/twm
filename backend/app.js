@@ -43,6 +43,34 @@ app.get('/items/:id', (req, res) => {
     res.status(404).send('Item not found');
   }
 });
+
+app.post('/items', async (req, res) => {
+  try {
+    const newItem = req.body;
+
+    if (!newItem.name || !newItem.type || !newItem.rarity || !newItem.price) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    const query = `
+      INSERT INTO items (name, type, rarity, price)
+      VALUES ($1, $2::item_type, $3::rarity_type, $4::money)
+      RETURNING *;`;
+
+    const result = await db.query(query, [
+      newItem.name,
+      newItem.type,
+      newItem.rarity,
+      newItem.price
+    ]);
+
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error inserting item:', error);
+    res.status(500).json({ error: 'Failed to insert item' });
+  }
+});
+
 app.listen(port, () => {
   console.log(`App listening on port ${port}`)
 });
