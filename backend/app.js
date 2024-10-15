@@ -2,6 +2,9 @@ import express from 'express';
 const app = express()
 const port = 3001
 
+// Middleware to parse JSON request bodies
+app.use(express.json());
+
 // Mock data
 let items = [
   { id: 1, name: 'Sword of Power', type: 'weapon', rarity: 'legendary', price: 1000 },
