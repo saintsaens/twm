@@ -1,5 +1,6 @@
 import express from "express";
 import mountRoutes from "./routes/index.js";
+import passport from "passport";
 const app = express();
 const port = 3001;
 
