@@ -29,6 +29,18 @@ passport.use(new LocalStrategy(async function verify(username, password, cb) {
   }
 }));
 
+passport.serializeUser(function(user, cb) {
+  process.nextTick(function() {
+    cb(null, { id: user.id, username: user.username });
+  });
+});
+
+passport.deserializeUser(function(user, cb) {
+  process.nextTick(function() {
+    return cb(null, user);
+  });
+});
+
 router.post('/login/password', passport.authenticate('local', {
   successRedirect: '/',
   failureRedirect: '/login'
