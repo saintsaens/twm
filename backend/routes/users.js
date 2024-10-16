@@ -1,8 +1,8 @@
-import express from 'express';
+import Router from "express-promise-router";
 import * as db from '../db/index.js';
 import bcrypt from 'bcrypt';
 
-const router = express.Router();
+const router = new Router();
 const saltRounds = 10; 
 
 // Create a new user

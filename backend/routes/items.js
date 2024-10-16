@@ -1,7 +1,7 @@
-import express from 'express';
+import Router from "express-promise-router";
 import * as db from '../db/index.js'
 
-const router = express.Router();
+const router = new Router();
 
 router.get('/', async (req, res, next) => {
     try {

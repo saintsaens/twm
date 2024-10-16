@@ -1,7 +1,7 @@
-import express from 'express';
+import Router from "express-promise-router";
 import * as db from '../db/index.js';
 
-const router = express.Router();
+const router = new Router();
 
 // Create a new seller
 router.post('/', async (req, res) => {

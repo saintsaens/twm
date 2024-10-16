@@ -1,7 +1,7 @@
-import express from 'express';
-import * as db from '../db/index.js'; // Adjust the path according to your project structure
+import Router from "express-promise-router";
+import * as db from '../db/index.js'; 
 
-const router = express.Router();
+const router = new Router();
 
 // Create a new order
 router.post('/', async (req, res) => {
