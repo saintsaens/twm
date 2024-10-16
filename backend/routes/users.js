@@ -5,30 +5,6 @@ import bcrypt from 'bcrypt';
 const router = new Router();
 const saltRounds = 10; 
 
-// Create a new user
-router.post('/', async (req, res) => {
-  const { username, email, password } = req.body;
-
-  if (!username || !email || !password) {
-    return res.status(400).json({ error: 'Missing required fields' });
-  }
-
-  try {
-    const hashedPw = await bcrypt.hash(password, saltRounds);
-
-    const query = `
-      INSERT INTO users (username, email, hashed_pw)
-      VALUES ($1, $2, $3)
-      RETURNING *;`;
-
-    const result = await db.query(query, [username, email, hashedPw]);
-    res.status(201).json(result.rows[0]);
-  } catch (error) {
-    console.error('Error creating user:', error);
-    res.status(500).json({ error: 'Failed to create user' });
-  }
-});
-
 // Get all users
 router.get('/', async (req, res) => {
   try {
