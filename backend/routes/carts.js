@@ -64,21 +64,17 @@ router.get('/:id', async (req, res) => {
 // Update a cart
 router.put('/:id', async (req, res) => {
   const id = parseInt(req.params.id);
-  const { total_price } = req.body;
 
   try {
     const query = `
       UPDATE carts
       SET 
-        total_price = COALESCE($1, total_price)
-      WHERE id = $2
+        updated_at = CURRENT_TIMESTAMP
+      WHERE id = $1
       RETURNING *;
     `;
 
-    const result = await db.query(query, [
-      total_price || null,
-      id
-    ]);
+    const result = await db.query(query, [id]);
 
     if (result.rowCount === 0) {
       return res.status(404).json({ error: 'Cart not found' });
