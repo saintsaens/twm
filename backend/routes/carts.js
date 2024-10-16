@@ -5,7 +5,7 @@ const router = new Router();
 
 // Create a new cart
 router.post('/', async (req, res) => {
-  const { user_id } = req.body;
+  const { user_id, created_at, updated_at } = req.body;
 
   // Check for required fields
   if (!user_id) {
@@ -19,13 +19,12 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'Invalid user_id' });
     }
 
-    // Insert the cart with a default total price of 0.00
     const query = `
-      INSERT INTO carts (user_id, total_price)
-      VALUES ($1, 0.00)  -- Initialize total_price to 0.00
+      INSERT INTO carts (user_id, created_at, updated_at)
+      VALUES ($1, $2, $3)
       RETURNING *;
     `;
-    const result = await db.query(query, [user_id]);
+    const result = await db.query(query, [user_id, created_at, updated_at]);
 
     res.status(201).json(result.rows[0]);
   } catch (error) {
