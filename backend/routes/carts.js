@@ -63,24 +63,58 @@ router.get('/:id', async (req, res) => {
 
 // Update a cart
 router.put('/:id', async (req, res) => {
-  const id = parseInt(req.params.id);
+  const cart_id = parseInt(req.params.id);
+  const { items } = req.body;
 
   try {
-    const query = `
+    // First, update the cart's updated_at timestamp
+    const updateCartQuery = `
       UPDATE carts
-      SET 
-        updated_at = CURRENT_TIMESTAMP
+      SET updated_at = CURRENT_TIMESTAMP
       WHERE id = $1
       RETURNING *;
     `;
+    const cartResult = await db.query(updateCartQuery, [cart_id]);
 
-    const result = await db.query(query, [id]);
-
-    if (result.rowCount === 0) {
+    if (cartResult.rowCount === 0) {
       return res.status(404).json({ error: 'Cart not found' });
     }
 
-    res.json(result.rows[0]);
+    // Handle adding/updating/removing items in carts_items table
+    for (const item of items) {
+      const { item_id, quantity } = item;
+
+      if (quantity === 0) {
+        // Remove item from cart if quantity is 0
+        await db.query(`
+          DELETE FROM carts_items
+          WHERE cart_id = $1 AND item_id = $2;
+        `, [cart_id, item_id]);
+      } else {
+        // Check if the item is already in the cart
+        const itemExistsResult = await db.query(`
+          SELECT * FROM carts_items WHERE cart_id = $1 AND item_id = $2;
+        `, [cart_id, item_id]);
+
+        if (itemExistsResult.rowCount > 0) {
+          // Update the quantity if the item already exists in the cart
+          await db.query(`
+            UPDATE carts_items
+            SET quantity = $1
+            WHERE cart_id = $2 AND item_id = $3;
+          `, [quantity, cart_id, item_id]);
+        } else {
+          // Insert the item into the cart if it's not there
+          await db.query(`
+            INSERT INTO carts_items (cart_id, item_id, quantity)
+            VALUES ($1, $2, $3);
+          `, [cart_id, item_id, quantity]);
+        }
+      }
+    }
+
+    // Return the updated cart
+    res.json(cartResult.rows[0]);
   } catch (error) {
     console.error('Error updating cart:', error);
     res.status(500).json({ error: 'Failed to update cart' });
