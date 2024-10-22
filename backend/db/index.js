@@ -1,8 +1,11 @@
 import pg from 'pg'
 const { Pool } = pg
 
+import dotenv from "dotenv";
+dotenv.config();
+
 const pool = new Pool({
-  database: 'witcher-ecommerce'
+  database: process.env.DATABASE
 });
 
 pool.connect((err, client, release) => {
