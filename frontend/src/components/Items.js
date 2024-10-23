@@ -6,7 +6,7 @@ function Items() {
   const [filter, setFilter] = useState('All');
 
   useEffect(() => {
-    fetch('/items/')
+    fetch('/api/items/')
       .then((response) => response.json())
       .then((data) => setItems(data))
       .catch((error) => console.error('Error fetching items:', error));
