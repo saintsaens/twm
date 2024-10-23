@@ -42,10 +42,19 @@ passport.deserializeUser(function(user, cb) {
   });
 });
 
-router.post('/login/password', passport.authenticate('local', {
-  successRedirect: '/',
-  failureRedirect: '/login'
-}));
+router.post('/login/password', (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) return next(err);
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+    req.logIn(user, (err) => {
+      if (err) return next(err);
+      return res.json({ message: 'Login successful', user });
+    });
+  })(req, res, next);
+});
+
 
 router.post('/logout', function(req, res, next) {
   req.logout(function(err) {
