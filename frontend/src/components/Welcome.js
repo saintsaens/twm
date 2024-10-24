@@ -23,7 +23,7 @@ function Welcome() {
 
   return (
     <div className="welcome">
-      {username ? <p>Welcome, {username}!</p> : <p>Please log in</p>}
+      {username ? <p>Welcome, {username}!</p> : <p>Not logged in</p>}
     </div>
   );
 }
