@@ -22,6 +22,9 @@ if (process.env.NODE_ENV !== 'production') {
 
 const PgSession = connectPgSimple(session);
 app.use(session({
+  store: new PgSession({
+    conString: process.env.DATABASE_URL,
+  }),
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
