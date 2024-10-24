@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
-import './Signup.css';  // Import the CSS file
+import '../styles/Signup.css';  // Import the CSS file
 
 function Signup() {
   const [username, setUsername] = useState('');
