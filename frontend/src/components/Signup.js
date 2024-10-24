@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
+import './Signup.css';  // Import the CSS file
 
 function Signup() {
   const [username, setUsername] = useState('');
@@ -39,10 +40,10 @@ function Signup() {
   };
 
   return (
-    <div>
-      <h2>Sign Up</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
+    <div className="signup-container">
+      <h2 className="signup-title">Sign Up</h2>
+      <form className="signup-form" onSubmit={handleSubmit}>
+        <div className="form-group">
           <label htmlFor="username">Username:</label>
           <input
             type="text"
@@ -52,7 +53,7 @@ function Signup() {
             required
           />
         </div>
-        <div>
+        <div className="form-group">
           <label htmlFor="email">Email:</label>
           <input
             type="email"
@@ -62,7 +63,7 @@ function Signup() {
             required
           />
         </div>
-        <div>
+        <div className="form-group">
           <label htmlFor="password">Password:</label>
           <input
             type="password"
@@ -72,13 +73,13 @@ function Signup() {
             required
           />
         </div>
-        <button type="submit">Create Account</button>
+        <button type="submit" className="signup-button">Create Account</button>
       </form>
-      <p>
+      <p className="signin-link">
         Already have an account? <Link to="/signin">Sign in here</Link>.
       </p>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
+      {error && <p className="error-message">{error}</p>}
+      {successMessage && <p className="success-message">{successMessage}</p>}
     </div>
   );
 }

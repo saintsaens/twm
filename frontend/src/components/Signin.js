@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import './Signin.css'; // Import the CSS file
 
 function Signin() {
   const [formData, setFormData] = useState({ username: '', password: '' });
@@ -39,10 +40,10 @@ function Signin() {
   };
 
   return (
-    <div>
-      <h2>Sign In</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
+    <div className="signin-container">
+      <h2 className="signin-title">Sign In</h2>
+      <form className="signin-form" onSubmit={handleSubmit}>
+        <div className="form-group">
           <label htmlFor="username">Username:</label>
           <input
             type="text"
@@ -52,7 +53,7 @@ function Signin() {
             required
           />
         </div>
-        <div>
+        <div className="form-group">
           <label htmlFor="password">Password:</label>
           <input
             type="password"
@@ -62,9 +63,12 @@ function Signin() {
             required
           />
         </div>
-        <button type="submit">Sign In</button>
+        <button type="submit" className="signin-button">Sign In</button>
       </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <p className="signup-link">
+        No account? <Link to="/signup">Sign up here</Link>.
+      </p>
+      {error && <p className="error-message">{error}</p>}
     </div>
   );
 }
