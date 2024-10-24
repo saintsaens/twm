@@ -6,6 +6,7 @@ import Signup from './components/Signup';
 import Signin from './components/Signin';
 import Logout from './components/Logout';
 import Navigation from './components/Navigation';
+import Welcome from "./components/Welcome";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Router>
         <header>
           <h1>The Witcher Marketplace</h1>
+          <Welcome />
         </header>
         <nav>
           <Navigation />
