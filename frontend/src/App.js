@@ -13,8 +13,10 @@ function App() {
       <Router>
         <header>
           <h1>The Witcher Marketplace</h1>
-          <Navigation />
         </header>
+        <nav>
+          <Navigation />
+        </nav>
         <main>
           <Routes>
             <Route path="/" element={<Items />} />
