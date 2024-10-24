@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router, Link } from "react-router-dom";
 import './App.css';
 
 import Navigation from './components/Navigation';
@@ -11,7 +11,9 @@ function App() {
     <div className="app-container">
       <Router>
         <header>
-          <h1>The Witcher Marketplace</h1>
+          <h1>
+            <Link to="/" className="header-link">The Witcher Marketplace</Link>
+          </h1>
           <Welcome />
         </header>
         <nav>

@@ -52,3 +52,8 @@ h1 {
 .nav-link:hover {
   color: #4CAF50;
 }
+
+.header-link {
+  text-decoration: none; /* Remove underline */
+  color: white; /* Set text color */
+}
