@@ -55,11 +55,10 @@ router.post('/login/password', (req, res, next) => {
   })(req, res, next);
 });
 
-
-router.post('/logout', function(req, res, next) {
-  req.logout(function(err) {
-    if (err) { return next(err); }
-    res.redirect('/');
+router.post('/logout', (req, res) => {
+  req.logout((err) => {
+    if (err) return res.status(500).json({ message: 'Logout failed' });
+    res.json({ message: 'Logout successful' });
   });
 });
 
