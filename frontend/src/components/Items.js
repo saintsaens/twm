@@ -23,7 +23,6 @@ function Items() {
 
   return (
     <div className="items-container">
-      <h2>Items</h2>
       
       {/* Dropdown for filtering */}
       <div className="filter-container">
