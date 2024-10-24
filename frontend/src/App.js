@@ -1,9 +1,11 @@
 import './App.css';
 import React from "react";
-import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Items from './components/Items';
 import Signup from './components/Signup';
 import Signin from './components/Signin';
+import Logout from './components/Logout';
+import Navigation from './components/Navigation';
 
 function App() {
   return (
@@ -18,28 +20,11 @@ function App() {
             <Route path="/" element={<Items />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/signin" element={<Signin />} />
+            <Route path="/logout" element={<Logout />} />
           </Routes>
         </main>
       </Router>
     </div>
-  );
-}
-
-function Navigation() {
-  return (
-    <nav className="navigation">
-      <ul>
-        <li>
-          <Link to="/" className="nav-link">Items</Link>
-        </li>
-        <li>
-          <Link to="/signup" className="nav-link">Sign up</Link>
-        </li>
-        <li>
-          <Link to="/signin" className="nav-link">Sign in</Link>
-        </li>
-      </ul>
-    </nav>
   );
 }
 
