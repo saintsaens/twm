@@ -1,32 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux'
+import { decrement, increment, fetchItems, setFilter } from '../store/features/itemsSlice'
+import '../styles/Items.css';
 
 function Items() {
-  const [items, setItems] = useState([]);
-  const [filter, setFilter] = useState('All');
+  const dispatch = useDispatch();
+  const { items, filter } = useSelector((state) => state.items);
 
   useEffect(() => {
-    fetch('/api/items/')
-      .then((response) => response.json())
-      .then((data) => setItems(data))
-      .catch((error) => console.error('Error fetching items:', error));
-  }, []);
+    dispatch(fetchItems());
+  }, [dispatch]);
 
   const handleFilterChange = (event) => {
-    setFilter(event.target.value);
+    dispatch(setFilter(event.target.value));
+  };
+
+  const addOne = (itemId) => {
+    dispatch(increment({ itemId }));
+  };
+
+  const removeOne = (itemId) => {
+    dispatch(decrement({ itemId }));
   };
 
   const filteredItems = items.filter(item => {
     if (filter === 'All') return true;
     return item.rarity === filter;
   });
-
-  const handleQuantityChange = (itemId, change) => {
-    setItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === itemId ? { ...item, quantity: Math.max(0, (item.quantity || 0) + change) } : item
-      )
-    );
-  };
 
   return (
     <div className="items-container">
@@ -57,9 +57,9 @@ function Items() {
                 <div className="name-quantity-container">
                   <span className="item-name">{item.name}</span>
                   <div className="quantity-button">
-                    <button onClick={() => handleQuantityChange(item.id, -1)}>-</button>
+                    <button onClick={() => removeOne(item.id)}>-</button>
                     <span>{item.quantity || 0}</span>
-                    <button onClick={() => handleQuantityChange(item.id, 1)}>+</button>
+                    <button onClick={() => addOne(item.id)}>+</button>
                   </div>
                 </div>
               </td>
