@@ -60,3 +60,22 @@
     color: white;
   }
   
+  .quantity-button {
+    display: flex; /* Flexbox for buttons and quantity */
+    align-items: center; /* Center buttons and quantity vertically */
+  }
+  
+  .quantity-button button {
+    margin: 0 5px; /* Add some spacing between buttons */
+  }
+  
+  .name-quantity-container {
+    display: flex; /* Use flexbox to align items horizontally */
+    align-items: center; /* Center items vertically */
+    justify-content: space-between; /* Distribute space between name and quantity button */
+  }
+  
+  .item-name {
+    margin-right: 10px; /* Add space between name and buttons */
+  }
+  
