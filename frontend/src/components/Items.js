@@ -48,6 +48,7 @@ function Items() {
             <th>Name</th>
             <th>Type</th>
             <th>Rarity</th>
+            <th>Price</th>
           </tr>
         </thead>
         <tbody>
@@ -65,6 +66,7 @@ function Items() {
               </td>
               <td>{item.type}</td>
               <td>{item.rarity}</td>
+              <td>{item.price}</td>
             </tr>
           ))}
         </tbody>
