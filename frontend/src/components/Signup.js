@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from "react-router-dom";
 
 function Signup() {
   const [username, setUsername] = useState('');
@@ -73,6 +74,9 @@ function Signup() {
         </div>
         <button type="submit">Create Account</button>
       </form>
+      <p>
+        Already have an account? <Link to="/signin">Sign in here</Link>.
+      </p>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
     </div>
