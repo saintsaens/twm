@@ -42,6 +42,14 @@ passport.deserializeUser(function(user, cb) {
   });
 });
 
+router.get('/user/profile', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.json({ username: req.user.username });
+  } else {
+    res.status(401).json({ error: 'Not authenticated' });
+  }
+});
+
 router.post('/login/password', (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
     if (err) return next(err);
