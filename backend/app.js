@@ -8,10 +8,11 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 dotenv.config();
 
-const app = express();
 const port = process.env.PORT;
 
-// Middleware to parse JSON request bodies
+const app = express();
+
+// Parse JSON request bodies
 app.use(express.json());
 
 // Log stuff
