@@ -33,10 +33,7 @@ function Items() {
 
   const totalPrice = filteredItems.reduce((acc, item) => {
     const itemPrice = parseMoney(item.price);
-    const itemQuantity = Number(item.quantity) || 0; // Convert to number
-
-    console.log('Item Price:', itemPrice, 'Item Quantity:', itemQuantity); // Log for debugging
-
+    const itemQuantity = Number(item.quantity) || 0;
     return acc + itemPrice * itemQuantity;
   }, 0);
 
