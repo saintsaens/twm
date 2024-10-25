@@ -38,6 +38,10 @@ export const itemsSlice = createSlice({
                 item.quantity = Math.max(0, (item.quantity || 0) - 1); // Prevent negative quantities
             }
         },
+        clearSelection(state) {
+            state.items.forEach(item => item.quantity = 0);
+            state.totalPrice = 0;
+        },        
     },
     extraReducers: (builder) => {
         builder
@@ -55,6 +59,6 @@ export const itemsSlice = createSlice({
     }
 })
 
-export const { setRarityFilter, setTypeFilter, increment, decrement } = itemsSlice.actions
+export const { setRarityFilter, setTypeFilter, increment, decrement, clearSelection } = itemsSlice.actions
 
 export default itemsSlice.reducer

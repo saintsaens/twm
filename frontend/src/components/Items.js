@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { decrement, increment, fetchItems, setRarityFilter, setTypeFilter } from '../store/features/itemsSlice';
+import { decrement, increment, fetchItems, setRarityFilter, setTypeFilter, clearSelection } from '../store/features/itemsSlice';
+import { addItems } from "../store/features/cartSlice";
 import '../styles/Items.css';
 import { parseMoney, formatCurrency } from "../utils/money";
 
@@ -24,7 +25,7 @@ function Items() {
     dispatch(action === 'increment' ? increment({ itemId }) : decrement({ itemId }));
   };
 
-  const filteredItems = items.filter(item => 
+  const filteredItems = items.filter(item =>
     (rarityFilter === 'All' || item.rarity === rarityFilter) &&
     (typeFilter === 'All' || item.type === typeFilter)
   );
@@ -87,8 +88,16 @@ function Items() {
             <td colSpan="3" style={{ textAlign: 'right', fontWeight: 'bold' }}>Total Price:</td>
             <td>{formatCurrency(totalPrice)}</td>
           </tr>
+          <tr>
+          </tr>
         </tfoot>
       </table>
+      <button onClick={() => {
+        dispatch(addItems({items, totalPrice}));
+        dispatch(clearSelection());
+      }}>
+        Add to cart
+      </button>
     </div>
   );
 }
