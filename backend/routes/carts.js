@@ -81,14 +81,14 @@ router.put('/:userId', async (req, res) => {
 
 
 // Delete a cart
-router.delete('/:id', async (req, res) => {
-  const id = parseInt(req.params.id);
+router.delete('/:userId', async (req, res) => {
+  const id = parseInt(req.params.userId);
 
   try {
-    const result = await db.query('DELETE FROM carts WHERE id = $1 RETURNING *;', [id]);
+    const result = await db.query('DELETE FROM users_items WHERE user_id = $1 RETURNING *;', [id]);
 
     if (result.rowCount === 0) {
-      return res.status(404).json({ error: 'Cart not found' });
+      return res.status(404).json({ error: 'Cart not found or was already empty' });
     }
 
     res.status(204).send();
@@ -97,6 +97,7 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ error: 'Failed to delete cart' });
   }
 });
+
 
 // Checkout
 router.post("/:id/checkout", async (req, res) => {
