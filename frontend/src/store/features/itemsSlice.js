@@ -14,13 +14,17 @@ export const itemsSlice = createSlice({
     name: 'items',
     initialState: {
         items: [],
-        filter: "All",
+        rarityFilter: "All",
+        typeFilter: "All",
         status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
         error: null
     },
     reducers: {
-        setFilter: (state, action) => {
-            state.filter = action.payload;
+        setTypeFilter: (state, action) => {
+            state.typeFilter = action.payload;
+        },
+        setRarityFilter: (state, action) => {
+            state.rarityFilter = action.payload;
         },
         increment: (state, action) => {
             const item = state.items.find(item => item.id === action.payload.itemId);
@@ -51,6 +55,6 @@ export const itemsSlice = createSlice({
     }
 })
 
-export const { setFilter, increment, decrement } = itemsSlice.actions
+export const { setRarityFilter, setTypeFilter, increment, decrement } = itemsSlice.actions
 
 export default itemsSlice.reducer

@@ -1,26 +1,31 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { decrement, increment, fetchItems, setFilter } from '../store/features/itemsSlice';
+import { decrement, increment, fetchItems, setRarityFilter, setTypeFilter } from '../store/features/itemsSlice';
 import '../styles/Items.css';
 
 function Items() {
   const dispatch = useDispatch();
-  const { items, filter } = useSelector((state) => state.items);
+  const { items, rarityFilter, typeFilter } = useSelector((state) => state.items);
 
   useEffect(() => {
     dispatch(fetchItems());
   }, [dispatch]);
 
-  const handleFilterChange = (event) => {
-    dispatch(setFilter(event.target.value));
+  const handleRarityChange = (event) => {
+    dispatch(setRarityFilter(event.target.value));
+  };
+
+  const handleTypeChange = (event) => {
+    dispatch(setTypeFilter(event.target.value));
   };
 
   const updateQuantity = (itemId, action) => {
     dispatch(action === 'increment' ? increment({ itemId }) : decrement({ itemId }));
   };
 
-  const filteredItems = items.filter(item =>
-    filter === 'All' || item.rarity === filter
+  const filteredItems = items.filter(item => 
+    (rarityFilter === 'All' || item.rarity === rarityFilter) &&
+    (typeFilter === 'All' || item.type === typeFilter)
   );
 
   function parseMoney(moneyString) {
@@ -37,16 +42,22 @@ function Items() {
     return acc + itemPrice * itemQuantity;
   }, 0);
 
-
   return (
     <div className="items-container">
       <div className="filter-container">
         <label htmlFor="rarity-filter">Filter by rarity: </label>
-        <select id="rarity-filter" value={filter} onChange={handleFilterChange}>
+        <select id="rarity-filter" value={rarityFilter} onChange={handleRarityChange}>
           <option value="All">All</option>
           <option value="Common">Common</option>
           <option value="Rare">Rare</option>
           <option value="Legendary">Legendary</option>
+        </select>
+
+        <label htmlFor="type-filter">Filter by type: </label>
+        <select id="type-filter" value={typeFilter} onChange={handleTypeChange}>
+          <option value="All">All</option>
+          <option value="Weapon">Weapon</option>
+          <option value="Potion">Potion</option>
         </select>
       </div>
 
