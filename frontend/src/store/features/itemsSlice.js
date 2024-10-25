@@ -15,6 +15,8 @@ export const itemsSlice = createSlice({
     initialState: {
         items: [],
         filter: "All",
+        status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+        error: null
     },
     reducers: {
         setFilter: (state, action) => {
@@ -35,16 +37,20 @@ export const itemsSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(fetchItems.pending, (state) => {
+                state.status = 'loading';
+            })
             .addCase(fetchItems.fulfilled, (state, action) => {
+                state.status = 'succeeded';
                 state.items = action.payload;
             })
             .addCase(fetchItems.rejected, (state, action) => {
-                console.error('Fetch items failed:', action.error.message);
+                state.status = 'failed';
+                state.error = action.error.message;
             });
-    },
+    }
 })
 
-// Action creators are generated for each case reducer function
 export const { setFilter, increment, decrement } = itemsSlice.actions
 
 export default itemsSlice.reducer
