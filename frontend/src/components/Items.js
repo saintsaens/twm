@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux'
-import { decrement, increment, fetchItems, setFilter } from '../store/features/itemsSlice'
+import { useSelector, useDispatch } from 'react-redux';
+import { decrement, increment, fetchItems, setFilter } from '../store/features/itemsSlice';
 import '../styles/Items.css';
 
 function Items() {
@@ -15,22 +15,17 @@ function Items() {
     dispatch(setFilter(event.target.value));
   };
 
-  const addOne = (itemId) => {
-    dispatch(increment({ itemId }));
+  const updateQuantity = (itemId, action) => {
+    dispatch(action === 'increment' ? increment({ itemId }) : decrement({ itemId }));
   };
 
-  const removeOne = (itemId) => {
-    dispatch(decrement({ itemId }));
-  };
+  const filteredItems = items.filter(item =>
+    filter === 'All' || item.rarity === filter
+  );
 
-  const filteredItems = items.filter(item => {
-    if (filter === 'All') return true;
-    return item.rarity === filter;
-  });
 
   return (
     <div className="items-container">
-      {/* Dropdown for filtering */}
       <div className="filter-container">
         <label htmlFor="rarity-filter">Filter by rarity: </label>
         <select id="rarity-filter" value={filter} onChange={handleFilterChange}>
@@ -51,21 +46,21 @@ function Items() {
           </tr>
         </thead>
         <tbody>
-          {filteredItems.map((item) => (
-            <tr key={item.id}>
+          {filteredItems.map(({ id, name, type, rarity, price, quantity = 0 }) => (
+            <tr key={id}>
               <td>
                 <div className="name-quantity-container">
-                  <span className="item-name">{item.name}</span>
+                  <span className="item-name">{name}</span>
                   <div className="quantity-button">
-                    <button onClick={() => removeOne(item.id)}>-</button>
-                    <span>{item.quantity || 0}</span>
-                    <button onClick={() => addOne(item.id)}>+</button>
+                    <button onClick={() => updateQuantity(id, 'decrement')}>-</button>
+                    <span>{quantity}</span>
+                    <button onClick={() => updateQuantity(id, 'increment')}>+</button>
                   </div>
                 </div>
               </td>
-              <td>{item.type}</td>
-              <td>{item.rarity}</td>
-              <td>{item.price}</td>
+              <td>{type}</td>
+              <td>{rarity}</td>
+              <td>{price}</td>
             </tr>
           ))}
         </tbody>
