@@ -35,9 +35,9 @@ router.get('/:id', async (req, res) => {
 // Update a user
 router.put('/:id', async (req, res) => {
   const id = parseInt(req.params.id);
-  const { username, email, password } = req.body;
+  const { username, password } = req.body;
 
-  if (!username && !email && !password) {
+  if (!username && !password) {
     return res.status(400).json({ error: 'No fields to update' });
   }
 
@@ -48,14 +48,12 @@ router.put('/:id', async (req, res) => {
       UPDATE users
       SET 
         username = COALESCE($1, username),
-        email = COALESCE($2, email),
         hashed_pw = COALESCE($3, hashed_pw)
       WHERE id = $4
       RETURNING *;`;
 
     const result = await db.query(query, [
       username || null,
-      email || null,
       hashedPw || null,
       id
     ]);

@@ -71,10 +71,10 @@ router.post('/logout', (req, res) => {
 });
 
 router.post('/signup', async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, password } = req.body;
 
   // Validate input
-  if (!username || !email || !password) {
+  if (!username || !password) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
@@ -84,17 +84,16 @@ router.post('/signup', async (req, res) => {
 
     // Insert user into the database
     const query = `
-      INSERT INTO users (username, email, hashed_pw)
-      VALUES ($1, $2, $3)
+      INSERT INTO users (username, hashed_pw)
+      VALUES ($1, $2)
       RETURNING *;
     `;
-    const result = await db.query(query, [username, email, hashedPw]);
+    const result = await db.query(query, [username, hashedPw]);
 
     // Extract the created user
     const user = {
       id: result.rows[0].id,
       username: result.rows[0].username,
-      email: result.rows[0].email
     };
 
     // Log the user in immediately after signup
@@ -107,7 +106,6 @@ router.post('/signup', async (req, res) => {
       return res.status(201).json({
         id: result.rows[0].id,
         username: result.rows[0].username,
-        email: result.rows[0].email,
       });
     });
 

@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import '../styles/Signup.css';
+import { useDispatch } from "react-redux";
+import { loginUser } from '../store/features/authSlice';
+import { fetchUser } from '../store/features/userSlice';
 
 function Signup() {
   const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,7 +23,7 @@ function Signup() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, email, password }),
+        body: JSON.stringify({ username, password }),
       });
 
       if (!response.ok) {
@@ -28,11 +33,14 @@ function Signup() {
         return;
       }
 
+      await dispatch(loginUser({ username, password })).unwrap();
+      dispatch(fetchUser());
+
       setSuccessMessage('Account created successfully! Please log in.');
       setError('');
       setUsername('');
-      setEmail('');
       setPassword('');
+      navigate('/');
     } catch (err) {
       setError('An error occurred while creating your account.');
       setSuccessMessage('');
@@ -50,16 +58,6 @@ function Signup() {
             id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
