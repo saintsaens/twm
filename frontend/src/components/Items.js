@@ -23,6 +23,23 @@ function Items() {
     filter === 'All' || item.rarity === filter
   );
 
+  function parseMoney(moneyString) {
+    return parseFloat(moneyString.replace(/[^0-9.-]+/g, ""));
+  }
+
+  function formatCurrency(value) {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
+  }
+
+  const totalPrice = filteredItems.reduce((acc, item) => {
+    const itemPrice = parseMoney(item.price);
+    const itemQuantity = Number(item.quantity) || 0; // Convert to number
+
+    console.log('Item Price:', itemPrice, 'Item Quantity:', itemQuantity); // Log for debugging
+
+    return acc + itemPrice * itemQuantity;
+  }, 0);
+
 
   return (
     <div className="items-container">
@@ -64,6 +81,12 @@ function Items() {
             </tr>
           ))}
         </tbody>
+        <tfoot>
+          <tr>
+            <td colSpan="3" style={{ textAlign: 'right', fontWeight: 'bold' }}>Total Price:</td>
+            <td>{formatCurrency(totalPrice)}</td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   );
