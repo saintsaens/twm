@@ -67,7 +67,7 @@ function Items() {
             <th>Name</th>
             <th>Type</th>
             <th>Rarity</th>
-            <th>Price</th>
+            <th>Unit price</th>
           </tr>
         </thead>
         <tbody>
