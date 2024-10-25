@@ -54,6 +54,20 @@ h1 {
 }
 
 .header-link {
-  text-decoration: none; /* Remove underline */
-  color: white; /* Set text color */
+  text-decoration: none;
+  color: white;
+}
+
+.cart-container {
+  background-color: #f8f9fa;
+  padding: 20px;
+  margin: 20px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  text-align: right;
+}
+
+.cart-container p {
+  margin: 5px 0;
+  font-weight: bold;
 }
