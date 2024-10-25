@@ -4,7 +4,7 @@ import { fetchUser } from '../store/features/userSlice';
 
 function Welcome() {
   const dispatch = useDispatch();
-  const username = useSelector((state) => state.user.username);
+  const { username } = useSelector((state) => state.user.username);
   const userStatus = useSelector((state) => state.user.status);
 
   useEffect(() => {
