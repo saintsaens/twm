@@ -1,14 +1,17 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-
-const navLinks = [
-  { path: '/', label: 'Home' },
-  { path: '/signup', label: 'Sign Up' },
-  { path: '/signin', label: 'Sign In' },
-  { path: '/logout', label: 'Log Out' },
-];
+import { useSelector } from 'react-redux';
 
 function Navigation() {
+  const username = useSelector((state) => state.user.username);
+
+  const navLinks = [
+    { path: '/', label: 'Home' },
+    ...(username ? [] : [{ path: '/signin', label: 'Sign In' }]),
+    ...(username ? [] : [{ path: '/signup', label: 'Sign Up' }]),
+    ...(username ? [{ path: '/logout', label: 'Log Out' }] : []),
+  ];
+
   return (
     <ul className="navigation">
       {navLinks.map(link => (
