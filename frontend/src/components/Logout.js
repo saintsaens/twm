@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Logout = () => {
   const navigate = useNavigate();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleLogout = async () => {
       const response = await fetch('/api/logout', {
         method: 'POST',

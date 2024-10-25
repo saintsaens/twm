@@ -1,4 +1,3 @@
-// authSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 export const loginUser = createAsyncThunk('auth/loginUser', async (formData) => {
@@ -34,7 +33,6 @@ const authSlice = createSlice({
             })
             .addCase(loginUser.fulfilled, (state, action) => {
                 state.loading = false;
-                // Here, you could dispatch fetchUser or update the store with the logged-in user
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.loading = false;

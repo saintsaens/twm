@@ -8,8 +8,8 @@ function Signin() {
     const [formData, setFormData] = useState({ username: '', password: '' });
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const error = useSelector((state) => state.auth.error); // Get error from the Redux state
-    const loading = useSelector((state) => state.auth.loading); // Get loading state
+    const error = useSelector((state) => state.auth.error);
+    const loading = useSelector((state) => state.auth.loading);
 
     useEffect(() => {
         dispatch(clearError()); // Clear error message when component mounts
@@ -26,8 +26,8 @@ function Signin() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await dispatch(loginUser(formData)).unwrap(); // Dispatch loginUser and unwrap the promise
-            navigate('/'); // Redirect to homepage on successful login
+            await dispatch(loginUser(formData)).unwrap();
+            navigate('/');
         } catch (error) {
             console.error('Login failed:', error);
         }
