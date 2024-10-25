@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { decrement, increment, fetchItems, setRarityFilter, setTypeFilter } from '../store/features/itemsSlice';
 import '../styles/Items.css';
+import { parseMoney, formatCurrency } from "../utils/money";
 
 function Items() {
   const dispatch = useDispatch();
@@ -27,14 +28,6 @@ function Items() {
     (rarityFilter === 'All' || item.rarity === rarityFilter) &&
     (typeFilter === 'All' || item.type === typeFilter)
   );
-
-  function parseMoney(moneyString) {
-    return parseFloat(moneyString.replace(/[^0-9.-]+/g, ""));
-  }
-
-  function formatCurrency(value) {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
-  }
 
   const totalPrice = filteredItems.reduce((acc, item) => {
     const itemPrice = parseMoney(item.price);
