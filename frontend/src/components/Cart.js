@@ -7,7 +7,6 @@ import { formatCurrency } from "../utils/money";
 function Cart() {
   const dispatch = useDispatch();
   const { items, totalPrice } = useSelector((state) => state.cart);
-  console.log(items);
   const userId = useSelector((state) => state.user.id);
 
 
@@ -21,6 +20,9 @@ function Cart() {
     <div>
       <p>Items in cart: {totalItems}</p>
       <p>Total price: {formatCurrency(totalPrice)}</p>
+      <button>
+        View cart
+      </button>
       <button onClick={() => {
         dispatch(clearCart());
       }}>
