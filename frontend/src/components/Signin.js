@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { loginUser, clearError } from '../store/features/authSlice';
 import '../styles/Signin.css';
+import { fetchUser } from "../store/features/userSlice";
 
 function Signin() {
     const [formData, setFormData] = useState({ username: '', password: '' });
@@ -27,6 +28,7 @@ function Signin() {
         e.preventDefault();
         try {
             await dispatch(loginUser(formData)).unwrap();
+            dispatch(fetchUser());
             navigate('/');
         } catch (error) {
             console.error('Login failed:', error);
