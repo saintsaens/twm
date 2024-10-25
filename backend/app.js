@@ -17,7 +17,7 @@ app.use(express.json());
 
 // Log stuff
 if (process.env.NODE_ENV !== 'production') {
-  app.use(morgan('dev'));
+  app.use(morgan(':method :url :status [:date]'));
 }
 
 const PgSession = connectPgSimple(session);
