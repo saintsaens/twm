@@ -1,25 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUser } from '../store/features/userSlice';
 
 function Welcome() {
-  const [username, setUsername] = useState('');
+  const dispatch = useDispatch();
+  const username = useSelector((state) => state.user.username);
+  const userStatus = useSelector((state) => state.user.status);
 
   useEffect(() => {
-    fetch('/api/user/profile', {
-        credentials: 'include' // Make sure cookies are sent with the request
-      })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error('Not logged in');
-      })
-      .then((data) => {
-        setUsername(data.username); // Set the username in state
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+    if (userStatus === 'idle') {
+      dispatch(fetchUser());
+    }
+  }, [dispatch, userStatus]);
 
   return (
     <div className="welcome">
