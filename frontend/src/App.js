@@ -6,8 +6,11 @@ import Navigation from './components/Navigation';
 import Welcome from './components/Welcome';
 import AppRoutes from './components/AppRoutes';
 import Cart from "./components/Cart";
+import { useSelector } from "react-redux";
 
 function App() {
+  const username = useSelector((state) => state.user.username);
+
   return (
     <div className="app-container">
       <Router>
@@ -20,9 +23,11 @@ function App() {
         <nav>
           <Navigation />
         </nav>
-        <div className="cart-container">
-          <Cart />
-        </div>
+        {username && (
+          <div className="cart-container">
+            <Cart />
+          </div>
+        )}
         <main>
           <AppRoutes />
         </main>
