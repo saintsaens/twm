@@ -24,7 +24,7 @@ function Orders() {
         <div className="items-container">
             <div className="go-back-link-container">
                 <p>
-                    <Link to="/">← Go back</Link>
+                    <Link to="/">← Home</Link>
                 </p>
             </div>
             <h2>Orders</h2>
@@ -32,7 +32,7 @@ function Orders() {
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Date (your timezone 🕐🤓)</th>
+                        <th>Date & time (your timezone 🕐🤓)</th>
                         <th>Paid 💸</th>
                     </tr>
                 </thead>
@@ -50,7 +50,6 @@ function Orders() {
                 </tbody>
             </table>
         </div>
-
     );
 }
 
