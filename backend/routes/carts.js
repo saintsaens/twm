@@ -3,6 +3,7 @@ import * as db from '../db/index.js';
 
 const router = new Router();
 
+// Get the cart of a user
 router.get('/:userId', async (req, res) => {
   const userId = parseInt(req.params.userId);
 
@@ -28,7 +29,6 @@ router.get('/:userId', async (req, res) => {
     res.status(500).json({ error: 'Failed to retrieve cart' });
   }
 });
-
 
 // Add items to the cart
 router.put('/:userId', async (req, res) => {
@@ -79,9 +79,6 @@ router.put('/:userId', async (req, res) => {
   }
 });
 
-
-
-
 // Delete a cart
 router.delete('/:userId', async (req, res) => {
   const id = parseInt(req.params.userId);
@@ -99,7 +96,6 @@ router.delete('/:userId', async (req, res) => {
     res.status(500).json({ error: 'Failed to delete cart' });
   }
 });
-
 
 // Checkout
 router.post("/:id/checkout", async (req, res) => {
