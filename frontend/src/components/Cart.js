@@ -13,7 +13,9 @@ function Cart() {
   const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
 
   useEffect(() => {
-    dispatch(fetchCart(userId));
+    if (userId) {
+      dispatch(fetchCart(userId));
+    }
   }, [dispatch, userId]);
 
   return (
