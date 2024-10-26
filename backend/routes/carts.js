@@ -28,55 +28,53 @@ router.get('/:userId', async (req, res) => {
 });
 
 
-// Update a cart
+// Add items to the cart
 router.put('/:userId', async (req, res) => {
   const userId = parseInt(req.params.userId);
-  const { items } = req.body;
-
+  const { items = [] } = req.body; // Default to an empty array if items is undefined
+  
+  // Validate that items is an array
+  if (!Array.isArray(items)) {
+    return res.status(400).json({ error: 'Invalid data format: items must be an array' });
+  }
+  
   try {
     for (const item of items) {
-      const { item_id, quantity } = item;
+      const { id: item_id, quantity } = item;
+      if (!item_id || typeof quantity !== 'number') {
+        return res.status(400).json({ error: 'Invalid item data: each item must include item_id and quantity as a number' });
+      }
 
-      if (quantity === 0) {
-        // Remove item from the user's cart if quantity is 0
-        await db.query(`
-          DELETE FROM users_items
-          WHERE user_id = $1 AND item_id = $2;
-          `, [userId, item_id]);
-      } else {
-        // Check if the item is already in the user's cart
-        const itemExistsResult = await db.query(`
+      const itemExistsResult = await db.query(`
             SELECT * FROM users_items WHERE user_id = $1 AND item_id = $2;
             `, [userId, item_id]);
 
-        if (itemExistsResult.rowCount > 0) {
-          // Update the quantity if the item already exists in the cart
-          await db.query(`
+      if (itemExistsResult.rowCount > 0) {
+        await db.query(`
                 UPDATE users_items
-                SET quantity = $1
+                SET quantity = quantity + $1
                 WHERE user_id = $2 AND item_id = $3;
                 `, [quantity, userId, item_id]);
-        } else {
-          // Insert the item into the cart if it's not there
-          await db.query(`
+      } else {
+        await db.query(`
                   INSERT INTO users_items (user_id, item_id, quantity)
                   VALUES ($1, $2, $3);
                   `, [userId, item_id, quantity]);
-        }
       }
     }
 
-    const userItemsQuery = `
+    const updatedItemsResult = await db.query(`
               SELECT item_id, quantity FROM users_items
               WHERE user_id = $1;
-            `;
-    const updatedItemsResult = await db.query(userItemsQuery, [userId]);
+            `, [userId]);
     res.json(updatedItemsResult.rows);
+
   } catch (error) {
     console.error('Error updating cart:', error);
     res.status(500).json({ error: 'Failed to update cart' });
   }
 });
+
 
 
 
