@@ -1,12 +1,16 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import '../styles/Cart.css';
 import { formatCurrency } from "../utils/money";
 import { Link } from "react-router-dom";
+import { clearCart, deleteCart } from "../store/features/cartSlice";
 
 
 function Cart() {
+  const dispatch = useDispatch();
   const { items, totalPrice } = useSelector((state) => state.cart);
+  const { userId } = useSelector((state) => state.user.userId);
+
 
   return (
     <div className="items-container">
@@ -39,6 +43,19 @@ function Cart() {
           </tr>
         </tfoot>
       </table>
+      <button onClick={() => {
+        dispatch(clearCart());
+        dispatch(deleteCart(userId));
+      }}>
+        Clear cart
+      </button>
+      <button onClick={() => {
+        dispatch(clearCart());
+        dispatch(deleteCart(userId));
+        <p>Hi</p>
+      }}>
+        Checkout
+      </button>
     </div>
   );
 }
