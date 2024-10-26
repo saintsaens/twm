@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchOrders } from '../store/features/ordersSlice';
 import '../styles/Items.css';
 import { Link, useNavigate } from "react-router-dom";
+import { generateName } from "../utils/names";
 
 function Orders() {
     const dispatch = useDispatch();
@@ -32,6 +33,7 @@ function Orders() {
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Nickname</th>
                         <th>Date & time (your timezone 🕐🤓)</th>
                         <th>Paid 💸</th>
                     </tr>
@@ -43,6 +45,7 @@ function Orders() {
                             className="table-row-clickable"
                         >
                             <td>{id}</td>
+                            <td>{generateName()}</td>
                             <td>{new Date(created_at).toLocaleString()}</td>
                             <td>{total_price}</td>
                         </tr>
