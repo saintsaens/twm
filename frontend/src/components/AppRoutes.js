@@ -5,6 +5,7 @@ import Signup from './Signup';
 import Signin from './Signin';
 import Logout from './Logout';
 import Cart from "./Cart";
+import Orders from "./Orders";
 
 const routes = [
   { path: "/", element: <Items /> },
@@ -12,6 +13,7 @@ const routes = [
   { path: "/signin", element: <Signin /> },
   { path: "/logout", element: <Logout /> },
   { path: "/cart", element: <Cart /> },
+  { path: "/orders", element: <Orders /> },
 ];
 
 const AppRoutes = () => {
