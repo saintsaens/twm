@@ -4,12 +4,14 @@ import Items from './Items';
 import Signup from './Signup';
 import Signin from './Signin';
 import Logout from './Logout';
+import Cart from "./Cart";
 
 const routes = [
   { path: "/", element: <Items /> },
   { path: "/signup", element: <Signup /> },
   { path: "/signin", element: <Signin /> },
   { path: "/logout", element: <Logout /> },
+  { path: "/cart", element: <Cart /> },
 ];
 
 const AppRoutes = () => {

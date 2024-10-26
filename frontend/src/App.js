@@ -5,7 +5,7 @@ import "./styles/App.css";
 import Navigation from './components/Navigation';
 import Welcome from './components/Welcome';
 import AppRoutes from './components/AppRoutes';
-import Cart from "./components/Cart";
+import CartWidget from "./components/CartWidget";
 import { useSelector } from "react-redux";
 
 function App() {
@@ -25,7 +25,7 @@ function App() {
         </nav>
         {username && (
           <div className="cart-container">
-            <Cart />
+            <CartWidget />
           </div>
         )}
         <main>

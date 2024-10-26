@@ -1,42 +1,44 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
-import { useDispatch } from "react-redux";
-import { clearCart, fetchCart, deleteCart } from "../store/features/cartSlice";
+import '../styles/Cart.css';
 import { formatCurrency } from "../utils/money";
+import { Link } from "react-router-dom";
+
 
 function Cart() {
-  const dispatch = useDispatch();
   const { items, totalPrice } = useSelector((state) => state.cart);
-  const { userId } = useSelector((state) => state.user.userId);
-
-
-  const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
-
-  useEffect(() => {
-    if (userId) {
-      dispatch(fetchCart(userId));
-    }
-  }, [dispatch, userId]);
 
   return (
-    <div>
-      <p>Items in cart: {totalItems}</p>
-      <p>Total price: {formatCurrency(totalPrice)}</p>
-      <button>
-        View cart
-      </button>
-      <button onClick={() => {
-        dispatch(clearCart());
-        dispatch(deleteCart(userId));
-      }}>
-        Clear cart
-      </button>
-      <button onClick={() => {
-        dispatch(clearCart());
-        dispatch(deleteCart(userId));
-      }}>
-        Checkout
-      </button>
+    <div className="items-container">
+      <p className="signup-link">
+        <Link to="/">← Go back</Link>
+      </p>
+      <table className="items-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Unit price</th>
+            <th>Quantity</th>
+          </tr>
+        </thead>
+        <tbody>
+          {items.map(({ id, name, price, quantity = 0 }) => (
+            <tr key={id}>
+              <td>{name}</td>
+              <td>{price}</td>
+              <td>{quantity}</td>
+            </tr>
+          ))}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colSpan="2" style={{ textAlign: 'right', fontWeight: 'bold' }}>Total Price:</td>
+            <td>{formatCurrency(totalPrice)}</td>
+          </tr>
+          <tr>
+          </tr>
+        </tfoot>
+      </table>
     </div>
   );
 }
