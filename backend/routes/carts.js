@@ -64,9 +64,11 @@ router.put('/:userId', async (req, res) => {
     }
 
     const updatedItemsResult = await db.query(`
-              SELECT item_id, quantity FROM users_items
-              WHERE user_id = $1;
-            `, [userId]);
+      SELECT ui.item_id, ui.quantity, i.name, i.price
+      FROM users_items ui
+      JOIN items i ON ui.item_id = i.id
+      WHERE ui.user_id = $1
+    `, [userId]);
     res.json(updatedItemsResult.rows);
 
   } catch (error) {
