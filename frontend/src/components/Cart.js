@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import '../styles/Cart.css';
+import '../styles/Items.css';
 import { formatCurrency } from "../utils/money";
 import { Link } from "react-router-dom";
 import { clearCart, deleteCart } from "../store/features/cartSlice";
@@ -20,10 +20,11 @@ function Cart() {
   }, [dispatch, userId]);
 
   return (
-    <div className="items-container">
-      <p className="signup-link">
+    <div>
+      <p>
         <Link to="/">← Go back</Link>
       </p>
+
       <table className="items-table">
         <thead>
           <tr>
