@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
 
 function Navigation() {
-  const username = useSelector((state) => state.user.username);
+  const { username } = useSelector((state) => state.user.username);
 
   const navLinks = [
     ...(username ? [] : [{ path: '/signin', label: 'Sign In' }]),

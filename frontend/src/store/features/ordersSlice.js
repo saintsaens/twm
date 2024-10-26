@@ -49,6 +49,7 @@ const orderSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
+            // Handle createOrder
             .addCase(createOrder.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -61,6 +62,7 @@ const orderSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
+            // Handle fetchOrders
             .addCase(fetchOrders.pending, (state) => {
                 state.loading = true;
                 state.error = null;
