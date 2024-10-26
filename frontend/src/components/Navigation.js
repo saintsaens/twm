@@ -6,7 +6,6 @@ function Navigation() {
   const username = useSelector((state) => state.user.username);
 
   const navLinks = [
-    { path: '/', label: 'Home' },
     ...(username ? [] : [{ path: '/signin', label: 'Sign In' }]),
     ...(username ? [] : [{ path: '/signup', label: 'Sign Up' }]),
     ...(username ? [{ path: '/logout', label: 'Log Out' }] : []),
