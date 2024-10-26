@@ -1,5 +1,5 @@
 import Router from "express-promise-router";
-import * as db from '../db/index.js'; 
+import * as db from '../db/index.js';
 
 const router = new Router();
 
@@ -51,16 +51,18 @@ router.post('/', async (req, res) => {
 });
 
 
-// Get all orders
+// Get all orders by user_id
 router.get('/', async (req, res) => {
+  const userId = req.query.user;
   try {
-    const result = await db.query('SELECT * FROM orders');
+    const result = await db.query('SELECT * FROM orders WHERE user_id = $1', [userId]);
     res.json(result.rows);
   } catch (error) {
     console.error('Error retrieving orders:', error);
     res.status(500).json({ error: 'Failed to retrieve orders' });
   }
 });
+
 
 // Get a specific order by ID
 router.get('/:id', async (req, res) => {
