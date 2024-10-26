@@ -4,11 +4,13 @@ import { decrement, increment, fetchItems, setRarityFilter, setTypeFilter, clear
 import { addItems, updateCart } from "../store/features/cartSlice";
 import '../styles/Items.css';
 import { parseMoney, formatCurrency } from "../utils/money";
+import CartWidget from "./CartWidget";
 
 function Items() {
   const dispatch = useDispatch();
   const { items, rarityFilter, typeFilter } = useSelector((state) => state.items);
   const { userId } = useSelector((state) => state.user.userId);
+  const { username } = useSelector((state) => state.user.username);
 
   useEffect(() => {
     dispatch(fetchItems());
@@ -39,6 +41,11 @@ function Items() {
 
   return (
     <div className="items-container">
+      {username && (
+          <div className="cart-container">
+            <CartWidget />
+          </div>
+        )}
       <div className="filter-container">
         <label htmlFor="rarity-filter">Filter by rarity: </label>
         <select id="rarity-filter" value={rarityFilter} onChange={handleRarityChange}>
