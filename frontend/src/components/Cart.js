@@ -31,6 +31,12 @@ function Cart() {
       }}>
         Clear cart
       </button>
+      <button onClick={() => {
+        dispatch(clearCart());
+        dispatch(deleteCart(userId));
+      }}>
+        Checkout
+      </button>
     </div>
   );
 }
