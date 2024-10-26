@@ -68,13 +68,18 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   const id = parseInt(req.params.id);
   try {
-    const result = await db.query('SELECT * FROM orders WHERE id = $1', [id]);
+    const result = await db.query(`
+      SELECT oi.item_id, oi.quantity, i.name, i.price
+      FROM orders_items oi
+      JOIN items i ON oi.item_id = i.id
+      WHERE oi.order_id = $1
+    `, [id]);
 
     if (result.rowCount === 0) {
       return res.status(404).json({ error: 'Order not found' });
     }
 
-    res.json(result.rows[0]);
+    res.json(result.rows);
   } catch (error) {
     console.error('Error retrieving order:', error);
     res.status(500).json({ error: 'Failed to retrieve order' });
