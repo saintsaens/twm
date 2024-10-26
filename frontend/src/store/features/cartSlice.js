@@ -10,6 +10,20 @@ export const fetchCart = createAsyncThunk('cart/fetchCart', async (userId) => {
 });
 
 export const updateCart = createAsyncThunk('cart/updateCart', async ({ userId, items }) => {
+export const deleteCart = createAsyncThunk('cart/fetchCart', async (userId) => {
+    const response = await fetch(`/api/carts/${userId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    return data;
+});
+
     const response = await fetch(`/api/carts/${userId}`, {
         method: 'PUT',
         headers: {

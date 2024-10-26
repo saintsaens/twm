@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from "react-redux";
-import { clearCart, fetchCart } from "../store/features/cartSlice";
+import { clearCart, fetchCart, deleteCart } from "../store/features/cartSlice";
 import { formatCurrency } from "../utils/money";
 
 function Cart() {
   const dispatch = useDispatch();
   const { items, totalPrice } = useSelector((state) => state.cart);
-  const userId = useSelector((state) => state.user.id);
+  const { userId } = useSelector((state) => state.user.userId);
 
 
   const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
@@ -25,6 +25,7 @@ function Cart() {
       </button>
       <button onClick={() => {
         dispatch(clearCart());
+        dispatch(deleteCart(userId));
       }}>
         Clear cart
       </button>
