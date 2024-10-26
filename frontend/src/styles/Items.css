@@ -208,3 +208,7 @@ h2 {
 .clear-cart-button:active {
   background-color: #bd2130;
 }
+
+.table-row-clickable {
+  cursor: pointer; /* Changes cursor to pointer on hover */
+}
