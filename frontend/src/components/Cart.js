@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import '../styles/Cart.css';
 import { formatCurrency } from "../utils/money";
 import { Link } from "react-router-dom";
 import { clearCart, deleteCart } from "../store/features/cartSlice";
+import { fetchCart } from "../store/features/cartSlice";
 
 
 function Cart() {
@@ -11,6 +12,12 @@ function Cart() {
   const { items, totalPrice } = useSelector((state) => state.cart);
   const { userId } = useSelector((state) => state.user.userId);
 
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchCart(userId));
+    }
+  }, [dispatch, userId]);
 
   return (
     <div className="items-container">
