@@ -9,7 +9,6 @@ export const fetchCart = createAsyncThunk('cart/fetchCart', async (userId) => {
     return data;
 });
 
-export const updateCart = createAsyncThunk('cart/updateCart', async ({ userId, items }) => {
 export const deleteCart = createAsyncThunk('cart/fetchCart', async (userId) => {
     const response = await fetch(`/api/carts/${userId}`, {
         method: 'DELETE',
@@ -24,6 +23,9 @@ export const deleteCart = createAsyncThunk('cart/fetchCart', async (userId) => {
     return data;
 });
 
+export const updateCart = createAsyncThunk('cart/updateCart', async ({ userId, validItems }) => {
+    // Filter out items with quantity less than 1
+    const items = validItems;
     const response = await fetch(`/api/carts/${userId}`, {
         method: 'PUT',
         headers: {
@@ -36,6 +38,8 @@ export const deleteCart = createAsyncThunk('cart/fetchCart', async (userId) => {
     }
     return await response.json();
 });
+
+
 
 const cartSlice = createSlice({
     name: 'cart',

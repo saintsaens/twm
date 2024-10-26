@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { decrement, increment, fetchItems, setRarityFilter, setTypeFilter, clearSelection } from '../store/features/itemsSlice';
-import { addItems } from "../store/features/cartSlice";
+import { addItems, updateCart } from "../store/features/cartSlice";
 import '../styles/Items.css';
 import { parseMoney, formatCurrency } from "../utils/money";
 
 function Items() {
   const dispatch = useDispatch();
   const { items, rarityFilter, typeFilter } = useSelector((state) => state.items);
+  const validItems = items.filter(item => item.quantity >= 1);
+  const { userId } = useSelector((state) => state.user.userId);
 
   useEffect(() => {
     dispatch(fetchItems());
@@ -93,7 +95,8 @@ function Items() {
         </tfoot>
       </table>
       <button onClick={() => {
-        dispatch(addItems({items, totalPrice}));
+        dispatch(addItems({ items, totalPrice }));
+        dispatch(updateCart({ userId, validItems }));
         dispatch(clearSelection());
       }}>
         Add to cart
