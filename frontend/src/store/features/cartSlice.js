@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { parseMoney } from "../../utils/money";
 
 export const fetchCart = createAsyncThunk('cart/fetchCart', async (userId) => {
     const response = await fetch(`/api/carts/${userId}`);
@@ -24,7 +25,6 @@ export const deleteCart = createAsyncThunk('cart/fetchCart', async (userId) => {
 });
 
 export const updateCart = createAsyncThunk('cart/updateCart', async ({ userId, items }) => {
-    // Filter out items with quantity less than 1
     const validItems = items.filter(item => item.quantity >= 1);
     const response = await fetch(`/api/carts/${userId}`, {
         method: 'PUT',
@@ -56,7 +56,6 @@ const cartSlice = createSlice({
                 const existingItem = state.items.find(item => item.item_id === item_id);
                 existingItem ? existingItem.quantity += quantity : state.items.push({ item_id, quantity });
             });
-            console.log(state.totalPrice);
             state.totalPrice += totalPrice;
         },
         removeItems(state, action) {
@@ -64,7 +63,7 @@ const cartSlice = createSlice({
             itemsToRemove.forEach(itemId => {
                 state.items = state.items.filter(item => item.item_id !== itemId);
             });
-            state.totalPrice = state.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+            state.totalPrice = state.items.reduce((total, item) => total + (parseMoney(item.price) * item.quantity), 0);
         },
         clearCart(state) {
             state.items = [];
@@ -79,8 +78,8 @@ const cartSlice = createSlice({
             })
             .addCase(fetchCart.fulfilled, (state, action) => {
                 state.loading = false;
-                state.items = action.payload; // Update items with the response
-                state.totalPrice = action.payload.reduce((total, item) => total + (item.price * item.quantity), 0); // Update totalPrice
+                state.items = action.payload;
+                state.totalPrice = action.payload.reduce((total, item) => total + (parseMoney(item.price) * item.quantity), 0);
             })
             .addCase(fetchCart.rejected, (state, action) => {
                 state.loading = false;
@@ -92,8 +91,8 @@ const cartSlice = createSlice({
             })
             .addCase(updateCart.fulfilled, (state, action) => {
                 state.loading = false;
-                state.items = action.payload; // Update items with the response
-                state.totalPrice = action.payload.reduce((total, item) => total + (item.price * item.quantity), 0); // Update totalPrice
+                state.items = action.payload;
+                state.totalPrice = action.payload.reduce((total, item) => total + (parseMoney(item.price) * item.quantity), 0);
             })
             .addCase(updateCart.rejected, (state, action) => {
                 state.loading = false;
