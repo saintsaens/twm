@@ -48,8 +48,6 @@ router.get('/user/profile', (req, res) => {
       id: req.user.id,
       username: req.user.username,
     });
-  } else {
-    res.status(401).json({ error: 'Not authenticated' });
   }
 });
 
