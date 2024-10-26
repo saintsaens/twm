@@ -8,7 +8,6 @@ import { parseMoney, formatCurrency } from "../utils/money";
 function Items() {
   const dispatch = useDispatch();
   const { items, rarityFilter, typeFilter } = useSelector((state) => state.items);
-  const validItems = items.filter(item => item.quantity >= 1);
   const { userId } = useSelector((state) => state.user.userId);
 
   useEffect(() => {
@@ -96,7 +95,7 @@ function Items() {
       </table>
       <button onClick={() => {
         dispatch(addItems({ items, totalPrice }));
-        dispatch(updateCart({ userId, validItems }));
+        dispatch(updateCart({ userId, items }));
         dispatch(clearSelection());
       }}>
         Add to cart

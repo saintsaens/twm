@@ -23,15 +23,15 @@ export const deleteCart = createAsyncThunk('cart/fetchCart', async (userId) => {
     return data;
 });
 
-export const updateCart = createAsyncThunk('cart/updateCart', async ({ userId, validItems }) => {
+export const updateCart = createAsyncThunk('cart/updateCart', async ({ userId, items }) => {
     // Filter out items with quantity less than 1
-    const items = validItems;
+    const validItems = items.filter(item => item.quantity >= 1);
     const response = await fetch(`/api/carts/${userId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ items }),
+        body: JSON.stringify({ items: validItems }),
     });
     if (!response.ok) {
         throw new Error('Failed to update cart');
@@ -56,6 +56,7 @@ const cartSlice = createSlice({
                 const existingItem = state.items.find(item => item.item_id === item_id);
                 existingItem ? existingItem.quantity += quantity : state.items.push({ item_id, quantity });
             });
+            console.log(state.totalPrice);
             state.totalPrice += totalPrice;
         },
         removeItems(state, action) {
