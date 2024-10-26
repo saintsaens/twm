@@ -5,11 +5,12 @@ const router = new Router();
 
 // Create a new order
 router.post('/', async (req, res) => {
-  const { created_at, user_id, total_price } = req.body;
+  const { user_id, total_price, items } = req.body;
+  const created_at = new Date().toISOString();
 
   // Check for required fields
-  if (!created_at || !total_price || !user_id) {
-    return res.status(400).json({ error: 'Missing required fields' });
+  if (!total_price || !user_id || !items || items.length === 0) {
+    return res.status(400).json({ error: 'Missing required fields or items' });
   }
 
   try {
@@ -20,19 +21,35 @@ router.post('/', async (req, res) => {
     }
 
     // Insert the order
-    const query = `
+    const orderQuery = `
       INSERT INTO orders (user_id, total_price, created_at)
       VALUES ($1, $2, $3)
       RETURNING *;
     `;
-    const result = await db.query(query, [user_id, total_price, created_at]);
+    const orderResult = await db.query(orderQuery, [user_id, total_price, created_at]);
 
-    res.status(201).json(result.rows[0]);
+    const orderId = orderResult.rows[0].id; // Get the newly created order ID
+
+    // Prepare the insert statement for orders_items
+    const orderItemsQuery = `
+      INSERT INTO orders_items (order_id, item_id, quantity)
+      VALUES ($1, $2, $3);
+    `;
+
+    // Insert each item into orders_items
+    for (const item of items) {
+      const { item_id, quantity } = item; // Destructure item_id and quantity
+      await db.query(orderItemsQuery, [orderId, item_id, quantity]);
+    }
+
+    // Return the created order along with the items
+    res.status(201).json({ order: orderResult.rows[0], items });
   } catch (error) {
     console.error('Error inserting order:', error);
     res.status(500).json({ error: 'Failed to insert order' });
   }
 });
+
 
 // Get all orders
 router.get('/', async (req, res) => {
