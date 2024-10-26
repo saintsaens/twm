@@ -10,7 +10,7 @@ export const fetchCart = createAsyncThunk('cart/fetchCart', async (userId) => {
     return data;
 });
 
-export const deleteCart = createAsyncThunk('cart/fetchCart', async (userId) => {
+export const deleteCart = createAsyncThunk('cart/deleteCart', async (userId) => {
     const response = await fetch(`/api/carts/${userId}`, {
         method: 'DELETE',
         headers: {
