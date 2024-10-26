@@ -78,7 +78,7 @@ function Cart() {
           Checkout
         </button>
       </div>
-      {showMessage && <p>All items have been shipped to your boss!</p>}
+      {showMessage && <p>All items have been shipped to your boss! ✈️</p>}
     </div>
   );
 }
