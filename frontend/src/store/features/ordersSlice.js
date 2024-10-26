@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+// Create an order
 export const createOrder = createAsyncThunk(
     'orders/createOrder',
     async ({ user_id, total_price, items }) => {
@@ -9,6 +10,25 @@ export const createOrder = createAsyncThunk(
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ user_id, total_price, items }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data;
+    }
+);
+
+// Fetch all orders for a user
+export const fetchOrders = createAsyncThunk(
+    'orders/fetchOrders',
+    async (userId) => {
+        const response = await fetch(`/api/orders?user=${userId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
         });
 
         if (!response.ok) {
@@ -38,6 +58,18 @@ const orderSlice = createSlice({
                 state.orders.push(action.payload);
             })
             .addCase(createOrder.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(fetchOrders.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchOrders.fulfilled, (state, action) => {
+                state.loading = false;
+                state.orders = action.payload; // Replace orders with fetched orders
+            })
+            .addCase(fetchOrders.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             });
