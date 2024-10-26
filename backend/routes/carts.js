@@ -7,6 +7,12 @@ router.get('/:userId', async (req, res) => {
   const userId = parseInt(req.params.userId);
 
   try {
+    // Check if user exists.
+    const resultUser = await db.query('SELECT * FROM users WHERE id = $1;', [userId]);
+    if (resultUser.rowCount === 0) {
+      return res.status(404).send('User not found');
+    }
+
     // Query to get items associated with the user from users_items
     const result = await db.query(`
       SELECT ui.item_id, ui.quantity, i.name, i.price
@@ -14,10 +20,6 @@ router.get('/:userId', async (req, res) => {
       JOIN items i ON ui.item_id = i.id
       WHERE ui.user_id = $1
     `, [userId]);
-
-    if (result.rowCount === 0) {
-      return res.status(404).json({ error: 'No items found for this user' });
-    }
 
     // Return the items in the cart along with their quantities
     res.json(result.rows);
@@ -32,12 +34,12 @@ router.get('/:userId', async (req, res) => {
 router.put('/:userId', async (req, res) => {
   const userId = parseInt(req.params.userId);
   const { items = [] } = req.body; // Default to an empty array if items is undefined
-  
+
   // Validate that items is an array
   if (!Array.isArray(items)) {
     return res.status(400).json({ error: 'Invalid data format: items must be an array' });
   }
-  
+
   try {
     for (const item of items) {
       const { id: item_id, quantity } = item;
