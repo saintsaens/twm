@@ -5,6 +5,7 @@ import { formatCurrency } from "../utils/money";
 import { Link } from "react-router-dom";
 import { clearCart, deleteCart } from "../store/features/cartSlice";
 import { fetchCart } from "../store/features/cartSlice";
+import { createOrder } from "../store/features/ordersSlice";
 
 
 function Cart() {
@@ -19,6 +20,18 @@ function Cart() {
       dispatch(fetchCart(userId));
     }
   }, [dispatch, userId]);
+
+  const handleCheckout = () => {
+    try {
+      dispatch(createOrder({ user_id: userId, total_price: totalPrice, items })).unwrap();
+      dispatch(clearCart());
+      dispatch(deleteCart(userId));
+      setShowMessage(true);
+    } catch (error) {
+      console.error('Failed to create order:', error);
+    }
+  };
+  
 
   return (
     <div className="items-container">
@@ -61,11 +74,7 @@ function Cart() {
         }}>
           Clear cart
         </button>
-        <button className="checkout-button" onClick={() => {
-          dispatch(clearCart());
-          dispatch(deleteCart(userId));
-          setShowMessage(true);
-        }}>
+        <button className="checkout-button" onClick={handleCheckout}>
           Checkout
         </button>
       </div>
