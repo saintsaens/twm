@@ -12,6 +12,7 @@ function Cart() {
   const { items, totalPrice } = useSelector((state) => state.cart);
   const { userId } = useSelector((state) => state.user.userId);
 
+  const [showMessage, setShowMessage] = useState(false);
 
   useEffect(() => {
     if (userId) {
@@ -60,10 +61,11 @@ function Cart() {
       <button onClick={() => {
         dispatch(clearCart());
         dispatch(deleteCart(userId));
-        <p>Hi</p>
+        setShowMessage(true);
       }}>
         Checkout
       </button>
+      {showMessage && <p>Everything has been shipped to your address!</p>}
     </div>
   );
 }
