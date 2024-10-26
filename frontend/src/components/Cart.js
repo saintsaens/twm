@@ -35,8 +35,8 @@ function Cart() {
           </tr>
         </thead>
         <tbody>
-          {items.map(({ id, name, price, quantity = 0 }) => (
-            <tr key={id}>
+          {items.map(({ id, name, price, quantity = 0 }, index) => (
+            <tr key={id || index}>
               <td>{name}</td>
               <td>{price}</td>
               <td>{quantity}</td>
