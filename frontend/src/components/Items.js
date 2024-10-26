@@ -42,10 +42,10 @@ function Items() {
   return (
     <div className="items-container">
       {username && (
-          <div className="cart-container">
-            <CartWidget />
-          </div>
-        )}
+        <div className="cart-container">
+          <CartWidget />
+        </div>
+      )}
       <div className="filter-container">
         <label htmlFor="rarity-filter">Filter by rarity: </label>
         <select id="rarity-filter" value={rarityFilter} onChange={handleRarityChange}>
@@ -100,14 +100,17 @@ function Items() {
           </tr>
         </tfoot>
       </table>
-      <button onClick={() => {
-        dispatch(addItems({ items, totalPrice }));
-        dispatch(updateCart({ userId, items }));
-        dispatch(clearSelection());
-      }}>
-        Add to cart
-      </button>
-    </div>
+      <div className="add-to-cart-container">
+        <button className="add-to-cart-button"
+          onClick={() => {
+            dispatch(addItems({ items, totalPrice }));
+            dispatch(updateCart({ userId, items }));
+            dispatch(clearSelection());
+          }}>
+          Add to cart
+        </button>
+      </div>
+    </div >
   );
 }
 

@@ -22,9 +22,11 @@ function Cart() {
 
   return (
     <div className="items-container">
-      <p>
-        <Link to="/">← Go back</Link>
-      </p>
+      <div className="go-back-link-container">
+        <p>
+          <Link to="/">← Go back</Link>
+        </p>
+      </div>
 
       <table className="items-table">
         <thead>
@@ -52,20 +54,22 @@ function Cart() {
           </tr>
         </tfoot>
       </table>
-      <button onClick={() => {
-        dispatch(clearCart());
-        dispatch(deleteCart(userId));
-      }}>
-        Clear cart
-      </button>
-      <button onClick={() => {
-        dispatch(clearCart());
-        dispatch(deleteCart(userId));
-        setShowMessage(true);
-      }}>
-        Checkout
-      </button>
-      {showMessage && <p>Everything has been shipped to your address!</p>}
+      <div className="add-to-cart-container">
+        <button className="clear-cart-button" onClick={() => {
+          dispatch(clearCart());
+          dispatch(deleteCart(userId));
+        }}>
+          Clear cart
+        </button>
+        <button className="checkout-button" onClick={() => {
+          dispatch(clearCart());
+          dispatch(deleteCart(userId));
+          setShowMessage(true);
+        }}>
+          Checkout
+        </button>
+      </div>
+      {showMessage && <p>All items have been shipped to your boss!</p>}
     </div>
   );
 }
