@@ -55,7 +55,7 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
   const userId = req.query.user;
   try {
-    const result = await db.query('SELECT * FROM orders WHERE user_id = $1', [userId]);
+    const result = await db.query('SELECT * FROM orders WHERE user_id = $1 ORDER BY created_at DESC', [userId]);
     res.json(result.rows);
   } catch (error) {
     console.error('Error retrieving orders:', error);
