@@ -21,7 +21,7 @@ function Cart() {
   }, [dispatch, userId]);
 
   return (
-    <div>
+    <div className="items-container">
       <p>
         <Link to="/">← Go back</Link>
       </p>
