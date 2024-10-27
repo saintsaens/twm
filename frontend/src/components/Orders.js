@@ -39,13 +39,13 @@ function Orders() {
                     </tr>
                 </thead>
                 <tbody>
-                    {orders.map(({ id, created_at, total_price }, index) => (
+                    {orders.map(({ id, created_at, total_price, nickname }, index) => (
                         <tr key={id || index}
                             onClick={() => handleRowClick(id)}
                             className="table-row-clickable"
                         >
                             <td>{id}</td>
-                            <td>{generateName()}</td>
+                            <td>{nickname}</td>
                             <td>{new Date(created_at).toLocaleString()}</td>
                             <td>{total_price}</td>
                         </tr>

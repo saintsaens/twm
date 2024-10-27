@@ -5,11 +5,11 @@ const router = new Router();
 
 // Create a new order
 router.post('/', async (req, res) => {
-  const { user_id, total_price, items } = req.body;
+  const { user_id, total_price, items, nickname } = req.body;
   const created_at = new Date().toISOString();
 
   // Check for required fields
-  if (!total_price || !user_id || !items || items.length === 0) {
+  if (!total_price || !user_id || !nickname || !items || items.length === 0) {
     return res.status(400).json({ error: 'Missing required fields or items' });
   }
 
@@ -22,11 +22,11 @@ router.post('/', async (req, res) => {
 
     // Insert the order
     const orderQuery = `
-      INSERT INTO orders (user_id, total_price, created_at)
-      VALUES ($1, $2, $3)
+      INSERT INTO orders (user_id, total_price, created_at, nickname)
+      VALUES ($1, $2, $3, $4)
       RETURNING *;
     `;
-    const orderResult = await db.query(orderQuery, [user_id, total_price, created_at]);
+    const orderResult = await db.query(orderQuery, [user_id, total_price, created_at, nickname]);
 
     const orderId = orderResult.rows[0].id; // Get the newly created order ID
 

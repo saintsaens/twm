@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { clearCart, deleteCart } from "../store/features/cartSlice";
 import { fetchCart } from "../store/features/cartSlice";
 import { createOrder } from "../store/features/ordersSlice";
+import { generateName } from "../utils/names";
 
 
 function Cart() {
@@ -22,8 +23,9 @@ function Cart() {
   }, [dispatch, userId]);
 
   const handleCheckout = () => {
+    const nickname = generateName();
     try {
-      dispatch(createOrder({ user_id: userId, total_price: totalPrice, items })).unwrap();
+      dispatch(createOrder({ user_id: userId, total_price: totalPrice, items, nickname })).unwrap();
       dispatch(clearCart());
       dispatch(deleteCart(userId));
       setShowMessage(true);
