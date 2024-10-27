@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
     `;
     const orderResult = await db.query(orderQuery, [user_id, total_price, created_at, nickname]);
 
-    const orderId = orderResult.rows[0].id; // Get the newly created order ID
+    const orderId = orderResult.rows[0].id;
 
     // Prepare the insert statement for orders_items
     const orderItemsQuery = `
@@ -38,7 +38,7 @@ router.post('/', async (req, res) => {
 
     // Insert each item into orders_items
     for (const item of items) {
-      const { item_id, quantity } = item; // Destructure item_id and quantity
+      const { item_id, quantity } = item;
       await db.query(orderItemsQuery, [orderId, item_id, quantity]);
     }
 
