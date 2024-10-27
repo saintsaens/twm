@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchOrders } from '../store/features/ordersSlice';
 import '../styles/Items.css';
 import { Link, useNavigate } from "react-router-dom";
-import { generateName } from "../utils/names";
 
 function Orders() {
     const dispatch = useDispatch();
