@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser } from '../store/features/userSlice';
+import { Link } from "react-router-dom";
 
 function Welcome() {
   const dispatch = useDispatch();
@@ -15,7 +16,7 @@ function Welcome() {
 
   return (
     <div className="welcome">
-      {username ? <p>Welcome, {username}!</p> : <p>Not logged in</p>}
+      {username ? <p>Welcome, {username}!</p> : <Link to="/signin" className="nav-link-white">Not logged in</Link>}
     </div>
   );
 }

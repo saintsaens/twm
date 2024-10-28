@@ -53,6 +53,16 @@ h1 {
   color: #4CAF50;
 }
 
+.nav-link-white {
+  text-decoration: none;
+  color: white;
+  transition: color 0.3s;
+}
+
+.nav-link-white:hover {
+  color: #4CAF50;
+}
+
 .header-link {
   text-decoration: none;
   color: white;
