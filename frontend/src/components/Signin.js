@@ -68,7 +68,7 @@ function Signin() {
         </button>
       </form>
       <p className="signup-link">
-        No account? <Link to="/signup">Sign up here</Link>.
+        No account? <Link to="/signup" className="nav-link">Sign up here →</Link>
       </p>
       {error && <p className="error-message">{error}</p>}
     </div>

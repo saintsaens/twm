@@ -31,7 +31,7 @@ const Order = () => {
         <div className="items-container">
             <div className="go-back-link-container">
                 <p>
-                    <Link to="/orders">← All orders</Link>
+                    <Link to="/orders" className="nav-link">← All orders</Link>
                 </p>
             </div>
             <h2>Order {id}</h2>

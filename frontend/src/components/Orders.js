@@ -24,7 +24,7 @@ function Orders() {
         <div className="items-container">
             <div className="go-back-link-container">
                 <p>
-                    <Link to="/">← Home</Link>
+                    <Link to="/" className="nav-link">← Home</Link>
                 </p>
             </div>
             <h2>Orders</h2>

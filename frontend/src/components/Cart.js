@@ -39,7 +39,7 @@ function Cart() {
     <div className="items-container">
       <div className="go-back-link-container">
         <p>
-          <Link to="/">← Go back</Link>
+          <Link to="/" className="nav-link">← Go back</Link>
         </p>
       </div>
 

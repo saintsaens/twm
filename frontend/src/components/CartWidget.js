@@ -24,7 +24,7 @@ function CartWidget() {
       <p>Items in cart: {totalItems}</p>
       <p>Total price: {formatCurrency(totalPrice)}</p>
       <button>
-        <Link to="/cart">View cart</Link>
+        <Link to="/cart" className="nav-link">View cart</Link>
       </button>
     </div>
   );

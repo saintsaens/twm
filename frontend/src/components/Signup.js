@@ -74,7 +74,7 @@ function Signup() {
         <button type="submit" className="signup-button">Create Account</button>
       </form>
       <p className="signin-link">
-        Already have an account? <Link to="/signin">Sign in here</Link>.
+        Already have an account? <Link to="/signin" className="nav-link">Sign in here →</Link>
       </p>
       {error && <p className="error-message">{error}</p>}
       {successMessage && <p className="success-message">{successMessage}</p>}
