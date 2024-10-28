@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { decrement, increment, fetchItems, setRarityFilter, setTypeFilter, clearSelection } from '../store/features/itemsSlice';
-import { addItems, updateCart } from "../store/features/cartSlice";
 import '../styles/Items.css';
+import { addItems, addToCart } from "../store/features/cartSlice";
 import { parseMoney, formatCurrency } from "../utils/money";
 import CartWidget from "./CartWidget";
 
@@ -104,7 +104,7 @@ function Items() {
         <button className="add-to-cart-button"
           onClick={() => {
             dispatch(addItems({ items, totalPrice }));
-            dispatch(updateCart({ userId, items }));
+            dispatch(addToCart({ userId, items }));
             dispatch(clearSelection());
           }}>
           Add to cart

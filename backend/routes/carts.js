@@ -31,7 +31,7 @@ router.get('/:userId', async (req, res) => {
 });
 
 // Add items to the cart
-router.put('/:userId', async (req, res) => {
+router.put('/add/:userId', async (req, res) => {
   const userId = parseInt(req.params.userId);
   const { items = [] } = req.body; // Default to an empty array if items is undefined
 

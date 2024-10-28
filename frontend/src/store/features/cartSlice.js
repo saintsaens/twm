@@ -24,9 +24,9 @@ export const deleteCart = createAsyncThunk('cart/deleteCart', async (userId) => 
     return data;
 });
 
-export const updateCart = createAsyncThunk('cart/updateCart', async ({ userId, items }) => {
+export const addToCart = createAsyncThunk('cart/addToCart', async ({ userId, items }) => {
     const validItems = items.filter(item => item.quantity >= 1);
-    const response = await fetch(`/api/carts/${userId}`, {
+    const response = await fetch(`/api/carts/add/${userId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -85,16 +85,16 @@ const cartSlice = createSlice({
                 state.loading = false;
                 state.error = action.error.message; // Store the error message
             })
-            .addCase(updateCart.pending, (state) => {
+            .addCase(addToCart.pending, (state) => {
                 state.loading = true;
                 state.error = null; // Reset error on new request
             })
-            .addCase(updateCart.fulfilled, (state, action) => {
+            .addCase(addToCart.fulfilled, (state, action) => {
                 state.loading = false;
                 state.items = action.payload;
                 state.totalPrice = action.payload.reduce((total, item) => total + (parseMoney(item.price) * item.quantity), 0);
             })
-            .addCase(updateCart.rejected, (state, action) => {
+            .addCase(addToCart.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message; // Store the error message
             });
