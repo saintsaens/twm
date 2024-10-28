@@ -50,7 +50,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-
 // Get all orders by user_id
 router.get('/', async (req, res) => {
   const userId = req.query.user;
@@ -62,7 +61,6 @@ router.get('/', async (req, res) => {
     res.status(500).json({ error: 'Failed to retrieve orders' });
   }
 });
-
 
 // Get a specific order by ID
 router.get('/:id', async (req, res) => {
