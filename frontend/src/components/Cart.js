@@ -22,6 +22,11 @@ function Cart() {
     }
   }, [dispatch, userId]);
 
+  const handleClear = () => {
+    dispatch(clearCart());
+    dispatch(deleteCart(userId));
+  };
+
   const handleCheckout = () => {
     const nickname = generateName();
     try {
@@ -33,7 +38,7 @@ function Cart() {
       console.error('Failed to create order:', error);
     }
   };
-  
+
 
   return (
     <div className="items-container">
@@ -70,15 +75,16 @@ function Cart() {
         </tfoot>
       </table>
       <div className="add-to-cart-container">
-        <button className="clear-cart-button" onClick={() => {
-          dispatch(clearCart());
-          dispatch(deleteCart(userId));
-        }}>
-          Clear cart
-        </button>
-        <button className="checkout-button" onClick={handleCheckout}>
-          Checkout
-        </button>
+        {totalPrice > 0 &&
+          <button className="clear-cart-button" onClick={handleClear}>
+            Clear cart
+          </button>
+        }
+        {totalPrice > 0 &&
+          <button className="checkout-button" onClick={handleCheckout}>
+            Checkout
+          </button>
+        }
       </div>
       {showMessage && <p>All items have been shipped to your boss!</p>}
       {showMessage && <p><Link to="/orders">See all orders →</Link></p>}
