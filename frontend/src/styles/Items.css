@@ -212,3 +212,32 @@ h2 {
 .table-row-clickable {
   cursor: pointer; /* Changes cursor to pointer on hover */
 }
+
+.remove-button {
+  background-color: #ff6b6b; /* Soft red */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.remove-button:hover {
+  background-color: #e63946; /* Darker red */
+}
+
+.quantity-cell {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.remove-button {
+  margin-left: 8px; /* Adds a bit of space between quantity and button */
+}

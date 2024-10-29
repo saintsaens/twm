@@ -66,10 +66,13 @@ function Cart() {
             <tr key={item_id || index}>
               <td>{name}</td>
               <td>{price}</td>
-              <td>{quantity}
-                <button onClick={() => {handleRemove(item_id)}}>
+              <td>
+                <div className="quantity-cell">
+                {quantity}
+                <button className="remove-button" onClick={() => {handleRemove(item_id)}}>
                   X
                 </button>
+                </div>
               </td>
             </tr>
           ))}
