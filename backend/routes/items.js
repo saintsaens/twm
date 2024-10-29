@@ -1,4 +1,5 @@
 import Router from "express-promise-router";
+import { ensureAuthenticated, ensureAdmin, checkUserId } from "./auth.js";
 import * as db from '../db/index.js'
 
 const router = new Router();
@@ -38,13 +39,13 @@ router.get('/:id', async (req, res) => {
     } else {
       res.status(404).send('Item not found');
     }
-  router.post('/', async (req, res) => {
   } catch (error) {
     console.error('Error fetching item:', error);
     res.status(500).send('Server error');
   }
 });
 
+router.post('/', ensureAuthenticated, ensureAdmin, async (req, res) => {
   try {
     const newItem = req.body;
 
@@ -56,7 +57,6 @@ router.get('/:id', async (req, res) => {
         INSERT INTO items (name, type, rarity, price)
         VALUES ($1, $2::item_type, $3::rarity_type, $4::money)
         RETURNING *;`;
-  router.put('/:id', async (req, res) => {
 
     const result = await db.query(query, [
       newItem.name,
@@ -72,6 +72,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+router.put('/:id', ensureAuthenticated, ensureAdmin, async (req, res) => {
   const id = parseInt(req.params.id);
   const { name, type, rarity, price } = req.body;
 
@@ -101,7 +102,6 @@ router.get('/:id', async (req, res) => {
     if (result.rowCount === 0) {
       return res.status(404).send('Item not found');
     }
-  router.delete('/:id', async (req, res) => {
 
     res.json(result.rows[0]); // Return the updated item
   } catch (error) {
@@ -110,6 +110,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+router.delete('/:id', ensureAuthenticated, ensureAdmin, async (req, res) => {
   const id = parseInt(req.params.id);
 
   try {
