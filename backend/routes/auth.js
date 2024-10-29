@@ -24,6 +24,14 @@ export const checkUserId = (req, res, next) => {
   next();
 };
 
+// Middleware to check if user is an admin
+export const ensureAdmin = (req, res, next) => {
+  if (req.user && req.user.role === 'admin') {
+    return next();
+  }
+  return res.status(403).json({ error: 'Access denied: Admins only' });
+};
+
 passport.use(new LocalStrategy(async function verify(username, password, cb) {
   const query = 'SELECT * FROM users WHERE username = $1';
   
