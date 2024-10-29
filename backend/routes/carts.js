@@ -79,6 +79,34 @@ router.put('/add/:userId', async (req, res) => {
   }
 });
 
+// Remove an item from the cart
+router.put('/remove/:userId', async (req, res) => {
+  const userId = parseInt(req.params.userId);
+  const { itemId } = req.body;
+
+  try {
+    // Delete item from the user's cart
+    await db.query(`
+        DELETE FROM users_items
+        WHERE user_id = $1 AND item_id = $2;
+      `, [userId, itemId]);
+
+    const updatedItemsResult = await db.query(`
+      SELECT ui.item_id, ui.quantity, i.name, i.price
+      FROM users_items ui
+      JOIN items i ON ui.item_id = i.id
+      WHERE ui.user_id = $1
+    `, [userId]);
+
+    res.json(updatedItemsResult.rows);
+
+  } catch (error) {
+    console.error('Error removing items from cart:', error);
+    res.status(500).json({ error: 'Failed to remove items from cart' });
+  }
+});
+
+
 // Delete a cart
 router.delete('/:userId', async (req, res) => {
   const id = parseInt(req.params.userId);

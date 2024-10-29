@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import '../styles/Items.css';
 import { formatCurrency } from "../utils/money";
 import { Link } from "react-router-dom";
-import { clearCart, deleteCart } from "../store/features/cartSlice";
+import { clearCart, deleteCart, removeFromCart, removeItem } from "../store/features/cartSlice";
 import { fetchCart } from "../store/features/cartSlice";
 import { createOrder } from "../store/features/ordersSlice";
 import { generateName } from "../utils/names";
@@ -39,6 +39,11 @@ function Cart() {
     }
   };
 
+  const handleRemove = (itemId) => {
+    dispatch(removeItem({itemId}));
+    dispatch(removeFromCart({userId, itemId}));
+  };
+
 
   return (
     <div className="items-container">
@@ -57,11 +62,15 @@ function Cart() {
           </tr>
         </thead>
         <tbody>
-          {items.map(({ id, name, price, quantity = 0 }, index) => (
-            <tr key={id || index}>
+          {items.map(({ item_id, name, price, quantity = 0 }, index) => (
+            <tr key={item_id || index}>
               <td>{name}</td>
               <td>{price}</td>
-              <td>{quantity}</td>
+              <td>{quantity}
+                <button onClick={() => {handleRemove(item_id)}}>
+                  X
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>

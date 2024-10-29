@@ -39,7 +39,19 @@ export const addToCart = createAsyncThunk('cart/addToCart', async ({ userId, ite
     return await response.json();
 });
 
-
+export const removeFromCart = createAsyncThunk('cart/removeFromCart', async ({ userId, itemId }) => {
+    const response = await fetch(`/api/carts/remove/${userId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ itemId }),
+    });
+    if (!response.ok) {
+        throw new Error('Failed to update cart');
+    }
+    return await response.json();
+});
 
 const cartSlice = createSlice({
     name: 'cart',
@@ -58,11 +70,9 @@ const cartSlice = createSlice({
             });
             state.totalPrice += totalPrice;
         },
-        removeItems(state, action) {
-            const itemsToRemove = action.payload; // Expecting an array of item_ids
-            itemsToRemove.forEach(itemId => {
-                state.items = state.items.filter(item => item.item_id !== itemId);
-            });
+        removeItem(state, action) {
+            const { itemId } = action.payload;
+            state.items = state.items.filter(item => item.item_id !== itemId);
             state.totalPrice = state.items.reduce((total, item) => total + (parseMoney(item.price) * item.quantity), 0);
         },
         clearCart(state) {
@@ -101,6 +111,6 @@ const cartSlice = createSlice({
     },
 });
 
-export const { addItems, removeItems, clearCart } = cartSlice.actions;
+export const { addItems, removeItem, clearCart } = cartSlice.actions;
 
 export default cartSlice.reducer;
