@@ -3,13 +3,13 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 // Create an order
 export const createOrder = createAsyncThunk(
     'orders/createOrder',
-    async ({ user_id, total_price, items, nickname }) => {
-        const response = await fetch('/api/orders', {
+    async ({ userId, totalPrice, items, nickname }) => {
+        const response = await fetch(`/api/orders/${userId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ user_id, total_price, items, nickname }),
+            body: JSON.stringify({ userId, totalPrice, items, nickname }),
         });
 
         if (!response.ok) {

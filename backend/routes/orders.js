@@ -1,21 +1,23 @@
 import Router from "express-promise-router";
 import * as db from '../db/index.js';
+import { ensureAuthenticated, checkUserId } from "./auth.js";
 
 const router = new Router();
 
 // Create a new order
-router.post('/', async (req, res) => {
-  const { user_id, total_price, items, nickname } = req.body;
+router.post('/:userId', async (req, res) => {
+  const userId = parseInt(req.params.userId);
+  const { totalPrice, items, nickname } = req.body;
   const created_at = new Date().toISOString();
 
   // Check for required fields
-  if (!total_price || !user_id || !nickname || !items || items.length === 0) {
+  if (!totalPrice || !userId || !nickname || !items || items.length === 0) {
     return res.status(400).json({ error: 'Missing required fields or items' });
   }
 
   try {
     // Check if the user exists
-    const userCheck = await db.query('SELECT id FROM users WHERE id = $1', [user_id]);
+    const userCheck = await db.query('SELECT id FROM users WHERE id = $1', [userId]);
     if (userCheck.rowCount === 0) {
       return res.status(400).json({ error: 'Invalid user_id' });
     }
@@ -26,7 +28,7 @@ router.post('/', async (req, res) => {
       VALUES ($1, $2, $3, $4)
       RETURNING *;
     `;
-    const orderResult = await db.query(orderQuery, [user_id, total_price, created_at, nickname]);
+    const orderResult = await db.query(orderQuery, [userId, totalPrice, created_at, nickname]);
 
     const orderId = orderResult.rows[0].id;
 

@@ -30,7 +30,7 @@ function Cart() {
   const handleCheckout = () => {
     const nickname = generateName();
     try {
-      dispatch(createOrder({ user_id: userId, total_price: totalPrice, items, nickname })).unwrap();
+      dispatch(createOrder({ userId, totalPrice, items, nickname })).unwrap();
       dispatch(clearCart());
       dispatch(deleteCart(userId));
       setShowMessage(true);
