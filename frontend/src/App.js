@@ -1,19 +1,18 @@
 import React from "react";
-import { BrowserRouter as Router, Link } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import "./styles/App.css";
 
 import Navigation from './components/Navigation';
 import Welcome from './components/Welcome';
 import AppRoutes from './components/AppRoutes';
+import Title from "./components/Title";
 
 function App() {
   return (
     <div className="app-container">
       <Router>
         <header>
-          <h1>
-            <Link to="/" className="header-link">The Witcher Marketplace</Link>
-          </h1>
+          <Title />
           <Welcome />
         </header>
         <nav>

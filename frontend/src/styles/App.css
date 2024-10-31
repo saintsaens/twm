@@ -1,16 +1,15 @@
 .app-container {
   text-align: center;
   max-width: 1000px;
-  margin: 0 auto;
+  margin: auto;
   padding: 20px;
 }
 
 header {
-  background-color: #2d2d2d;
+  background: #2d2d2d;
   padding: 20px;
   color: white;
   display: flex;
-  justify-content: space-between;
   align-items: center;
 }
 
@@ -21,19 +20,14 @@ h1 {
   text-align: left;
 }
 
-.welcome {
+.welcome, .navigation {
   flex: 1;
   text-align: right;
   margin-right: 20px;
 }
 
-.navigation {
-  text-align: right;
-  padding: 10px;
-}
-
 .navigation ul {
-  list-style-type: none;
+  list-style: none;
   padding: 0;
   margin: 0;
 }
@@ -43,33 +37,27 @@ h1 {
   margin: 0 15px;
 }
 
-.nav-link {
+.nav-link, .nav-link-white, .header-link {
   text-decoration: none;
   color: black;
   transition: color 0.3s;
 }
 
-.nav-link:hover {
-  color: #4CAF50;
-}
-
-.nav-link-white {
-  text-decoration: none;
-  color: white;
-  transition: color 0.3s;
-}
-
-.nav-link-white:hover {
-  color: #4CAF50;
-}
-
 .header-link {
-  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.nav-link:hover, .nav-link-white:hover {
+  color: #4CAF50;
+}
+
+.header-link, .nav-link-white {
   color: white;
 }
 
 .cart-container {
-  background-color: #f8f9fa;
+  background: #f8f9fa;
   padding: 20px;
   margin: 20px 0;
   border: 1px solid #ddd;
@@ -80,4 +68,16 @@ h1 {
 .cart-container p {
   margin: 5px 0;
   font-weight: bold;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  flex: 2;
+}
+
+.title-logo {
+  align-items: center;
+  width: 100px;
+  margin-right: 10px;
 }
