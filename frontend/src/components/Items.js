@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { decrement, increment, fetchItems, setRarityFilter, setTypeFilter, clearSelection } from '../store/features/itemsSlice';
+import { setQuantity, fetchItems, setRarityFilter, setTypeFilter, clearSelection } from '../store/features/itemsSlice';
 import { addItems, addToCart } from "../store/features/cartSlice";
 import { parseMoney, formatCurrency } from "../utils/money";
 import CartWidget from "./CartWidget";
@@ -23,9 +23,10 @@ function Items() {
     dispatch(setTypeFilter(event.target.value));
   };
 
-  const updateQuantity = (itemId, action) => {
-    dispatch(action === 'increment' ? increment({ itemId }) : decrement({ itemId }));
+  const handleQuantityChange = (itemId, quantity) => {
+    dispatch(setQuantity({ itemId, quantity }));
   };
+
 
   const filteredItems = items.filter(item =>
     (rarityFilter === 'All' || item.rarity === rarityFilter) &&
@@ -40,9 +41,7 @@ function Items() {
 
   return (
     <>
-      {username && (
-        <CartWidget />
-      )}
+      {username && <CartWidget />}
       <section>
         <label htmlFor="rarity-filter">Filter by rarity: </label>
         <select id="rarity-filter" value={rarityFilter} onChange={handleRarityChange}>
@@ -67,23 +66,27 @@ function Items() {
               <th>Name</th>
               <th>Type</th>
               <th>Rarity</th>
-              <th>Unit price</th>
+              <th>Price</th>
+              <th>Quantity</th>
             </tr>
           </thead>
           <tbody>
             {filteredItems.map(({ id, name, type, rarity, price, quantity = 0 }) => (
               <tr key={id}>
-                <td>
-                  <span>{name}</span>
-                  <div>
-                    <button onClick={() => updateQuantity(id, 'decrement')}>-</button>
-                    <span>{quantity}</span>
-                    <button onClick={() => updateQuantity(id, 'increment')}>+</button>
-                  </div>
-                </td>
+                <td>{name}</td>
                 <td>{type}</td>
                 <td>{rarity}</td>
                 <td>{price}</td>
+                <td>
+                  <select
+                    value={quantity}
+                    onChange={(e) => handleQuantityChange(id, Number(e.target.value))}
+                  >
+                    {[...Array(10).keys()].map(i => (
+                      <option key={i} value={i}>{i}</option>
+                    ))}
+                  </select>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -99,7 +102,8 @@ function Items() {
             dispatch(addItems({ items, totalPrice }));
             dispatch(addToCart({ userId, items }));
             dispatch(clearSelection());
-          }}>
+          }}
+        >
           Add to cart
         </button>
       </section>

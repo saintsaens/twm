@@ -26,16 +26,11 @@ export const itemsSlice = createSlice({
         setRarityFilter: (state, action) => {
             state.rarityFilter = action.payload;
         },
-        increment: (state, action) => {
-            const item = state.items.find(item => item.id === action.payload.itemId);
+        setQuantity: (state, action) => {
+            const { itemId, quantity } = action.payload;
+            const item = state.items.find(item => item.id === itemId);
             if (item) {
-                item.quantity = (item.quantity || 0) + 1;
-            }
-        },
-        decrement: (state, action) => {
-            const item = state.items.find(item => item.id === action.payload.itemId);
-            if (item) {
-                item.quantity = Math.max(0, (item.quantity || 0) - 1); // Prevent negative quantities
+                item.quantity = Math.max(0, quantity); // Ensure quantity is non-negative
             }
         },
         clearSelection(state) {
@@ -59,6 +54,6 @@ export const itemsSlice = createSlice({
     }
 })
 
-export const { setRarityFilter, setTypeFilter, increment, decrement, clearSelection } = itemsSlice.actions
+export const { setRarityFilter, setTypeFilter, setQuantity, clearSelection } = itemsSlice.actions
 
 export default itemsSlice.reducer
