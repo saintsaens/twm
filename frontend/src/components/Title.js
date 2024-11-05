@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 function Title() {
   return (
     <h1>
-      <Link to="/">The Witcher Marketplace</Link>
+      The Witcher Marketplace
     </h1>
   );
 }
