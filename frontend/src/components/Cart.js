@@ -39,53 +39,46 @@ function Cart() {
   };
 
   const handleRemove = (itemId) => {
-    dispatch(removeItem({itemId}));
-    dispatch(removeFromCart({userId, itemId}));
+    dispatch(removeItem({ itemId }));
+    dispatch(removeFromCart({ userId, itemId }));
   };
 
 
   return (
-    <div className="items-container">
-      <div className="go-back-link-container">
-        <p>
-          <Link to="/" className="nav-link">← Go back</Link>
-        </p>
-      </div>
+    <>
+      <section>
+        <Link to="/" className="nav-link">← Go back</Link>
+      </section>
+      <section>
 
-      <table className="items-table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Unit price</th>
-            <th>Quantity</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map(({ item_id, name, price, quantity = 0 }, index) => (
-            <tr key={item_id || index}>
-              <td>{name}</td>
-              <td>{price}</td>
-              <td>
-                <div className="quantity-cell">
-                {quantity}
-                <button className="remove-button" onClick={() => {handleRemove(item_id)}}>
-                  X
-                </button>
-                </div>
-              </td>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Unit price</th>
+              <th>Quantity</th>
             </tr>
-          ))}
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colSpan="2" style={{ textAlign: 'right', fontWeight: 'bold' }}>Total Price:</td>
-            <td>{formatCurrency(totalPrice)}</td>
-          </tr>
-          <tr>
-          </tr>
-        </tfoot>
-      </table>
-      <div className="add-to-cart-container">
+          </thead>
+          <tbody>
+            {items.map(({ item_id, name, price, quantity = 0 }, index) => (
+              <tr key={item_id || index}>
+                <td>{name}</td>
+                <td>{price}</td>
+                <td>
+                  {quantity}
+                  <button className="remove-button" onClick={() => { handleRemove(item_id) }}>
+                    X
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+      <section>
+        <p>Total price: {formatCurrency(totalPrice)}</p>
+      </section>
+      <section>
         {totalPrice > 0 &&
           <button className="clear-cart-button" onClick={handleClear}>
             Clear cart
@@ -96,10 +89,10 @@ function Cart() {
             Checkout
           </button>
         }
-      </div>
-      {showMessage && <p>All items have been shipped to your boss!</p>}
-      {showMessage && <p><Link to="/orders">See all orders →</Link></p>}
-    </div>
+        {showMessage && <p>All items have been shipped to your boss!</p>}
+        {showMessage && <p><Link to="/orders">See all orders →</Link></p>}
+      </section>
+    </>
   );
 }
 

@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import "./styles/App.css";
 
 import Navigation from './components/Navigation';
 import Welcome from './components/Welcome';
@@ -9,20 +8,19 @@ import Title from "./components/Title";
 
 function App() {
   return (
-    <div className="app-container">
-      <Router>
-        <header>
-          <Title />
-          <Welcome />
-        </header>
+    <Router>
+      <header>
         <nav>
+          <img src="/logo.png" height="100" alt="Logo" />
           <Navigation />
         </nav>
-        <main>
-          <AppRoutes />
-        </main>
-      </Router>
-    </div>
+        <Title />
+        <Welcome />
+      </header>
+      <main>
+        <AppRoutes />
+      </main>
+    </Router>
   );
 }
 

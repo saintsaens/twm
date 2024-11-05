@@ -15,9 +15,9 @@ function Welcome() {
   }, [dispatch, userStatus]);
 
   return (
-    <div className="welcome">
-      {username ? <p>Welcome, {username}!</p> : <Link to="/signin" className="nav-link-white">Not logged in</Link>}
-    </div>
+    <section>
+      {username ? <p>Welcome, {username}!</p> : <Link to="/signin">Not logged in</Link>}
+    </section>
   );
 }
 

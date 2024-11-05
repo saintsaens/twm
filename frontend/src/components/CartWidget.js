@@ -20,13 +20,15 @@ function CartWidget() {
   }, [dispatch, userId]);
 
   return (
-    <div>
-      <p>Items in cart: {totalItems}</p>
-      <p>Total price: {formatCurrency(totalPrice)}</p>
-      <button>
-        <Link to="/cart" className="nav-link">View cart</Link>
-      </button>
-    </div>
+    <section>
+      <aside>
+        <p>Items in cart: {totalItems}</p>
+        <p>
+          Total price: {formatCurrency(totalPrice)}
+        </p>
+        <Link to="/cart">View cart</Link>
+      </aside>
+    </section>
   );
 }
 

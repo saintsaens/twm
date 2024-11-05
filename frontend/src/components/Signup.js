@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import '../styles/Signup.css';
 import { useDispatch } from "react-redux";
 import { loginUser } from '../store/features/authSlice';
 import { fetchUser } from '../store/features/userSlice';
@@ -48,10 +47,12 @@ function Signup() {
   };
 
   return (
-    <div className="signup-container">
-      <h2 className="signup-title">Sign Up</h2>
-      <form className="signup-form" onSubmit={handleSubmit}>
-        <div className="form-group">
+    <>
+      <section>
+        <form className="signup-form" onSubmit={handleSubmit}>
+          <header>
+            <h2>Sign Up</h2>
+          </header>
           <label htmlFor="username">Username:</label>
           <input
             type="text"
@@ -60,8 +61,6 @@ function Signup() {
             onChange={(e) => setUsername(e.target.value)}
             required
           />
-        </div>
-        <div className="form-group">
           <label htmlFor="password">Password:</label>
           <input
             type="password"
@@ -70,15 +69,17 @@ function Signup() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-        </div>
-        <button type="submit" className="signup-button">Create Account</button>
-      </form>
-      <p className="signin-link">
-        Already have an account? <Link to="/signin" className="nav-link">Sign in here →</Link>
-      </p>
-      {error && <p className="error-message">{error}</p>}
-      {successMessage && <p className="success-message">{successMessage}</p>}
-    </div>
+          <button type="submit">Create Account</button>
+        </form>
+      </section>
+      <section>
+        <p className="signin-link">
+          Already have an account? <Link to="/signin">Sign in here →</Link>
+        </p>
+        {error && <p className="error-message">{error}</p>}
+        {successMessage && <p className="success-message">{successMessage}</p>}
+      </section>
+    </>
   );
 }
 

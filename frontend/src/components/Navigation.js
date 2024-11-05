@@ -14,10 +14,10 @@ function Navigation() {
   ];
 
   return (
-    <ul className="navigation">
+    <ul>
       {navLinks.map(link => (
         <li key={link.path}>
-          <Link to={link.path} className="nav-link">{link.label}</Link>
+          <Link to={link.path}>{link.label}</Link>
         </li>
       ))}
     </ul>
