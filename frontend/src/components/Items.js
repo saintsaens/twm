@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { decrement, increment, fetchItems, setRarityFilter, setTypeFilter, clearSelection } from '../store/features/itemsSlice';
-import '../styles/Items.css';
 import { addItems, addToCart } from "../store/features/cartSlice";
 import { parseMoney, formatCurrency } from "../utils/money";
 import CartWidget from "./CartWidget";
