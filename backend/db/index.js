@@ -15,6 +15,6 @@ pool.connect((err, client, release) => {
   console.log('Connected to PostgreSQL database successfully!');
 });
 
-export const query = (text, params, callback) => {
-  return pool.query(text, params, callback)
+export const query = (text, params) => {
+  return pool.query(text, params)
 }
