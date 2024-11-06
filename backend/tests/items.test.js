@@ -1,12 +1,12 @@
 import { test, expect, vi } from 'vitest';
-import express, { json } from 'express';
+import express from 'express';
 import itemsRouter from '../routes/items.js';
 import { query } from '../db/index.js';
-import request from 'supertest'; // Ensure you import 'supertest'
+import request from 'supertest';
 
 // Mock Express app
 const app = express();
-app.use(json());
+app.use(express.json());
 app.use('/items', itemsRouter);
 
 // Mock data
