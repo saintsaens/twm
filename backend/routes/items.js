@@ -129,4 +129,5 @@ router.delete('/:id', ensureAuthenticated, ensureAdmin, async (req, res) => {
   }
 });
 
+module.exports = router;  // CommonJS export for tests
 export default router;
