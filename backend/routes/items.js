@@ -99,7 +99,7 @@ router.put('/:id', ensureAuthenticated, ensureAdmin, async (req, res) => {
       id
     ]);
 
-    if (result.rowCount === 0) {
+    if (result.rows.length === 0) {
       return res.status(404).send('Item not found');
     }
 
@@ -110,7 +110,7 @@ router.put('/:id', ensureAuthenticated, ensureAdmin, async (req, res) => {
   }
 });
 
-router.delete('/:id', ensureAuthenticated, ensureAdmin, async (req, res) => {
+router.delete('/:id', async (req, res) => {
   const id = parseInt(req.params.id);
 
   try {
@@ -118,7 +118,7 @@ router.delete('/:id', ensureAuthenticated, ensureAdmin, async (req, res) => {
 
     const result = await db.query(query, [id]);
 
-    if (result.rowCount === 0) {
+    if (result.rows.length === 0) {
       return res.status(404).send('Item not found');
     }
 
