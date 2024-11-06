@@ -29,7 +29,12 @@ router.post('/:userId', async (req, res) => {
       RETURNING *;
     `;
     const orderResult = await db.query(orderQuery, [userId, totalPrice, created_at, nickname]);
-
+    
+    // Check if the order was successfully inserted
+    if (orderResult.rows.length === 0) {
+      return res.status(500).json({ error: 'Failed to create order' });
+    }
+    
     const orderId = orderResult.rows[0].id;
 
     // Prepare the insert statement for orders_items
