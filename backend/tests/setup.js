@@ -8,16 +8,8 @@ vi.mock('../db/index.js', () => {
     };
 });
 
-beforeAll(async () => {
-    console.log = vi.fn();  // Suppress any logs during tests to avoid clutter
-});
-
 afterAll(() => {
     vi.restoreAllMocks();  // Restore all mocks after tests
-});
-
-beforeEach(() => {
-    // Add setup logic here if needed for each test
 });
 
 afterEach(() => {
