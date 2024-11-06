@@ -4,6 +4,7 @@ import { setQuantity, fetchItems, setRarityFilter, setTypeFilter, clearSelection
 import { addItems, addToCart } from "../store/features/cartSlice";
 import { parseMoney, formatCurrency } from "../utils/money";
 import CartWidget from "./CartWidget";
+import { Link } from "react-router-dom";
 
 function Items() {
   const dispatch = useDispatch();
@@ -25,6 +26,11 @@ function Items() {
 
   const handleQuantityChange = (itemId, quantity) => {
     dispatch(setQuantity({ itemId, quantity }));
+  };
+
+  const handleClearFilters = () => {
+    dispatch(setRarityFilter('All'));
+    dispatch(setTypeFilter('All'));
   };
 
 
@@ -67,6 +73,7 @@ function Items() {
           <option value="Weapon">Weapon</option>
           <option value="Potion">Potion</option>
         </select>
+        <Link onClick={handleClearFilters}>Clear</Link>
       </section>
 
       <section>
