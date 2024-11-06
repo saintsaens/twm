@@ -46,17 +46,15 @@ function Cart() {
 
   return (
     <>
+      <Link to="/">← Go back</Link>
       <section>
-        <Link to="/" className="nav-link">← Go back</Link>
-      </section>
-      <section>
-
         <table>
           <thead>
             <tr>
               <th>Name</th>
               <th>Unit price</th>
               <th>Quantity</th>
+              <th>Remove</th>
             </tr>
           </thead>
           <tbody>
@@ -66,7 +64,9 @@ function Cart() {
                 <td>{price}</td>
                 <td>
                   {quantity}
-                  <button className="remove-button" onClick={() => { handleRemove(item_id) }}>
+                </td>
+                <td>
+                  <button onClick={() => { handleRemove(item_id) }}>
                     X
                   </button>
                 </td>
