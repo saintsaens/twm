@@ -41,7 +41,7 @@ test('should return an item by ID', async () => {
   const item = mockItems[0];
   vi.mocked(query).mockResolvedValue({ rows: [item] });
 
-  const res = await request(app).get(`/${item.id}`);
+  const res = await request(app).get(`/items/${item.id}`);
   expect(res.status).toBe(200);
   expect(res.body).toEqual(item);
 });

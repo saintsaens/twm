@@ -34,7 +34,7 @@ router.get('/:id', async (req, res) => {
   try {
     const result = await db.query(query, [id]);
 
-    if (result.rowCount > 0) {
+    if (result.rows.length > 0) {
       res.json(result.rows[0]);
     } else {
       res.status(404).send('Item not found');
