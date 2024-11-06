@@ -10,10 +10,7 @@ function App() {
   return (
     <Router>
       <header>
-        <nav>
-          <img src="/logo.png" height="100" alt="Logo" />
-          <Navigation />
-        </nav>
+        <Navigation />
         <Title />
         <Welcome />
       </header>

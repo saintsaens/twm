@@ -14,13 +14,18 @@ function Navigation() {
   ];
 
   return (
-    <ul>
-      {navLinks.map(link => (
-        <li key={link.path}>
-          <Link to={link.path}>{link.label}</Link>
-        </li>
-      ))}
-    </ul>
+    <nav>
+      <Link to="/">
+        <img src="/logo.png" height="100" alt="Logo" />
+      </Link>
+      <ul>
+        {navLinks.map(link => (
+          <li key={link.path}>
+            <Link to={link.path}>{link.label}</Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 }
 
