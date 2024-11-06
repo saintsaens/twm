@@ -44,7 +44,12 @@ function Items() {
       {username && <CartWidget />}
       <section>
         <label htmlFor="rarity-filter">Filter by rarity: </label>
-        <select id="rarity-filter" value={rarityFilter} onChange={handleRarityChange}>
+        <select
+          id="rarity-filter"
+          name="rarity-filter"
+          value={rarityFilter}
+          onChange={handleRarityChange}
+        >
           <option value="All">All</option>
           <option value="Common">Common</option>
           <option value="Rare">Rare</option>
@@ -52,7 +57,12 @@ function Items() {
         </select>
 
         <label htmlFor="type-filter">Filter by type: </label>
-        <select id="type-filter" value={typeFilter} onChange={handleTypeChange}>
+        <select
+          id="type-filter"
+          name="type-filter"
+          value={typeFilter}
+          onChange={handleTypeChange}
+        >
           <option value="All">All</option>
           <option value="Weapon">Weapon</option>
           <option value="Potion">Potion</option>
@@ -79,6 +89,8 @@ function Items() {
                 <td>{price}</td>
                 <td>
                   <select
+                    id={`quantity-${id}`}
+                    name={`quantity-${id}`}
                     value={quantity}
                     onChange={(e) => handleQuantityChange(id, Number(e.target.value))}
                   >
