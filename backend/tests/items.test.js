@@ -37,6 +37,46 @@ test('should return all items', async () => {
   expect(res.body).toEqual(mockItems);
 });
 
+test('should return items filtered by type', async () => {
+  vi.mocked(query).mockResolvedValue({ rows: [mockItems[0]] });
+
+  const res = await request(app).get('/items?type=Weapon');
+  expect(res.status).toBe(200);
+  expect(res.body).toEqual([mockItems[0]]);
+});
+
+test('should return items filtered by rarity', async () => {
+  vi.mocked(query).mockResolvedValue({ rows: [mockItems[1]] });
+
+  const res = await request(app).get('/items?rarity=Rare');
+  expect(res.status).toBe(200);
+  expect(res.body).toEqual([mockItems[1]]);
+});
+
+test('should return items filtered by both type and rarity', async () => {
+  vi.mocked(query).mockResolvedValue({ rows: [mockItems[1]] });
+
+  const res = await request(app).get('/items?type=Weapon&rarity=Rare');
+  expect(res.status).toBe(200);
+  expect(res.body).toEqual([mockItems[1]]);
+});
+
+test('should return an empty array when no items match the filters', async () => {
+  vi.mocked(query).mockResolvedValue({ rows: [] });
+
+  const res = await request(app).get('/items?type=Potion&rarity=Legendary');
+  expect(res.status).toBe(200);
+  expect(res.body).toEqual([]);
+});
+
+test('should return all items if no filters are applied', async () => {
+  vi.mocked(query).mockResolvedValue({ rows: mockItems });
+
+  const res = await request(app).get('/items');
+  expect(res.status).toBe(200);
+  expect(res.body).toEqual(mockItems);
+});
+
 test('should return an item by ID', async () => {
   const item = mockItems[0];
   vi.mocked(query).mockResolvedValue({ rows: [item] });
