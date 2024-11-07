@@ -74,10 +74,10 @@ function Items() {
       </select>
       <Link onClick={handleClearFilters}>Clear</Link>
 
-      <div class="fr-table" id="table-md-component">
-        <div class="fr-table__wrapper">
-          <div class="fr-table__container">
-            <div class="fr-table__content">
+      <div className="fr-table" id="table-md-component">
+        <div className="fr-table__wrapper">
+          <div className="fr-table__container">
+            <div className="fr-table__content">
               <table id="table-md">
                 <caption>
                   Items
