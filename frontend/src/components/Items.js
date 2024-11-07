@@ -10,7 +10,6 @@ function Items() {
   const dispatch = useDispatch();
   const { items, rarityFilter, typeFilter } = useSelector((state) => state.items);
   const { userId } = useSelector((state) => state.user);
-  const { username } = useSelector((state) => state.user.username);
   const { username } = useSelector((state) => state.user);
 
   useEffect(() => {
