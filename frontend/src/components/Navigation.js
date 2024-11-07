@@ -7,26 +7,19 @@ function Navigation() {
   const { username } = useSelector((state) => state.user);
 
   const navLinks = [
-    ...(username ? [] : [{ path: '/signin', label: 'Sign In' }]),
-    ...(username ? [] : [{ path: '/signup', label: 'Sign Up' }]),
-    ...(username ? [{ path: '/orders', label: 'Orders' }] : []),
-    ...(username ? [{ path: '/logout', label: 'Log Out' }] : []),
+    ...(username ? [] : [{ path: '/signin', label: 'Sign in', icon: "fr-btn fr-icon-lock-line" }]),
+    ...(username ? [] : [{ path: '/signup', label: 'Sign up', icon: "fr-btn fr-icon-account-line" }]),
+    ...(username ? [{ path: '/orders', label: 'Your orders', icon: "fr-btn fr-icon-money-euro-circle-line" }] : []),
+    ...(username ? [{ path: '/logout', label: 'Log out', icon: "fr-btn fr-icon-logout-box-r-line" }] : []),
   ];
 
   return (
-    <nav className="fr-nav" id="header-navigation" role="navigation" aria-label="Main menu">
-      <ul className="fr-nav__list">
-        <li>
-          <Link to="/">
-            <img src="/logo.png" height="100" alt="Logo" />
-          </Link>
-        </li>
-        <li>
-          <Welcome />
-        </li>
-        {navLinks.map(link => (
-          <li className="fr-nav__item" key={link.path}>
-            <Link to={link.path} className="fr-nav__link">{link.label}</Link>
+    <nav className="fr-header__tools-links">
+      <Welcome />
+      <ul class="fr-btns-group">
+      {navLinks.map(link => (
+          <li key={link.path}>
+            <Link to={link.path} className={link.icon}>{link.label}</Link>
           </li>
         ))}
       </ul>
