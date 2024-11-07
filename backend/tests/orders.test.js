@@ -3,6 +3,7 @@ import express from 'express';
 import ordersRouter from '../routes/orders.js';
 import { query } from '../db/index.js';
 import request from 'supertest';
+import passport from "passport";
 
 // Mock Express app
 const app = express();
@@ -79,7 +80,6 @@ test('should create a new order', async () => {
     expect(res.body).toEqual(createdOrder);
 });
 
-
 test('should return 400 if required fields are missing', async () => {
     const incompleteOrder = { totalPrice: 6400.00, items: [] };
     const res = await request(app).post('/orders/1').send(incompleteOrder);
@@ -113,6 +113,18 @@ test('should return all orders for a user', async () => {
 
 test('should return a specific order by ID', async () => {
     const orderId = 1;
+
+    vi.spyOn(passport, 'authenticate').mockImplementation(() => {
+        return (req, res, next) => {
+            req.user = { id: 1 };
+            next();
+        };
+    });
+
+    vi.mocked(query).mockResolvedValueOnce({
+        rows: [{ user_id: 1 }]
+      });
+
     vi.mocked(query).mockResolvedValueOnce({ rows: mockOrderItems });
 
     const res = await request(app).get(`/orders/${orderId}`);
@@ -122,11 +134,22 @@ test('should return a specific order by ID', async () => {
 
 test('should return 404 if order not found by ID', async () => {
     const nonExistentOrderId = 999;
-    vi.mocked(query).mockResolvedValueOnce({ rowCount: 0 });
+    vi.spyOn(passport, 'authenticate').mockImplementation(() => {
+        return (req, res, next) => {
+            req.user = { id: 1 };
+            next();
+        };
+    });
+
+    vi.mocked(query).mockResolvedValueOnce({
+        rows: [{ user_id: 1 }]
+      });
+
+    vi.mocked(query).mockResolvedValueOnce({ rows: [] });
 
     const res = await request(app).get(`/orders/${nonExistentOrderId}`);
     expect(res.status).toBe(404);
-    expect(res.body).toEqual({ error: 'Order not found' });
+    expect(res.body).toEqual({ error: 'Order items not found' });
 });
 
 test('should return 500 if there is a database error', async () => {
