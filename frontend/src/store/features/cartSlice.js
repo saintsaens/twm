@@ -58,6 +58,7 @@ const cartSlice = createSlice({
     initialState: {
         items: [],
         totalPrice: 0,
+        totalItems: 0,
         loading: false,
         error: null,
     },
@@ -69,40 +70,45 @@ const cartSlice = createSlice({
                 existingItem ? existingItem.quantity += quantity : state.items.push({ item_id, quantity });
             });
             state.totalPrice += totalPrice;
+            state.totalItems = state.items.reduce((acc, item) => acc + item.quantity, 0);
         },
         removeItem(state, action) {
             const { itemId } = action.payload;
             state.items = state.items.filter(item => item.item_id !== itemId);
             state.totalPrice = state.items.reduce((total, item) => total + (parseMoney(item.price) * item.quantity), 0);
+            state.totalItems = state.items.reduce((acc, item) => acc + item.quantity, 0);
         },
         clearCart(state) {
             state.items = [];
             state.totalPrice = 0;
+            state.totalItems = 0;
         },
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchCart.pending, (state) => {
-                state.loading = true;
-                state.error = null; // Reset error on new request
-            })
-            .addCase(fetchCart.fulfilled, (state, action) => {
-                state.loading = false;
-                state.items = action.payload;
-                state.totalPrice = action.payload.reduce((total, item) => total + (parseMoney(item.price) * item.quantity), 0);
-            })
-            .addCase(fetchCart.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.error.message; // Store the error message
-            })
-            .addCase(addToCart.pending, (state) => {
-                state.loading = true;
-                state.error = null; // Reset error on new request
-            })
-            .addCase(addToCart.fulfilled, (state, action) => {
-                state.loading = false;
-                state.items = action.payload;
-                state.totalPrice = action.payload.reduce((total, item) => total + (parseMoney(item.price) * item.quantity), 0);
+        .addCase(fetchCart.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        .addCase(fetchCart.fulfilled, (state, action) => {
+            state.loading = false;
+            state.items = action.payload;
+            state.totalPrice = action.payload.reduce((total, item) => total + (parseMoney(item.price) * item.quantity), 0);
+            state.totalItems = state.items.reduce((acc, item) => acc + item.quantity, 0);
+        })
+        .addCase(fetchCart.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message; // Store the error message
+        })
+        .addCase(addToCart.pending, (state) => {
+            state.loading = true;
+            state.error = null; // Reset error on new request
+        })
+        .addCase(addToCart.fulfilled, (state, action) => {
+            state.loading = false;
+            state.items = action.payload;
+            state.totalPrice = action.payload.reduce((total, item) => total + (parseMoney(item.price) * item.quantity), 0);
+            state.totalItems = state.items.reduce((acc, item) => acc + item.quantity, 0);
             })
             .addCase(addToCart.rejected, (state, action) => {
                 state.loading = false;
