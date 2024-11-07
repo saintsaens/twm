@@ -58,7 +58,7 @@ router.post('/:userId', async (req, res) => {
   }
 });
 
-// Get all orders by user_id
+// Get all orders for a specific user
 router.get('/', async (req, res) => {
   const userId = req.query.user;
   try {
@@ -70,6 +70,7 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Get a specific order
 router.get('/:id', (req, res, next) => {
   passport.authenticate('session', { session: true })(req, res, next);
 }, async (req, res) => {
