@@ -112,6 +112,7 @@ function Items() {
                       <td>{price}</td>
                       <td>
                         <select
+                          className="fr-select"
                           id={`quantity-${id}`}
                           name={`quantity-${id}`}
                           value={quantity}
