@@ -14,21 +14,23 @@ function Navigation() {
   ];
 
   return (
-    <nav>
-      <Link to="/">
-        <img src="/logo.png" height="100" alt="Logo" />
-      </Link>
-      <ul>
+    <nav className="fr-nav" id="header-navigation" role="navigation" aria-label="Main menu">
+      <ul className="fr-nav__list">
+        <li>
+          <Link to="/">
+            <img src="/logo.png" height="100" alt="Logo" />
+          </Link>
+        </li>
         <li>
           <Welcome />
         </li>
         {navLinks.map(link => (
-          <li key={link.path}>
-            <Link to={link.path}>{link.label}</Link>
+          <li className="fr-nav__item" key={link.path}>
+            <Link to={link.path} className="fr-nav__link">{link.label}</Link>
           </li>
         ))}
       </ul>
-    </nav>
+    </nav >
   );
 }
 

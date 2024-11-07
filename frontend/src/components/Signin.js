@@ -39,41 +39,84 @@ function Signin() {
 
   return (
     <>
-      <section>
-        <form onSubmit={handleSubmit}>
-          <header>
-            <h2>Sign In</h2>
-          </header>
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            ref={usernameRef}
-            required
-          />
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-          <button type="submit" disabled={loading}>
-            {loading ? 'Signing in...' : 'Sign In'}
-          </button>
-        </form>
-      </section>
-      <section>
-        <p className="signup-link">
-          No account? <Link to="/signup">Sign up here →</Link>
-        </p>
-        {error && <p>{error}</p>}
-      </section>
+      <main className="fr-pt-md-14v" role="main" id="content">
+        <div className="fr-container fr-container--fluid fr-mb-md-14v">
+          <div className="fr-grid-row fr-grid-row-gutters fr-grid-row--center">
+            <div className="fr-col-12 fr-col-md-8 fr-col-lg-6">
+              <div className="fr-container fr-background-alt--grey fr-px-md-0 fr-py-10v fr-py-md-14v">
+                <div className="fr-grid-row fr-grid-row-gutters fr-grid-row--center">
+                  <div className="fr-col-12 fr-col-md-9 fr-col-lg-8">
+                    <h1>Sign in</h1>
+                    <div>
+                      <form id="login" onSubmit={handleSubmit}>
+                        <fieldset className="fr-fieldset" id="login-fieldset" aria-labelledby="login-fieldset-legend login-fieldset-messages">
+                              <div className="fr-fieldset__element">
+                                <div className="fr-input-group">
+                                  <label className="fr-label" htmlFor="username">
+                                    Username
+                                  </label>
+                                  <input
+                                    className="fr-input"
+                                    autocomplete="username"
+                                    aria-required="true"
+                                    aria-describedby="username"
+                                    name="username"
+                                    type="text"
+                                    id="username"
+                                    value={formData.username}
+                                    onChange={handleChange}
+                                    ref={usernameRef}
+                                    required
+                                  />
+                                </div>
+                              </div>
+                              <div className="fr-fieldset__element">
+                                <div className="fr-password" id="password">
+                                  <label className="fr-label" htmlFor="password-input">
+                                    Password
+                                  </label>
+                                    <input
+                                      className="fr-password__input fr-input"
+                                      aria-describedby="password"
+                                      aria-required="true"
+                                      name="password"
+                                      type="password"
+                                      id="password"
+                                      value={formData.password}
+                                      onChange={handleChange}
+                                      autocomplete="current-password"
+                                      required
+                                    />
+                                  </div>
+                                </div>
+                          <div className="fr-fieldset__element">
+                            <ul className="fr-btns-group">
+                              <li>
+                                <button
+                                  className="fr-mt-2v fr-btn"
+                                  type="submit"
+                                  disabled={loading}
+                                >
+                                  {loading ? 'Signing in...' : 'Sign In'}
+                                </button>
+                              </li>
+                            </ul>
+                          </div>
+                        </fieldset>
+                      </form>
+                    </div>
+                    <hr />
+                    <Link className="fr-link" to="/signup">
+                      Create an account →
+                    </Link>
+                    {error && <p>{error}</p>}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
     </>
   );
 }

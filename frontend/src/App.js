@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
+import '@gouvfr/dsfr/dist/dsfr.min.css';
 
 import Navigation from './components/Navigation';
 import AppRoutes from './components/AppRoutes';
