@@ -79,7 +79,7 @@ function Signup() {
                           </div>
                           <div className="fr-fieldset__element">
                             <div className="fr-password" id="password">
-                              <label className="fr-label" htmlFor="password-input">
+                              <label className="fr-label" htmlFor="password">
                                 Password
                               </label>
                               <input

@@ -50,45 +50,45 @@ function Signin() {
                     <div>
                       <form id="login" onSubmit={handleSubmit}>
                         <fieldset className="fr-fieldset" id="login-fieldset" aria-labelledby="login-fieldset-legend login-fieldset-messages">
-                              <div className="fr-fieldset__element">
-                                <div className="fr-input-group">
-                                  <label className="fr-label" htmlFor="username">
-                                    Username
-                                  </label>
-                                  <input
-                                    className="fr-input"
-                                    autocomplete="username"
-                                    aria-required="true"
-                                    aria-describedby="username"
-                                    name="username"
-                                    type="text"
-                                    id="username"
-                                    value={formData.username}
-                                    onChange={handleChange}
-                                    ref={usernameRef}
-                                    required
-                                  />
-                                </div>
-                              </div>
-                              <div className="fr-fieldset__element">
-                                <div className="fr-password" id="password">
-                                  <label className="fr-label" htmlFor="password-input">
-                                    Password
-                                  </label>
-                                    <input
-                                      className="fr-password__input fr-input"
-                                      aria-describedby="password"
-                                      aria-required="true"
-                                      name="password"
-                                      type="password"
-                                      id="password"
-                                      value={formData.password}
-                                      onChange={handleChange}
-                                      autocomplete="current-password"
-                                      required
-                                    />
-                                  </div>
-                                </div>
+                          <div className="fr-fieldset__element">
+                            <div className="fr-input-group">
+                              <label className="fr-label" htmlFor="username">
+                                Username
+                              </label>
+                              <input
+                                className="fr-input"
+                                autoComplete="username"
+                                aria-required="true"
+                                aria-describedby="username"
+                                name="username"
+                                type="text"
+                                id="username"
+                                value={formData.username}
+                                onChange={handleChange}
+                                ref={usernameRef}
+                                required
+                              />
+                            </div>
+                          </div>
+                          <div className="fr-fieldset__element">
+                            <div className="fr-password" id="password">
+                              <label className="fr-label" htmlFor="password">
+                                Password
+                              </label>
+                              <input
+                                className="fr-password__input fr-input"
+                                aria-describedby="password"
+                                aria-required="true"
+                                name="password"
+                                type="password"
+                                id="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                autoComplete="current-password"
+                                required
+                              />
+                            </div>
+                          </div>
                           <div className="fr-fieldset__element">
                             <ul className="fr-btns-group">
                               <li>
