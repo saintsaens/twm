@@ -1,6 +1,7 @@
 import Router from "express-promise-router";
 import * as db from '../db/index.js';
 import { ensureAuthenticated, checkUserId } from "./auth.js";
+import passport from "passport";
 
 const router = new Router();
 
@@ -29,12 +30,12 @@ router.post('/:userId', async (req, res) => {
       RETURNING *;
     `;
     const orderResult = await db.query(orderQuery, [userId, totalPrice, created_at, nickname]);
-    
+
     // Check if the order was successfully inserted
     if (orderResult.rows.length === 0) {
       return res.status(500).json({ error: 'Failed to create order' });
     }
-    
+
     const orderId = orderResult.rows[0].id;
 
     // Prepare the insert statement for orders_items
@@ -69,19 +70,41 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get a specific order by ID
-router.get('/:id', async (req, res) => {
-  const id = parseInt(req.params.id);
+router.get('/:id', (req, res, next) => {
+  passport.authenticate('session', { session: true })(req, res, next);
+}, async (req, res) => {
+  const orderId = parseInt(req.params.id);
+
+  // Check if the user is authenticated
+  if (!req.user.id) {
+    return res.status(401).json({ error: 'Unauthorized: You need to be logged in to access this order' });
+  }
+
   try {
+    // Check if the authenticated user is authorized to view the order
+    const orderCheck = await db.query(`
+      SELECT user_id FROM orders WHERE id = $1
+    `, [orderId]);
+
+    if (orderCheck.rows.length === 0) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    // Ensure the user is the owner of the order
+    if (orderCheck.rows[0].user_id !== req.user.id) {
+      return res.status(403).json({ error: 'Forbidden: You do not have access to this order' });
+    }
+
+    // Fetch the order items
     const result = await db.query(`
       SELECT oi.item_id, oi.quantity, i.name, i.price
       FROM orders_items oi
       JOIN items i ON oi.item_id = i.id
       WHERE oi.order_id = $1
-    `, [id]);
+    `, [orderId]);
 
-    if (result.rowCount === 0) {
-      return res.status(404).json({ error: 'Order not found' });
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Order items not found' });
     }
 
     res.json(result.rows);
@@ -90,5 +113,6 @@ router.get('/:id', async (req, res) => {
     res.status(500).json({ error: 'Failed to retrieve order' });
   }
 });
+
 
 export default router;
