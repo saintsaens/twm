@@ -22,8 +22,10 @@ const userSlice = createSlice({
     },
     reducers: {
         clearUser: (state) => {
+            state.userId = '';
             state.username = '';
             state.status = 'idle';
+            state.error = null;
         },
     },
     extraReducers: (builder) => {
