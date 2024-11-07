@@ -17,11 +17,11 @@ function App() {
 
   return (
     <Router>
-      <header>
+      <header className="fr-container fr-mt-2v fr-mb-8w">
         <Navigation />
         <Title />
       </header>
-      <main>
+      <main className="fr-container fr-mb-12w">
         <AppRoutes />
       </main>
     </Router>
