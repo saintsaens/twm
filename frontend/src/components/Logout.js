@@ -9,19 +9,18 @@ const Logout = () => {
 
   useEffect(() => {
     const handleLogout = async () => {
-      const response = await fetch('/api/logout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        dispatch(clearUser());
-        navigate('/signin');
-      } else {
-        console.error('Logout failed');
-      }
+      try {
+        const response = await fetch('/api/logout', {
+          method: 'POST',
+          credentials: 'include',
+        });
+        if (response.ok) {
+          dispatch(clearUser());
+          navigate('/signin');
+        }
+      } catch (error) {
+        console.error('Logout failed', error);
+      };
     };
 
     handleLogout();
