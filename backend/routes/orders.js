@@ -19,7 +19,7 @@ router.post('/:userId', async (req, res) => {
   try {
     // Check if the user exists
     const userCheck = await db.query('SELECT id FROM users WHERE id = $1', [userId]);
-    if (userCheck.rowCount === 0) {
+    if (userCheck.rows.length === 0) {
       return res.status(400).json({ error: 'Invalid user_id' });
     }
 

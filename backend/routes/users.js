@@ -22,7 +22,7 @@ router.get('/:id', async (req, res) => {
 
   try {
     const result = await db.query('SELECT * FROM users WHERE id = $1;', [id]);
-    if (result.rowCount === 0) {
+    if (result.rows.length === 0) {
       return res.status(404).send('User not found');
     }
     res.json(result.rows[0]);
@@ -58,7 +58,7 @@ router.put('/:id', async (req, res) => {
       id
     ]);
 
-    if (result.rowCount === 0) {
+    if (result.rows.length === 0) {
       return res.status(404).send('User not found');
     }
 
@@ -78,7 +78,7 @@ router.delete('/:id', async (req, res) => {
     
     const result = await db.query(query, [id]);
 
-    if (result.rowCount === 0) {
+    if (result.rows.length === 0) {
       return res.status(404).send('User not found');
     }
 

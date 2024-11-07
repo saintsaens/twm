@@ -11,7 +11,7 @@ router.get('/:userId', ensureAuthenticated, checkUserId, async (req, res) => {
   try {
     // Check if user exists.
     const resultUser = await db.query('SELECT * FROM users WHERE id = $1;', [userId]);
-    if (resultUser.rowCount === 0) {
+    if (resultUser.rows.length === 0) {
       return res.status(404).send('User not found');
     }
 
@@ -52,7 +52,7 @@ router.put('/add/:userId', ensureAuthenticated, checkUserId, async (req, res) =>
             SELECT * FROM users_items WHERE user_id = $1 AND item_id = $2;
             `, [userId, item_id]);
 
-      if (itemExistsResult.rowCount > 0) {
+      if (itemExistsResult.rows.length > 0) {
         await db.query(`
                 UPDATE users_items
                 SET quantity = quantity + $1
@@ -114,7 +114,7 @@ router.delete('/:userId', ensureAuthenticated, checkUserId, async (req, res) => 
   try {
     const result = await db.query('DELETE FROM users_items WHERE user_id = $1 RETURNING *;', [id]);
 
-    if (result.rowCount === 0) {
+    if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Cart not found or was already empty' });
     }
 
@@ -131,7 +131,7 @@ router.post("/:id/checkout", async (req, res) => {
 
   // Validate the cart to ensure that it exists.
   const cartResult = await db.query('SELECT * FROM carts WHERE id = $1', [cart_id]);
-  if (cartResult.rowCount === 0) {
+  if (cartResult.rows.length === 0) {
     return res.status(400).json({ error: 'Invalid cart_id' });
   }
 

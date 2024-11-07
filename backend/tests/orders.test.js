@@ -95,7 +95,7 @@ test('should return 400 if user does not exist', async () => {
         ],
         nickname: 'First Order',
     };
-    vi.mocked(query).mockResolvedValueOnce({ rowCount: 0 }); // Simulate no user found
+    vi.mocked(query).mockResolvedValueOnce({ rows: [] }); // Simulate no user found
 
     const res = await request(app).post('/orders/999').send(newOrder);
     expect(res.status).toBe(400);
