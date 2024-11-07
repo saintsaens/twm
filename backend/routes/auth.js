@@ -34,20 +34,20 @@ export const ensureAdmin = (req, res, next) => {
 
 passport.use(new LocalStrategy(async function verify(username, password, cb) {
   const query = 'SELECT * FROM users WHERE username = $1';
-  
+
   try {
     const { rows } = await db.query(query, [username]);
     const row = rows[0];
-    
+
     if (!row) {
       return cb(null, false, { message: 'Incorrect username or password.' });
     }
-    
+
     const isMatch = await bcrypt.compare(password, row.hashed_pw);
     if (!isMatch) {
       return cb(null, false, { message: 'Incorrect username or password.' });
     }
-    
+
     return cb(null, row);
   } catch (err) {
     console.error('Database query error:', err);
@@ -55,14 +55,14 @@ passport.use(new LocalStrategy(async function verify(username, password, cb) {
   }
 }));
 
-passport.serializeUser(function(user, cb) {
-  process.nextTick(function() {
+passport.serializeUser(function (user, cb) {
+  process.nextTick(function () {
     cb(null, { id: user.id, username: user.username });
   });
 });
 
-passport.deserializeUser(function(user, cb) {
-  process.nextTick(function() {
+passport.deserializeUser(function (user, cb) {
+  process.nextTick(function () {
     return cb(null, user);
   });
 });
@@ -73,6 +73,8 @@ router.get('/user/profile', (req, res) => {
       id: req.user.id,
       username: req.user.username,
     });
+  } else {
+    res.status(401).json({ message: 'Not logged in' });
   }
 });
 
@@ -123,7 +125,7 @@ router.post('/signup', async (req, res) => {
     };
 
     // Log the user in immediately after signup
-    req.login(user, function(err) {
+    req.login(user, function (err) {
       if (err) {
         return next(err);
       }
@@ -135,7 +137,7 @@ router.post('/signup', async (req, res) => {
       });
     });
 
-    
+
   } catch (error) {
     console.error('Error creating user:', error);
     res.status(500).json({ error: 'Failed to create user' });
