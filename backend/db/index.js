@@ -2,10 +2,12 @@ import pg from 'pg'
 const { Pool } = pg
 
 import dotenv from "dotenv";
-dotenv.config();
+const envFile = process.env.NODE_ENV === 'render' ? '.env.render' : '.env';
+dotenv.config({ path: envFile });
 
 const pool = new Pool({
-  database: process.env.DATABASE
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === 'render' ? { rejectUnauthorized: false } : false,
 });
 
 pool.connect((err, client, release) => {

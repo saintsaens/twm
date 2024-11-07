@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "vitest --ui",
-    "start": "nodemon app.js"
+    "start": "NODE_ENV=development nodemon app.js",
+    "start:render": "NODE_ENV=render nodemon app.js"
   },
   "author": "Flavien",
   "license": "ISC",
