@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import Welcome from "./Welcome";
 
 function Navigation() {
-  const { username } = useSelector((state) => state.user.username);
+  const { username } = useSelector((state) => state.user);
 
   const navLinks = [
     ...(username ? [] : [{ path: '/signin', label: 'Sign In' }]),

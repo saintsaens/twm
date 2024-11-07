@@ -1,17 +1,7 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchUser } from '../store/features/userSlice';
+import { useSelector } from 'react-redux';
 
 function Welcome() {
-    const dispatch = useDispatch();
-    const { username } = useSelector((state) => state.user.username);
-    const userStatus = useSelector((state) => state.user.status);
-
-    useEffect(() => {
-        if (userStatus === 'idle') {
-            dispatch(fetchUser());
-        }
-    }, [dispatch, userStatus]);
+    const { username } = useSelector((state) => state.user);
 
     return (username ? <p>Welcome, {username}!</p> : null);
 }
