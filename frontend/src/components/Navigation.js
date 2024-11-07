@@ -5,10 +5,12 @@ import Welcome from "./Welcome";
 
 function Navigation() {
   const { username } = useSelector((state) => state.user);
+  const { totalItems } = useSelector((state) => state.cart);
 
   const navLinks = [
     ...(username ? [] : [{ path: '/signin', label: 'Sign in', icon: "fr-btn fr-icon-lock-line" }]),
     ...(username ? [] : [{ path: '/signup', label: 'Sign up', icon: "fr-btn fr-icon-account-line" }]),
+    ...(username ? [{ path: '/cart', label: `Cart (${totalItems})`, icon: "fr-btn fr-icon-shopping-cart-2-line" }] : []),
     ...(username ? [{ path: '/orders', label: 'Your orders', icon: "fr-btn fr-icon-money-euro-circle-line" }] : []),
     ...(username ? [{ path: '/logout', label: 'Log out', icon: "fr-btn fr-icon-logout-box-r-line" }] : []),
   ];

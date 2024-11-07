@@ -3,14 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setQuantity, fetchItems, setRarityFilter, setTypeFilter, clearSelection } from '../store/features/itemsSlice';
 import { addItems, addToCart } from "../store/features/cartSlice";
 import { parseMoney, formatCurrency } from "../utils/money";
-import CartWidget from "./CartWidget";
 import { Link } from "react-router-dom";
 
 function Items() {
   const dispatch = useDispatch();
   const { items, rarityFilter, typeFilter } = useSelector((state) => state.items);
   const { userId } = useSelector((state) => state.user);
-  const { username } = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(fetchItems());
@@ -47,7 +45,6 @@ function Items() {
 
   return (
     <>
-      {username && <CartWidget />}
       <label htmlFor="rarity-filter">Filter by rarity: </label>
       <select
         id="rarity-filter"

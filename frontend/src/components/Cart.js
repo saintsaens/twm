@@ -11,7 +11,7 @@ import { generateName } from "../utils/names";
 function Cart() {
   const dispatch = useDispatch();
   const { items, totalPrice } = useSelector((state) => state.cart);
-  const { userId } = useSelector((state) => state.user.userId);
+  const { userId } = useSelector((state) => state.user);
 
   const [showMessage, setShowMessage] = useState(false);
 
