@@ -104,7 +104,7 @@ function Items() {
 
                 <tbody>
                   {filteredItems.map(({ id, name, type, rarity, price, quantity = 0 }) => (
-                    <tr id={`table-md-row-key-${id}`} data-row-key={id}>
+                    <tr key={id} id={`table-md-row-key-${id}`} data-row-key={id}>
                       <td>{name}</td>
                       <td>{type}</td>
                       <td>{rarity}</td>
