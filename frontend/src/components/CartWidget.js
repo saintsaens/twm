@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 function CartWidget() {
   const dispatch = useDispatch();
   const { items, totalPrice } = useSelector((state) => state.cart);
-  const { userId } = useSelector((state) => state.user.userId);
+  const { userId } = useSelector((state) => state.user);
 
 
   const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
