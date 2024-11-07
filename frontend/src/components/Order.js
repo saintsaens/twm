@@ -11,7 +11,7 @@ const Order = () => {
 
     const { order } = useSelector((state) => state.order);
     const { orders } = useSelector((state) => state.orders);
-    const { userId } = useSelector((state) => state.user.userId);
+    const { userId } = useSelector((state) => state.user);
     const currentOrder = orders.find((order) => order.id === Number(id));
     const date = currentOrder ? new Date(currentOrder.created_at).toLocaleString() : "Date not available";
     const totalPrice = currentOrder ? currentOrder.total_price : null;
