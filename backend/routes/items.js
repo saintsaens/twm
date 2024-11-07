@@ -45,7 +45,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', ensureAuthenticated, ensureAdmin, async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const newItem = req.body;
 
@@ -72,7 +72,7 @@ router.post('/', ensureAuthenticated, ensureAdmin, async (req, res) => {
   }
 });
 
-router.put('/:id', ensureAuthenticated, ensureAdmin, async (req, res) => {
+router.put('/:id', async (req, res) => {
   const id = parseInt(req.params.id);
   const { name, type, rarity, price } = req.body;
 
