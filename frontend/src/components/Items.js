@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setQuantity, fetchItems, setRarityFilter, setTypeFilter, clearSelection } from '../store/features/itemsSlice';
 import { addItems, addToCart } from "../store/features/cartSlice";
 import { parseMoney, formatCurrency } from "../utils/money";
-import { Link } from "react-router-dom";
+import "../styles/Items.css"
 
 function Items() {
   const dispatch = useDispatch();
@@ -45,60 +45,58 @@ function Items() {
 
   return (
     <>
-      <label htmlFor="rarity-filter">Filter by rarity: </label>
-      <select
-        id="rarity-filter"
-        name="rarity-filter"
-        value={rarityFilter}
-        onChange={handleRarityChange}
-      >
-        <option value="All">All</option>
-        <option value="Common">Common</option>
-        <option value="Rare">Rare</option>
-        <option value="Legendary">Legendary</option>
-      </select>
-
-      <label htmlFor="type-filter">Filter by type: </label>
-      <select
-        id="type-filter"
-        name="type-filter"
-        value={typeFilter}
-        onChange={handleTypeChange}
-      >
-        <option value="All">All</option>
-        <option value="Weapon">Weapon</option>
-        <option value="Potion">Potion</option>
-      </select>
-      <Link onClick={handleClearFilters}>Clear</Link>
-
+    <h1>Items</h1>
+      <div className="fr-select-group-container">
+        <div className="fr-select-group">
+          <label className="fr-label" htmlFor="rarity-filter">Filter by rarity</label>
+          <select
+            className="fr-select"
+            id="rarity-filter"
+            name="rarity-filter"
+            value={rarityFilter}
+            onChange={handleRarityChange}
+          >
+            <option value="All">All</option>
+            <option value="Common">Common</option>
+            <option value="Rare">Rare</option>
+            <option value="Legendary">Legendary</option>
+          </select>
+        </div>
+  
+        <div className="fr-select-group">
+          <label className="fr-label" htmlFor="type-filter">Filter by type</label>
+          <select
+            className="fr-select"
+            id="type-filter"
+            name="type-filter"
+            value={typeFilter}
+            onChange={handleTypeChange}
+          >
+            <option value="All">All</option>
+            <option value="Weapon">Weapon</option>
+            <option value="Potion">Potion</option>
+          </select>
+        </div>
+  
+        <div className="fr-clear-container">
+          <button className="fr-btn fr-btn--secondary" onClick={handleClearFilters}>Clear</button>
+        </div>
+      </div>
+  
       <div className="fr-table" id="table-md-component">
         <div className="fr-table__wrapper">
           <div className="fr-table__container">
             <div className="fr-table__content">
               <table id="table-md">
-                <caption>
-                  Items
-                </caption>
                 <thead>
                   <tr>
-                    <th scope="col">
-                      Name
-                    </th>
-                    <th scope="col">
-                      Type
-                    </th>
-                    <th scope="col">
-                      Rarity
-                    </th>
-                    <th scope="col">
-                      Price
-                    </th>
-                    <th scope="col">
-                      Quantity
-                    </th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Rarity</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
                   </tr>
                 </thead>
-
                 <tbody>
                   {filteredItems.map(({ id, name, type, rarity, price, quantity = 0 }) => (
                     <tr key={id} id={`table-md-row-key-${id}`} data-row-key={id}>
@@ -127,11 +125,11 @@ function Items() {
           </div>
         </div>
       </div>
-
+  
       <section>
         <p>Total price: {formatCurrency(totalPrice)}</p>
       </section>
-
+  
       <section>
         <button
           className="fr-btn"
@@ -146,6 +144,7 @@ function Items() {
       </section>
     </>
   );
+  
 }
 
 export default Items;

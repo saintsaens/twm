@@ -1,0 +1,19 @@
+.fr-select-group-container {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: flex-end;
+    margin: 1rem;
+}
+
+.fr-select-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.fr-clear-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
