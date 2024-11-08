@@ -5,10 +5,12 @@ import dotenv from "dotenv";
 const envFile = process.env.NODE_ENV === 'render' ? '.env.render' : '.env';
 dotenv.config({ path: envFile });
 
-const pool = new Pool({
+const poolConfig = () => ({
   connectionString: process.env.DATABASE_URL,
   ssl: process.env.NODE_ENV === 'render' ? { rejectUnauthorized: false } : false,
 });
+
+const pool = new Pool(poolConfig());
 
 pool.connect((err, client, release) => {
   if (err) {
