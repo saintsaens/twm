@@ -1,7 +1,6 @@
 import passport from 'passport';
 
 export const isAdmin = (req, res, next) => {
-    console.log(req.user);
     if (req.user && req.user.role === 'admin') {
         return next();
     }
