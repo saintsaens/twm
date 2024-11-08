@@ -112,11 +112,11 @@ router.post('/signup', async (req, res) => {
 
     // Insert user into the database
     const query = `
-      INSERT INTO users (username, hashed_pw)
-      VALUES ($1, $2)
+      INSERT INTO users (username, hashed_pw, role)
+      VALUES ($1, $2, $3)
       RETURNING *;
     `;
-    const result = await db.query(query, [username, hashedPw]);
+    const result = await db.query(query, [username, hashedPw, "user"]);
 
     // Extract the created user
     const user = {
