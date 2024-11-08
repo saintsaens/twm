@@ -1,10 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+const baseUrl = process.env.REACT_APP_API_URL;
+
 // Create an order
 export const createOrder = createAsyncThunk(
     'orders/createOrder',
     async ({ userId, totalPrice, items, nickname }) => {
-        const response = await fetch(`/api/orders/${userId}`, {
+        const response = await fetch(`${baseUrl}/api/orders/${userId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -24,7 +26,7 @@ export const createOrder = createAsyncThunk(
 export const fetchOrders = createAsyncThunk(
     'orders/fetchOrders',
     async (userId) => {
-        const response = await fetch(`/api/orders?user=${userId}`, {
+        const response = await fetch(`${baseUrl}/api/orders?user=${userId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

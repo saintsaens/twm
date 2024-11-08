@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
+const baseUrl = process.env.REACT_APP_API_URL;
+
 export const fetchItems = createAsyncThunk('items/fetchItems', async () => {
-    const baseUrl = process.env.REACT_APP_API_URL;
     const response = await fetch(`${baseUrl}/api/items`);
     if (!response.ok) {
         throw new Error('Network response was not ok');

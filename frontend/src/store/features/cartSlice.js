@@ -1,8 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { parseMoney } from "../../utils/money";
 
+const baseUrl = process.env.REACT_APP_API_URL;
+
 export const fetchCart = createAsyncThunk('cart/fetchCart', async (userId) => {
-    const response = await fetch(`/api/carts/${userId}`);
+    const response = await fetch(`${baseUrl}/api/carts/${userId}`);
     if (!response.ok) {
         throw new Error('Network response was not ok');
     }
@@ -11,7 +13,7 @@ export const fetchCart = createAsyncThunk('cart/fetchCart', async (userId) => {
 });
 
 export const deleteCart = createAsyncThunk('cart/deleteCart', async (userId) => {
-    const response = await fetch(`/api/carts/${userId}`, {
+    const response = await fetch(`${baseUrl}/api/carts/${userId}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -26,7 +28,7 @@ export const deleteCart = createAsyncThunk('cart/deleteCart', async (userId) => 
 
 export const addToCart = createAsyncThunk('cart/addToCart', async ({ userId, items }) => {
     const validItems = items.filter(item => item.quantity >= 1);
-    const response = await fetch(`/api/carts/add/${userId}`, {
+    const response = await fetch(`${baseUrl}/api/carts/add/${userId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -40,7 +42,7 @@ export const addToCart = createAsyncThunk('cart/addToCart', async ({ userId, ite
 });
 
 export const removeFromCart = createAsyncThunk('cart/removeFromCart', async ({ userId, itemId }) => {
-    const response = await fetch(`/api/carts/remove/${userId}`, {
+    const response = await fetch(`${baseUrl}/api/carts/remove/${userId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

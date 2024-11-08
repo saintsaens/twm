@@ -1,7 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+const baseUrl = process.env.REACT_APP_API_URL;
+
 export const fetchUser = createAsyncThunk('user/fetchUser', async () => {
-    const response = await fetch('/api/user/profile', { credentials: 'include' });
+    const response = await fetch(`${baseUrl}/api/user/profile`, { credentials: 'include' });
     if (response.ok) {
         const data = await response.json();
         return ({

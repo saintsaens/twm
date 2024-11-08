@@ -1,7 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+const baseUrl = process.env.REACT_APP_API_URL;
+
 export const loginUser = createAsyncThunk('auth/loginUser', async (formData) => {
-    const response = await fetch('/api/login/password', {
+    const response = await fetch(`${baseUrl}/api/login/password`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
