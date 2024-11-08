@@ -1,4 +1,5 @@
 import { vi } from 'vitest';
+import passport from "passport";
 
 // Mocking the db module to prevent real database connections during tests
 vi.mock('../db/index.js', () => {
@@ -14,4 +15,10 @@ afterAll(() => {
 
 afterEach(() => {
     vi.clearAllMocks();  // Clear all mocks after each test
+    vi.spyOn(passport, 'authenticate').mockImplementation(() => {
+        return (req, res, next) => {
+          req.user = { };
+          next();
+        };
+      });
 });
