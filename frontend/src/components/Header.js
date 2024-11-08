@@ -3,12 +3,12 @@ import Title from "./Title";
 
 function Header() {
     return (
-        <header role="banner" class="fr-header">
-            <div class="fr-header__body">
-                <div class="fr-container">
-                    <div class="fr-header__body-row">
+        <header role="banner" className="fr-header">
+            <div className="fr-header__body">
+                <div className="fr-container">
+                    <div className="fr-header__body-row">
                         <Title />
-                        <div class="fr-header__tools">
+                        <div className="fr-header__tools">
                             <Navigation />
                         </div>
                     </div>
