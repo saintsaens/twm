@@ -7,15 +7,6 @@ import * as db from '../db/index.js'
 const router = new Router();
 const saltRounds = 10;
 
-// Middleware to verify user ID matches session user ID
-export const checkUserId = (req, res, next) => {
-  const userId = parseInt(req.params.userId);
-  if (req.user.id !== userId) {
-    return res.status(403).json({ error: 'Forbidden' });
-  }
-  next();
-};
-
 passport.use(new LocalStrategy(async function verify(username, password, cb) {
   const query = 'SELECT * FROM users WHERE username = $1';
 
