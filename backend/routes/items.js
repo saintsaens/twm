@@ -1,5 +1,5 @@
 import Router from "express-promise-router";
-import { isAdmin } from "../middleware/authMiddleware.js";
+import { isAdmin, isAuthenticated } from "../middleware/authMiddleware.js";
 import passport from "passport";
 import * as db from '../db/index.js'
 
@@ -49,15 +49,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Create an item
-router.post('/', (req, res, next) => {
-  passport.authenticate('session', { session: true })(req, res, next);
-}, isAdmin, async (req, res) => {
-
-  // Check if the user is authenticated
-  if (!req.user.id) {
-    return res.status(401).json({ error: 'Unauthorized: You need to be logged in to access this order' });
-  }
-
+router.post('/', isAuthenticated, isAdmin, async (req, res) => {
   try {
     const newItem = req.body;
 
@@ -84,15 +76,10 @@ router.post('/', (req, res, next) => {
   }
 });
 
-router.put('/:id', (req, res, next) => {
-  passport.authenticate('session', { session: true })(req, res, next);
-}, isAdmin, async (req, res) => {
+// Update an item
+router.put('/:id', isAuthenticated, isAdmin, async (req, res) => {
   const id = parseInt(req.params.id);
   const { name, type, rarity, price } = req.body;
-  // Check if the user is authenticated
-  if (!req.user.id) {
-    return res.status(401).json({ error: 'Unauthorized: You need to be logged in to access this order' });
-  }
 
   if (!name && !type && !rarity && !price) {
     return res.status(400).json({ error: 'No fields to update' });
@@ -128,15 +115,9 @@ router.put('/:id', (req, res, next) => {
   }
 });
 
-router.delete('/:id', (req, res, next) => {
-  passport.authenticate('session', { session: true })(req, res, next);
-}, isAdmin, async (req, res) => {
+// Delete an item
+router.delete('/:id', isAuthenticated, isAdmin, async (req, res) => {
   const id = parseInt(req.params.id);
-
-  // Check if the user is authenticated
-  if (!req.user.id) {
-    return res.status(401).json({ error: 'Unauthorized: You need to be logged in to access this order' });
-  }
 
   try {
     const query = 'DELETE FROM items WHERE id = $1 RETURNING *;';
