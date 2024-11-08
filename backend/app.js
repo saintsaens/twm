@@ -4,9 +4,11 @@ import session from "express-session";
 import connectPgSimple from "connect-pg-simple"
 import passport from "passport";
 import morgan from "morgan";
+import cors from "cors";
 
 import dotenv from "dotenv";
-dotenv.config();
+const envFile = process.env.NODE_ENV === 'render' ? '.env.render' : '.env';
+dotenv.config({ path: envFile });
 
 const port = process.env.PORT;
 
@@ -20,6 +22,7 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(morgan(':method :url :status [:date]'));
 }
 
+// Use sessions
 const PgSession = connectPgSimple(session);
 app.use(session({
   store: new PgSession({
@@ -32,6 +35,19 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.authenticate('session'));
+
+const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',');
+
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+}));
 
 mountRoutes(app);
 
