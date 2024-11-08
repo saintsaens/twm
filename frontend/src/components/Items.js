@@ -58,7 +58,9 @@ function Items() {
           >
             <option value="All">All</option>
             <option value="Common">Common</option>
+            <option value="Uncommon">Uncommon</option>
             <option value="Rare">Rare</option>
+            <option value="Epic">Epic</option>
             <option value="Legendary">Legendary</option>
           </select>
         </div>
@@ -74,7 +76,9 @@ function Items() {
           >
             <option value="All">All</option>
             <option value="Weapon">Weapon</option>
+            <option value="Armor">Armor</option>
             <option value="Potion">Potion</option>
+            <option value="Bomb">Bomb</option>
           </select>
         </div>
   
