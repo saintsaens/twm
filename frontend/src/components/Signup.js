@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { loginUser } from '../store/features/authSlice';
+import { useDispatch, useSelector } from "react-redux";
+import { createUser, loginUser } from '../store/features/authSlice';
 import { fetchUser } from '../store/features/userSlice';
 
 function Signup() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
+  const { error, successMessage } = useSelector(state => state.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -17,32 +16,16 @@ function Signup() {
     e.preventDefault();
 
     try {
-      const response = await fetch('/api/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        setError(data.message || 'Failed to create an account.');
-        setSuccessMessage('');
-        return;
-      }
-
+      await dispatch(createUser({ username, password })).unwrap();
+      
       await dispatch(loginUser({ username, password })).unwrap();
       dispatch(fetchUser());
 
-      setSuccessMessage('Account created successfully! Please log in.');
-      setError('');
       setUsername('');
       setPassword('');
       navigate('/');
     } catch (err) {
-      setError('An error occurred while creating your account.');
-      setSuccessMessage('');
+      console.error('Signup error:', err);
     }
   };
 
