@@ -8,6 +8,7 @@ function Signup() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const { error, successMessage } = useSelector(state => state.auth);
+  const loading = useSelector((state) => state.auth.loading);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -84,8 +85,9 @@ function Signup() {
                                 <button
                                   className="fr-mt-2v fr-btn"
                                   type="submit"
+                                  disabled={loading}
                                 >
-                                  Create Account
+                                  {loading ? "Creating account…" : "Create account"}
                                 </button>
                               </li>
                             </ul>
