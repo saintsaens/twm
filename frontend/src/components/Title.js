@@ -7,6 +7,9 @@ function Title() {
         <div class="fr-header__logo">
           <img src="/logo.png" height="100" alt="Logo" />
         </div>
+        <div class="fr-header__navbar">
+          <button data-fr-opened="false" aria-controls="modal-2579" id="button-2580" title="Menu" class="fr-btn--menu fr-btn">Menu</button>
+        </div>
       </div>
       <div class="fr-header__service">
         <p class="fr-header__service-title">
