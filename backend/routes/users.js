@@ -1,12 +1,13 @@
 import Router from "express-promise-router";
 import * as db from '../db/index.js';
 import bcrypt from 'bcrypt';
+import { isAdmin, isAuthenticated } from "../middleware/authMiddleware.js";
 
 const router = new Router();
 const saltRounds = 10; 
 
 // Get all users
-router.get('/', async (req, res) => {
+router.get('/', isAuthenticated, isAdmin, async (req, res) => {
   try {
     const result = await db.query('SELECT * FROM users;');
     res.send(result.rows);
@@ -17,11 +18,16 @@ router.get('/', async (req, res) => {
 });
 
 // Get a user by ID
-router.get('/:id', async (req, res) => {
-  const id = parseInt(req.params.id);
+router.get('/:id', isAuthenticated, async (req, res) => {
+  const requestedUserId = parseInt(req.params.id);  // Get the ID from the URL parameter
+
+  // Check if the authenticated user is the same as the requested user
+  if (req.user.id !== requestedUserId) {
+    return res.status(403).json({ error: 'Forbidden. You can only access your own data.' });
+  }
 
   try {
-    const result = await db.query('SELECT * FROM users WHERE id = $1;', [id]);
+    const result = await db.query('SELECT * FROM users WHERE id = $1;', [requestedUserId]);
     if (result.rows.length === 0) {
       return res.status(404).send('User not found');
     }
@@ -33,7 +39,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Update a user
-router.put('/:id', async (req, res) => {
+router.put('/:id', isAuthenticated, isAdmin, async (req, res) => {
   const id = parseInt(req.params.id);
   const { username, password } = req.body;
 
@@ -70,7 +76,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete a user
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', isAuthenticated, isAdmin, async (req, res) => {
   const id = parseInt(req.params.id);
 
   try {
