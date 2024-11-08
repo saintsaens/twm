@@ -14,6 +14,8 @@ const port = process.env.PORT;
 
 const app = express();
 
+app.set('trust proxy', 1);
+
 // Parse JSON request bodies
 app.use(express.json());
 
@@ -21,6 +23,12 @@ app.use(express.json());
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan(':method :url :status [:date]'));
 }
+
+const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',');
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true,
+}));
 
 // Use sessions
 const PgSession = connectPgSimple(session);
@@ -38,16 +46,9 @@ app.use(session({
     maxAge: 24 * 60 * 60 * 1000
   }
 }));
+
 app.use(passport.initialize());
-app.use(passport.authenticate('session'));
-
-const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',');
-
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,
-}));
-
+app.use(passport.session());
 
 mountRoutes(app);
 
