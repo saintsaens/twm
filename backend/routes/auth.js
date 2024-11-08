@@ -73,7 +73,7 @@ router.post('/logout', (req, res) => {
   });
 });
 
-router.post('/signup', async (req, res) => {
+router.post('/signup', async (req, res, next) => {
   const { username, password } = req.body;
 
   // Validate input
