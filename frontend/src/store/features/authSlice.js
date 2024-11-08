@@ -39,6 +39,27 @@ export const loginUser = createAsyncThunk('auth/loginUser', async (formData) => 
     return await response.json();
 });
 
+export const logoutUser = createAsyncThunk(
+    'auth/logoutUser',
+    async (_, { rejectWithValue, dispatch }) => {
+        try {
+            const response = await fetch(`${baseUrl}/api/logout`, {
+                method: 'POST',
+                credentials: 'include',
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                return rejectWithValue(errorData.message || 'Logout failed');
+            }
+
+            return await response.json();
+        } catch (error) {
+            return rejectWithValue('An error occurred during logout');
+        }
+    }
+);
+
 const authSlice = createSlice({
     name: 'auth',
     initialState: {
@@ -74,6 +95,17 @@ const authSlice = createSlice({
             .addCase(loginUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message;
+            })
+            .addCase(logoutUser.pending, (state) => {
+                state.loading = true;
+                state.error = '';
+            })
+            .addCase(logoutUser.fulfilled, (state) => {
+                state.loading = false;
+            })
+            .addCase(logoutUser.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
             });
     },
 });
