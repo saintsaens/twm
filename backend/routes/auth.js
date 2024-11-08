@@ -7,14 +7,6 @@ import * as db from '../db/index.js'
 const router = new Router();
 const saltRounds = 10;
 
-// Middleware to check if user is authenticated
-export const ensureAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.status(401).json({ error: 'Unauthorized' });
-};
-
 // Middleware to verify user ID matches session user ID
 export const checkUserId = (req, res, next) => {
   const userId = parseInt(req.params.userId);
@@ -22,14 +14,6 @@ export const checkUserId = (req, res, next) => {
     return res.status(403).json({ error: 'Forbidden' });
   }
   next();
-};
-
-// Middleware to check if user is an admin
-export const ensureAdmin = (req, res, next) => {
-  if (req.user && req.user.role === 'admin') {
-    return next();
-  }
-  return res.status(403).json({ error: 'Access denied: Admins only' });
 };
 
 passport.use(new LocalStrategy(async function verify(username, password, cb) {

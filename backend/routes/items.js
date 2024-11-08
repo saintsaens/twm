@@ -1,5 +1,4 @@
 import Router from "express-promise-router";
-import { ensureAuthenticated, ensureAdmin, checkUserId } from "./auth.js";
 import * as db from '../db/index.js'
 
 const router = new Router();

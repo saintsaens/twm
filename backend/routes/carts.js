@@ -1,11 +1,10 @@
 import Router from "express-promise-router";
 import * as db from '../db/index.js';
-import { ensureAuthenticated, checkUserId } from "./auth.js";
 
 const router = new Router();
 
 // Get the cart of a user
-router.get('/:userId', ensureAuthenticated, checkUserId, async (req, res) => {
+router.get('/:userId', async (req, res) => {
   const userId = parseInt(req.params.userId);
 
   try {
@@ -32,7 +31,7 @@ router.get('/:userId', ensureAuthenticated, checkUserId, async (req, res) => {
 });
 
 // Add items to the cart
-router.put('/add/:userId', ensureAuthenticated, checkUserId, async (req, res) => {
+router.put('/add/:userId', async (req, res) => {
   const userId = parseInt(req.params.userId);
   const { items = [] } = req.body; // Default to an empty array if items is undefined
 
@@ -81,7 +80,7 @@ router.put('/add/:userId', ensureAuthenticated, checkUserId, async (req, res) =>
 });
 
 // Remove an item from the cart
-router.put('/remove/:userId', ensureAuthenticated, checkUserId, async (req, res) => {
+router.put('/remove/:userId', async (req, res) => {
   const userId = parseInt(req.params.userId);
   const { itemId } = req.body;
 
@@ -108,7 +107,7 @@ router.put('/remove/:userId', ensureAuthenticated, checkUserId, async (req, res)
 });
 
 // Delete a cart
-router.delete('/:userId', ensureAuthenticated, checkUserId, async (req, res) => {
+router.delete('/:userId', async (req, res) => {
   const id = parseInt(req.params.userId);
 
   try {
