@@ -45,7 +45,7 @@ function Items() {
 
   return (
     <>
-    <h1>Items</h1>
+      <h1>Items</h1>
       <div className="fr-select-group-container">
         <div className="fr-select-group">
           <label className="fr-label" htmlFor="rarity-filter">Filter by rarity</label>
@@ -64,7 +64,7 @@ function Items() {
             <option value="Legendary">Legendary</option>
           </select>
         </div>
-  
+
         <div className="fr-select-group">
           <label className="fr-label" htmlFor="type-filter">Filter by type</label>
           <select
@@ -81,12 +81,12 @@ function Items() {
             <option value="Bomb">Bomb</option>
           </select>
         </div>
-  
+
         <div className="fr-clear-container">
           <button className="fr-btn fr-btn--secondary" onClick={handleClearFilters}>Clear</button>
         </div>
       </div>
-  
+
       <div className="fr-table" id="table-md-component">
         <div className="fr-table__wrapper">
           <div className="fr-table__container">
@@ -129,12 +129,9 @@ function Items() {
           </div>
         </div>
       </div>
-  
-      <section>
-        <p>Total price: {formatCurrency(totalPrice)}</p>
-      </section>
-  
-      <section>
+
+      <p>Total price: {formatCurrency(totalPrice)}</p>
+
         <button
           className="fr-btn"
           onClick={() => {
@@ -145,10 +142,9 @@ function Items() {
         >
           Add to cart
         </button>
-      </section>
     </>
   );
-  
+
 }
 
 export default Items;
