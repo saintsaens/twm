@@ -1,17 +1,23 @@
 import Router from "express-promise-router";
 import * as db from '../db/index.js';
+import { isAuthenticated } from "../middleware/authMiddleware.js";
 
 const router = new Router();
 
 // Get the cart of a user
-router.get('/:userId', async (req, res) => {
+router.get('/:userId', isAuthenticated, async (req, res) => {
   const userId = parseInt(req.params.userId);
+
+  // Check if the authenticated user is the same as the requested user
+  if (req.user.id != userId) {
+    return res.status(403).json({ error: 'Forbidden. You can only get your own cart.' });
+  }
 
   try {
     // Check if user exists.
     const resultUser = await db.query('SELECT * FROM users WHERE id = $1;', [userId]);
     if (resultUser.rows.length === 0) {
-      return res.status(404).send('User not found');
+      return res.status(404).json({error: 'User not found'});
     }
 
     // Query to get items associated with the user from users_items
@@ -31,9 +37,14 @@ router.get('/:userId', async (req, res) => {
 });
 
 // Add items to the cart
-router.put('/add/:userId', async (req, res) => {
+router.put('/add/:userId', isAuthenticated, async (req, res) => {
   const userId = parseInt(req.params.userId);
   const { items = [] } = req.body; // Default to an empty array if items is undefined
+  
+  // Check if the authenticated user is the same as the requested user
+  if (req.user.id !== userId) {
+    return res.status(403).json({ error: 'Forbidden. You can only add to your own cart.' });
+  }
 
   // Validate that items is an array
   if (!Array.isArray(items)) {
@@ -80,9 +91,22 @@ router.put('/add/:userId', async (req, res) => {
 });
 
 // Remove an item from the cart
-router.put('/remove/:userId', async (req, res) => {
+router.put('/remove/:userId', isAuthenticated, async (req, res) => {
   const userId = parseInt(req.params.userId);
   const { itemId } = req.body;
+
+  // Check if the authenticated user is the same as the requested user
+  if (req.user.id !== userId) {
+    return res.status(403).json({ error: 'Forbidden. You can only modify your own cart.' });
+  }
+
+  if (!itemId) {
+    return res.status(400).json({ error: 'Item ID is required' });
+  }
+
+  if (!Number.isInteger(Number(itemId))) {
+    return res.status(400).json({ error: 'Invalid item ID format' });
+  }
 
   try {
     // Delete item from the user's cart
@@ -107,8 +131,17 @@ router.put('/remove/:userId', async (req, res) => {
 });
 
 // Delete a cart
-router.delete('/:userId', async (req, res) => {
+router.delete('/:userId', isAuthenticated, async (req, res) => {
   const id = parseInt(req.params.userId);
+
+  // Check if the authenticated user is the same as the requested user
+  if (req.user.id !== id) {
+    return res.status(403).json({ error: 'Forbidden. You can only delete your own cart.' });
+  }
+
+  if (!Number.isInteger(Number(id))) {
+    return res.status(400).json({ error: 'Invalid user ID format' });
+  }
 
   try {
     const result = await db.query('DELETE FROM users_items WHERE user_id = $1 RETURNING *;', [id]);
@@ -125,7 +158,7 @@ router.delete('/:userId', async (req, res) => {
 });
 
 // Checkout
-router.post("/:id/checkout", async (req, res) => {
+router.post("/:id/checkout", isAuthenticated, async (req, res) => {
   const cart_id = parseInt(req.params.id);
 
   // Validate the cart to ensure that it exists.
@@ -193,6 +226,5 @@ router.post("/:id/checkout", async (req, res) => {
     res.status(500).json({ error: 'Failed to create order' });
   }
 });
-
 
 export default router;
