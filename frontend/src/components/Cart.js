@@ -46,14 +46,14 @@ function Cart() {
 
   return (
     <>
+      <h1>Cart</h1>
       <Link to="/">← Go back</Link>
-      
+
       <div className="fr-table" id="table-md-component">
         <div className="fr-table__wrapper">
           <div className="fr-table__container">
             <div className="fr-table__content">
               <table id="table-md">
-                <caption>Cart</caption>
                 <thead>
                   <tr>
                     <th scope="col">Name</th>
@@ -69,8 +69,8 @@ function Cart() {
                       <td>{price}</td>
                       <td>{quantity}</td>
                       <td>
-                        <button 
-                          className="fr-btn fr-btn--secondary fr-btn--sm" 
+                        <button
+                          className="fr-btn fr-btn--secondary fr-btn--sm"
                           onClick={() => handleRemove(item_id)}
                         >
                           Remove
@@ -85,30 +85,30 @@ function Cart() {
         </div>
       </div>
 
-        <p>Total price: {formatCurrency(totalPrice)}</p>
+      <p>Total price: {formatCurrency(totalPrice)}</p>
 
-        {totalPrice > 0 && (
-          <div>
-            <button 
-              className="fr-btn fr-btn--secondary" 
-              onClick={handleClear}
-            >
-              Clear cart
-            </button>
-            <button 
-              className="fr-btn" 
-              onClick={handleCheckout}
-            >
-              Checkout
-            </button>
-          </div>
-        )}
-        {showMessage && (
-          <>
-            <p>All items have been shipped to your boss!</p>
-            <p><Link to="/orders">See all orders →</Link></p>
-          </>
-        )}
+      {totalPrice > 0 && (
+        <div>
+          <button
+            className="fr-btn fr-btn--secondary"
+            onClick={handleClear}
+          >
+            Clear cart
+          </button>
+          <button
+            className="fr-btn"
+            onClick={handleCheckout}
+          >
+            Checkout
+          </button>
+        </div>
+      )}
+      {showMessage && (
+        <>
+          <p>All items have been shipped to your boss!</p>
+          <p><Link to="/orders">See all orders →</Link></p>
+        </>
+      )}
     </>
   );
 }

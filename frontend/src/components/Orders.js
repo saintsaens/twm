@@ -15,47 +15,57 @@ function Orders() {
         }
     }, [dispatch, userId]);
 
-    const handleRowClick = (id) => {
+    const handleView = (id) => {
         navigate(`/orders/${id}`);
     };
 
     return (
-        <div className="fr-table" id="table-md-component">
-            <div className="fr-table__wrapper">
-                <div className="fr-table__container">
-                    <div className="fr-table__content">
-                        <table id="table-md">
-                            <caption>
-                                Orders
-                            </caption>
-                            <thead>
-                                <tr>
-                                    <th scope="col">ID</th>
-                                    <th scope="col">Nickname</th>
-                                    <th scope="col">Date & time</th>
-                                    <th scope="col">Paid</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {orders.map(({ id, created_at, total_price, nickname }) => (
-                                    <tr
-                                        key={id}
-                                        data-row-key={id}
-                                        className="fr-table__row--clickable"
-                                        onClick={() => handleRowClick(id)}
-                                    >
-                                        <td>{id}</td>
-                                        <td>{nickname}</td>
-                                        <td>{new Date(created_at).toLocaleString()}</td>
-                                        <td>{total_price}</td>
+        <>
+            <h1>
+                Your orders
+            </h1>
+            <div className="fr-table" id="table-md-component">
+                <div className="fr-table__wrapper">
+                    <div className="fr-table__container">
+                        <div className="fr-table__content">
+                            <table id="table-md">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Nickname</th>
+                                        <th scope="col">Date & time</th>
+                                        <th scope="col">Paid</th>
+                                        <th scope="col">Actions</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {orders.map(({ id, created_at, total_price, nickname }) => (
+                                        <tr
+                                            key={id}
+                                            data-row-key={id}
+                                            className="fr-table__row--clickable"
+                                        >
+                                            <td>{id}</td>
+                                            <td>{nickname}</td>
+                                            <td>{new Date(created_at).toLocaleString()}</td>
+                                            <td>{total_price}</td>
+                                            <td>
+                                                <button
+                                                    className="fr-btn fr-btn--secondary fr-btn--sm"
+                                                    onClick={() => handleView(id)}
+                                                >
+                                                    View
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
 

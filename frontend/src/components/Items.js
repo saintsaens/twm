@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setQuantity, fetchItems, setRarityFilter, setTypeFilter, clearSelection } from '../store/features/itemsSlice';
 import { addItems, addToCart } from "../store/features/cartSlice";
 import { parseMoney, formatCurrency } from "../utils/money";
-import "../styles/Items.css"
+import "../styles/App.css"
 
 function Items() {
   const dispatch = useDispatch();

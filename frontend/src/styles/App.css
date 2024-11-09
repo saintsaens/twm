@@ -17,3 +17,12 @@
     align-items: center;
     justify-content: center;
 }
+
+.fr-container {
+    padding-left: 100px;
+    padding-right: 100px;
+}
+
+main {
+    padding-top: 30px;
+}

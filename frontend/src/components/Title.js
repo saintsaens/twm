@@ -1,6 +1,9 @@
+import { useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
 
 function Title() {
+  const { username } = useSelector((state) => state.user);
+
   return (
     <Link className="fr-header__brand fr-enlarge-link" to="/">
       <div className="fr-header__brand-top">
@@ -15,7 +18,9 @@ function Title() {
         <p className="fr-header__service-title">
           The Witcher Marketplace
         </p>
-        <p className="fr-header__service-tagline">Where you can steel swords.</p>
+        <p className="fr-header__service-tagline">
+          Where you can steel swords{username ? `, ${username}.` : `.`}
+        </p>
       </div>
     </Link>
   );

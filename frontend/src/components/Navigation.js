@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
-import Welcome from "./Welcome";
 
 function Navigation() {
   const { username } = useSelector((state) => state.user);
@@ -17,7 +16,6 @@ function Navigation() {
 
   return (
     <nav className="fr-header__tools-links">
-      <Welcome />
       <ul className="fr-btns-group">
       {navLinks.map(link => (
           <li key={link.path}>

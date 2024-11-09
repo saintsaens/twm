@@ -28,50 +28,55 @@ const Order = () => {
 
 
     return (
-        <div className="fr-table" >
-            <div className="go-back-link-container">
-                <p>
-                    <Link to="/orders" className="nav-link">← All orders</Link>
-                </p>
-            </div>
-            <div className="fr-table" id="table-md-component">
-                <div className="fr-table__wrapper">
-                    <div className="fr-table__container">
-                        <div className="fr-table__content">
-                            <table id="table-md">
-                                <caption>
-                                    Order {id} ({date})
-                                </caption>
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Item name</th>
-                                        <th scope="col">Item price</th>
-                                        <th scope="col">Item quantity</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {order.map(({ item_id, name, price, quantity }) => (
-                                        <tr key={item_id}>
-                                            <td>{name}</td>
-                                            <td>{price}</td>
-                                            <td>{quantity}</td>
+        <>
+            <h1>
+                Order {id}
+            </h1>
+            <div className="fr-table" >
+                <div className="go-back-link-container">
+                    <p>
+                        <Link to="/orders" className="nav-link">← All orders</Link>
+                    </p>
+                </div>
+                <div className="fr-table" id="table-md-component">
+                    <div className="fr-table__wrapper">
+                        <div className="fr-table__container">
+                            <div className="fr-table__content">
+                                <table id="table-md">
+                                    <caption>
+                                        {date}
+                                    </caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Item name</th>
+                                            <th scope="col">Item price</th>
+                                            <th scope="col">Item quantity</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colSpan="2" style={{ textAlign: 'right', fontWeight: 'bold' }}>Total Price:</td>
-                                        <td>{totalPrice}</td>
-                                    </tr>
-                                    <tr>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        {order.map(({ item_id, name, price, quantity }) => (
+                                            <tr key={item_id}>
+                                                <td>{name}</td>
+                                                <td>{price}</td>
+                                                <td>{quantity}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colSpan="2" style={{ textAlign: 'right', fontWeight: 'bold' }}>Total Price:</td>
+                                            <td>{totalPrice}</td>
+                                        </tr>
+                                        <tr>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 
