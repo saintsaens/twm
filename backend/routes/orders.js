@@ -1,14 +1,20 @@
 import Router from "express-promise-router";
 import * as db from '../db/index.js';
 import passport from "passport";
+import { isAuthenticated } from "../middleware/authMiddleware.js";
 
 const router = new Router();
 
 // Create a new order
-router.post('/:userId', async (req, res) => {
+router.post('/:userId', isAuthenticated, async (req, res) => {
   const userId = parseInt(req.params.userId);
   const { totalPrice, items, nickname } = req.body;
   const created_at = new Date().toISOString();
+
+  // Check if the authenticated user is the same as the requested user
+  if (req.user.id !== userId) {
+    return res.status(403).json({ error: 'Forbidden. You can only create an order for yourself.' });
+  }
 
   // Check for required fields
   if (!totalPrice || !userId || !nickname || !items || items.length === 0) {
@@ -58,9 +64,21 @@ router.post('/:userId', async (req, res) => {
 });
 
 // Get all orders for a specific user
-router.get('/', async (req, res) => {
+router.get('/', isAuthenticated, async (req, res) => {
   const userId = req.query.user;
+
+  // Check if the authenticated user is the same as the requested user
+  if (req.user.id != userId) {
+    return res.status(403).json({ error: 'Forbidden. You can only get your own orders.' });
+  }
+
   try {
+    // Check if the user exists
+    const userCheck = await db.query('SELECT id FROM users WHERE id = $1', [userId]);
+    if (userCheck.rows.length === 0) {
+      return res.status(400).json({ error: 'Invalid user_id' });
+    }
+    
     const result = await db.query('SELECT * FROM orders WHERE user_id = $1 ORDER BY created_at DESC', [userId]);
     res.json(result.rows);
   } catch (error) {
@@ -70,9 +88,7 @@ router.get('/', async (req, res) => {
 });
 
 // Get a specific order
-router.get('/:id', (req, res, next) => {
-  passport.authenticate('session', { session: true })(req, res, next);
-}, async (req, res) => {
+router.get('/:id', isAuthenticated, async (req, res) => {
   const orderId = parseInt(req.params.id);
 
   // Check if the user is authenticated
