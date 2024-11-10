@@ -47,66 +47,77 @@ function Cart() {
   return (
     <>
       <h1>Cart</h1>
-      <Link to="/">← Go back</Link>
+      <Link to="/" className="fr-link">← Go back</Link>
 
-      <div className="fr-table" id="table-md-component">
-        <div className="fr-table__wrapper">
-          <div className="fr-table__container">
-            <div className="fr-table__content">
-              <table id="table-md">
-                <thead>
-                  <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Unit price</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {items.map(({ item_id, name, price, quantity = 0 }, index) => (
-                    <tr key={item_id || index} id={`table-md-row-key-${item_id}`} data-row-key={item_id}>
-                      <td>{name}</td>
-                      <td>{price}</td>
-                      <td>{quantity}</td>
-                      <td>
-                        <button
-                          className="fr-btn fr-btn--secondary fr-btn--sm"
-                          onClick={() => handleRemove(item_id)}
-                        >
-                          Remove
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+      {items.length === 0 ? (
+        <div className="fr-empty-state">
+          <p>Nothing in the cart.</p>
+          <Link to="/" className="fr-link">← Go back</Link>
+        </div>
+      ) : (
+        <>
+          <div className="fr-table" id="table-md-component">
+            <div className="fr-table__wrapper">
+              <div className="fr-table__container">
+                <div className="fr-table__content">
+                  <table id="table-md">
+                    <thead>
+                      <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Unit price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {items.map(({ item_id, name, price, quantity = 0 }, index) => (
+                        <tr key={item_id || index} id={`table-md-row-key-${item_id}`} data-row-key={item_id}>
+                          <td>{name}</td>
+                          <td>{price}</td>
+                          <td>{quantity}</td>
+                          <td>
+                            <button
+                              className="fr-btn fr-btn--secondary fr-btn--sm"
+                              onClick={() => handleRemove(item_id)}
+                            >
+                              Remove
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <p>Total price: {formatCurrency(totalPrice)}</p>
-
-      {totalPrice > 0 && (
-        <div>
-          <button
-            className="fr-btn fr-btn--secondary"
-            onClick={handleClear}
-          >
-            Clear cart
-          </button>
-          <button
-            className="fr-btn"
-            onClick={handleCheckout}
-          >
-            Checkout
-          </button>
-        </div>
-      )}
-      {showMessage && (
-        <>
-          <p>All items have been shipped to your boss!</p>
-          <p><Link to="/orders">See all orders →</Link></p>
+          <div className="fr-table-footer">
+            <div className="fr-table-footer__content">
+              <p className="fr-text--bold fr-mb-0">Total price: {formatCurrency(totalPrice)}</p>
+              {totalPrice > 0 && (
+                <div>
+                  <button
+                    className="fr-btn fr-btn--secondary fr-ml-2w"
+                    onClick={handleClear}
+                  >
+                    Clear cart
+                  </button>
+                  <button
+                    className="fr-btn fr-ml-2w"
+                    onClick={handleCheckout}
+                  >
+                    Checkout
+                  </button>
+                </div>
+              )}
+              {showMessage && (
+                <div className="fr-success-message">
+                  <p className="fr-mb-0">All items have been shipped to your boss!</p>
+                  <Link to="/orders" className="fr-link">See all orders →</Link>
+                </div>
+              )}
+            </div>
+          </div>
         </>
       )}
     </>

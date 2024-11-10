@@ -26,3 +26,49 @@
 main {
     padding-top: 30px;
 }
+
+.fr-table-footer {
+    margin-top: 1rem;
+    padding: 1rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.fr-table-footer__content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.fr-mb-0 {
+    margin-bottom: 0;
+}
+
+.fr-ml-2w {
+    margin-left: 1rem;
+}
+
+.fr-empty-state {
+    text-align: center;
+    padding: 3rem;
+    background-color: var(--background-contrast-grey);
+    border-radius: 4px;
+    margin: 2rem 0;
+}
+
+.fr-success-message {
+    margin-left: 2rem;
+    color: var(--text-default-success);
+}
+
+.fr-mb-0 {
+    margin-bottom: 0;
+}
+
+.fr-mt-2w {
+    margin-top: 1rem;
+}
+
+.fr-ml-2w {
+    margin-left: 1rem;
+}
