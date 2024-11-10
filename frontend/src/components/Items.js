@@ -4,9 +4,11 @@ import { setQuantity, fetchItems, setRarityFilter, setTypeFilter, clearSelection
 import { addItems, addToCart } from "../store/features/cartSlice";
 import { parseMoney, formatCurrency } from "../utils/money";
 import "../styles/App.css"
+import { useNavigate } from "react-router-dom";
 
 function Items() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { items, rarityFilter, typeFilter } = useSelector((state) => state.items);
   const { userId } = useSelector((state) => state.user);
 
@@ -129,19 +131,22 @@ function Items() {
           </div>
         </div>
       </div>
-
-      <p>Total price: {formatCurrency(totalPrice)}</p>
-
-        <button
-          className="fr-btn"
-          onClick={() => {
-            dispatch(addItems({ items, totalPrice }));
-            dispatch(addToCart({ userId, items }));
-            dispatch(clearSelection());
-          }}
-        >
-          Add to cart
-        </button>
+      <div className="fr-table-footer">
+        <div className="fr-table-footer__content">
+          <p className="fr-text--bold fr-mb-0">Total price: {formatCurrency(totalPrice)}</p>
+          <button
+            className="fr-btn fr-ml-2w"
+            onClick={() => {
+              dispatch(addItems({ items, totalPrice }));
+              dispatch(addToCart({ userId, items }));
+              dispatch(clearSelection());
+              navigate("/cart");
+            }}
+          >
+            Add to cart
+          </button>
+        </div>
+      </div>
     </>
   );
 
