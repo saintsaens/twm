@@ -36,6 +36,7 @@ const mockUser = (role) => (req, res, next) => {
   next();
 };
 
+// Tests for getItems
 test('should return all items', async () => {
   vi.mocked(query).mockResolvedValue({ rows: mockItems });
 
@@ -84,6 +85,7 @@ test('should return all items if no filters are applied', async () => {
   expect(res.body).toEqual(mockItems);
 });
 
+// Tests for getItem
 test('should return an item by ID', async () => {
   const item = mockItems[0];
   vi.mocked(query).mockResolvedValue({ rows: [item] });
@@ -157,6 +159,7 @@ test('should return 400 if user is admin and required fields are missing', async
   expect(res.body).toEqual({ error: 'Missing required fields' });
 });
 
+// Tests for updateItem
 test('should update an item by ID', async () => {
   const updatedItem = {
     name: 'Updated Sword',
