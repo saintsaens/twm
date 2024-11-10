@@ -14,7 +14,7 @@ export const createUser = createAsyncThunk('auth/createUser', async ({ username,
 
         if (!response.ok) {
             const errorData = await response.json();
-            return rejectWithValue(errorData.message || 'Failed to create an account.');
+            return rejectWithValue(errorData.error || 'Failed to create account.');
         }
 
         return await response.json();

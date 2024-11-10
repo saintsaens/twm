@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { createUser, loginUser } from '../store/features/authSlice';
+import { clearError, createUser, loginUser } from '../store/features/authSlice';
 import { fetchUser } from '../store/features/userSlice';
 
 function Signup() {
@@ -13,15 +13,17 @@ function Signup() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    dispatch(clearError());
+  }, [dispatch]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       await dispatch(createUser({ username, password })).unwrap();
-      
       await dispatch(loginUser({ username, password })).unwrap();
       dispatch(fetchUser());
-
       setUsername('');
       setPassword('');
       navigate('/');
@@ -95,12 +97,12 @@ function Signup() {
                         </fieldset>
                       </form>
                     </div>
+                    {error && <p>{error}</p>}
+                    {successMessage && <p>{successMessage}</p>}
                     <hr />
                     <Link className="fr-link" to="/signin">
                       Sign in here →
                     </Link>
-                    {error && <p>{error}</p>}
-                    {successMessage && <p>{successMessage}</p>}
                   </div>
                 </div>
               </div>

@@ -105,11 +105,11 @@ function Signin() {
                         </fieldset>
                       </form>
                     </div>
+                    {error && <p>{error}</p>}
                     <hr />
                     <Link className="fr-link" to="/signup">
                       Create an account →
                     </Link>
-                    {error && <p>{error}</p>}
                   </div>
                 </div>
               </div>
