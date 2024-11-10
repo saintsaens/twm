@@ -82,16 +82,25 @@ router.post('/signup', async (req, res, next) => {
   }
 
   try {
+    // Check if user already exists
+    const checkUserQuery = 'SELECT id FROM users WHERE username = $1';
+    const existingUser = await db.query(checkUserQuery, [username]);
+
+    if (existingUser.rows.length > 0) {
+      return res.status(409).json({ error: 'Username already exists' });
+    }
+
     // Hash the password
     const hashedPw = await bcrypt.hash(password, saltRounds);
 
     // Insert user into the database
-    const query = `
+    const insertQuery = `
       INSERT INTO users (username, hashed_pw, role)
       VALUES ($1, $2, $3)
-      RETURNING *;
+      RETURNING id, username;
     `;
-    const result = await db.query(query, [username, hashedPw, "user"]);
+
+    const result = await db.query(insertQuery, [username, hashedPw, "user"]);
 
     // Extract the created user
     const user = {
@@ -100,22 +109,34 @@ router.post('/signup', async (req, res, next) => {
     };
 
     // Log the user in immediately after signup
-    req.login(user, function (err) {
+    req.login(user, (err) => {
       if (err) {
-        return next(err);
+        console.error('Login error after signup:', err);
+        return res.status(500).json({ error: 'Failed to log in after signup' });
       }
 
-      // Return the newly created user (without password for security)
-      return res.status(201).json({
-        id: result.rows[0].id,
-        username: result.rows[0].username,
-      });
+      return res.status(201).json(user);
     });
-
 
   } catch (error) {
     console.error('Error creating user:', error);
-    res.status(500).json({ error: 'Failed to create user' });
+    
+    // Handle potential race condition where unique constraint is violated
+    if (error.code === '23505' && error.constraint === 'users_username_key') {
+      return res.status(409).json({ error: 'Username already exists' });
+    }
+
+    // Handle other database errors with more specific messages
+    if (error.code === '23502') {
+      return res.status(400).json({ error: 'Missing required database fields' });
+    }
+
+    if (error.code === '23503') {
+      return res.status(400).json({ error: 'Invalid reference in database' });
+    }
+
+    // For any other unexpected errors
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
