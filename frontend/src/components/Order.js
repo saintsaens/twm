@@ -32,12 +32,8 @@ const Order = () => {
             <h1>
                 Order {id}
             </h1>
+            <Link to="/orders" className="fr-link">← All orders</Link>
             <div className="fr-table" >
-                <div className="go-back-link-container">
-                    <p>
-                        <Link to="/orders" className="nav-link">← All orders</Link>
-                    </p>
-                </div>
                 <div className="fr-table" id="table-md-component">
                     <div className="fr-table__wrapper">
                         <div className="fr-table__container">
