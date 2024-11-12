@@ -1,5 +1,3 @@
-import passport from 'passport';
-
 export const isAdmin = (req, res, next) => {
     if (req.user && req.user.role === 'admin') {
         return next();
@@ -8,10 +6,8 @@ export const isAdmin = (req, res, next) => {
 };
 
 export const isAuthenticated = (req, res, next) => {
-  passport.authenticate('session', { session: true })(req, res, () => {
-    if (!req.user || !req.user.id) {
-      return res.status(401).json({ error: 'Unauthorized. You need to be logged in.' });
-    }
-    next();
-  });
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  return res.status(401).json({ error: 'Unauthorized. You need to be logged in.' });
 };

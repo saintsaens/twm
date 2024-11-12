@@ -7,7 +7,6 @@ const router = new Router();
 // Get the cart of a user
 router.get('/:userId', isAuthenticated, async (req, res) => {
   const userId = parseInt(req.params.userId);
-
   // Check if the authenticated user is the same as the requested user
   if (req.user.id != userId) {
     return res.status(403).json({ error: 'Forbidden. You can only get your own cart.' });
