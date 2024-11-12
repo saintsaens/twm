@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { formatCurrency } from "../utils/money";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { clearCart, deleteCart, removeFromCart, removeItem } from "../store/features/cartSlice";
 import { fetchCart } from "../store/features/cartSlice";
 import { createOrder } from "../store/features/ordersSlice";
@@ -10,6 +10,7 @@ import { generateName } from "../utils/names";
 
 function Cart() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { items, totalPrice } = useSelector((state) => state.cart);
   const { userId } = useSelector((state) => state.user);
 
@@ -26,12 +27,14 @@ function Cart() {
     dispatch(deleteCart(userId));
   };
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     const nickname = generateName();
     try {
-      dispatch(createOrder({ userId, totalPrice, items, nickname })).unwrap();
+      const createdOrder = await dispatch(createOrder({ userId, totalPrice, items, nickname })).unwrap();
+      const orderId = createdOrder.order.id;
       dispatch(clearCart());
       dispatch(deleteCart(userId));
+      navigate(`/orders/${orderId}`);
       setShowMessage(true);
     } catch (error) {
       console.error('Failed to create order:', error);
