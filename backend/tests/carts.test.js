@@ -107,13 +107,6 @@ test('should return cart items with quantities for existing user', async () => {
 });
 
 test('should return 500 if database query fails', async () => {
-    vi.spyOn(passport, 'authenticate').mockImplementation(() => {
-        return (req, res, next) => {
-            req.user = { id: 1, role: "user" };
-            next();
-        };
-    });
-    // Mock user query to throw an error
     vi.mocked(query).mockRejectedValueOnce(new Error('Database error'));
 
     const res = await request(app).get('/carts/1');
@@ -155,13 +148,6 @@ test('should return 400 if items is not an array', async () => {
 });
 
 test('should return 400 if item data is invalid', async () => {
-    vi.spyOn(passport, 'authenticate').mockImplementation(() => {
-        return (req, res, next) => {
-            req.user = { id: 1 };
-            next();
-        };
-    });
-
     const invalidItems = [
         { id: 1 }, // missing quantity
         { quantity: 2 }, // missing id
