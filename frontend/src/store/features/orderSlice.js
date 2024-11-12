@@ -3,16 +3,13 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 const baseUrl = process.env.REACT_APP_API_URL;
 
-// Fetch a specific order by ID
 export const fetchOrder = createAsyncThunk(
     'orders/fetchOrder',
     async (orderId) => {
-        const response = await fetch(`${baseUrl}/api/orders/${orderId}`,
-            {
-                method: 'GET',
-                credentials: 'include', // This ensures cookies are sent with the request
-            }
-        );
+        const response = await fetch(`${baseUrl}/api/orders/${orderId}`, {
+            method: 'GET',
+            credentials: 'include',
+        });
         if (!response.ok) {
             throw new Error('Failed to fetch order');
         }

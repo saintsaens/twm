@@ -3,17 +3,19 @@ import { parseMoney } from "../../utils/money";
 
 const baseUrl = process.env.REACT_APP_API_URL;
 
-export const fetchCart = createAsyncThunk('cart/fetchCart', async (userId) => {
-    const response = await fetch(`${baseUrl}/api/carts/${userId}`, {
-        method: 'GET',
-        credentials: 'include',
-      });
-    if (!response.ok) {
-        throw new Error('Network response was not ok');
-    }
-    const data = await response.json();
-    return data;
-});
+export const fetchCart = createAsyncThunk(
+    'cart/fetchCart',
+    async (userId) => {
+        const response = await fetch(`${baseUrl}/api/carts/${userId}`, {
+            method: 'GET',
+            credentials: 'include',
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data;
+    });
 
 export const deleteCart = createAsyncThunk('cart/deleteCart', async (userId) => {
     const response = await fetch(`${baseUrl}/api/carts/${userId}`, {
@@ -94,29 +96,29 @@ const cartSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-        .addCase(fetchCart.pending, (state) => {
-            state.loading = true;
-            state.error = null;
-        })
-        .addCase(fetchCart.fulfilled, (state, action) => {
-            state.loading = false;
-            state.items = action.payload;
-            state.totalPrice = action.payload.reduce((total, item) => total + (parseMoney(item.price) * item.quantity), 0);
-            state.totalItems = state.items.reduce((acc, item) => acc + item.quantity, 0);
-        })
-        .addCase(fetchCart.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.error.message; // Store the error message
-        })
-        .addCase(addToCart.pending, (state) => {
-            state.loading = true;
-            state.error = null; // Reset error on new request
-        })
-        .addCase(addToCart.fulfilled, (state, action) => {
-            state.loading = false;
-            state.items = action.payload;
-            state.totalPrice = action.payload.reduce((total, item) => total + (parseMoney(item.price) * item.quantity), 0);
-            state.totalItems = state.items.reduce((acc, item) => acc + item.quantity, 0);
+            .addCase(fetchCart.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchCart.fulfilled, (state, action) => {
+                state.loading = false;
+                state.items = action.payload;
+                state.totalPrice = action.payload.reduce((total, item) => total + (parseMoney(item.price) * item.quantity), 0);
+                state.totalItems = state.items.reduce((acc, item) => acc + item.quantity, 0);
+            })
+            .addCase(fetchCart.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message; // Store the error message
+            })
+            .addCase(addToCart.pending, (state) => {
+                state.loading = true;
+                state.error = null; // Reset error on new request
+            })
+            .addCase(addToCart.fulfilled, (state, action) => {
+                state.loading = false;
+                state.items = action.payload;
+                state.totalPrice = action.payload.reduce((total, item) => total + (parseMoney(item.price) * item.quantity), 0);
+                state.totalItems = state.items.reduce((acc, item) => acc + item.quantity, 0);
             })
             .addCase(addToCart.rejected, (state, action) => {
                 state.loading = false;
