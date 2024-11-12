@@ -11,6 +11,7 @@ export const createOrder = createAsyncThunk(
             headers: {
                 'Content-Type': 'application/json',
             },
+            credentials: 'include',
             body: JSON.stringify({ userId, totalPrice, items, nickname }),
         });
 

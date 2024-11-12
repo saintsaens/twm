@@ -4,7 +4,10 @@ import { parseMoney } from "../../utils/money";
 const baseUrl = process.env.REACT_APP_API_URL;
 
 export const fetchCart = createAsyncThunk('cart/fetchCart', async (userId) => {
-    const response = await fetch(`${baseUrl}/api/carts/${userId}`);
+    const response = await fetch(`${baseUrl}/api/carts/${userId}`, {
+        method: 'GET',
+        credentials: 'include',
+      });
     if (!response.ok) {
         throw new Error('Network response was not ok');
     }
@@ -18,6 +21,7 @@ export const deleteCart = createAsyncThunk('cart/deleteCart', async (userId) => 
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include',
     });
     if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -33,6 +37,7 @@ export const addToCart = createAsyncThunk('cart/addToCart', async ({ userId, ite
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({ items: validItems }),
     });
     if (!response.ok) {
@@ -47,6 +52,7 @@ export const removeFromCart = createAsyncThunk('cart/removeFromCart', async ({ u
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({ itemId }),
     });
     if (!response.ok) {
