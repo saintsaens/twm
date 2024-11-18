@@ -7,13 +7,12 @@ const router = new Router();
 // Get the cart of a user
 router.get('/:userId', isAuthenticated, async (req, res) => {
   const userId = parseInt(req.params.userId);
-  // Check if the authenticated user is the same as the requested user
+
   if (req.user.id != userId) {
     return res.status(403).json({ error: 'Forbidden. You can only get your own cart.' });
   }
 
   try {
-    // Check if user exists.
     const resultUser = await db.query('SELECT * FROM users WHERE id = $1;', [userId]);
     if (resultUser.rows.length === 0) {
       return res.status(404).json({error: 'User not found'});
@@ -40,12 +39,10 @@ router.put('/add/:userId', isAuthenticated, async (req, res) => {
   const userId = parseInt(req.params.userId);
   const { items = [] } = req.body; // Default to an empty array if items is undefined
   
-  // Check if the authenticated user is the same as the requested user
   if (req.user.id !== userId) {
     return res.status(403).json({ error: 'Forbidden. You can only add to your own cart.' });
   }
 
-  // Validate that items is an array
   if (!Array.isArray(items)) {
     return res.status(400).json({ error: 'Invalid data format: items must be an array' });
   }
@@ -94,7 +91,6 @@ router.put('/remove/:userId', isAuthenticated, async (req, res) => {
   const userId = parseInt(req.params.userId);
   const { itemId } = req.body;
 
-  // Check if the authenticated user is the same as the requested user
   if (req.user.id !== userId) {
     return res.status(403).json({ error: 'Forbidden. You can only modify your own cart.' });
   }
