@@ -6,8 +6,11 @@ import { isAdmin, isAuthenticated } from "../middleware/authMiddleware.js";
 const router = new Router();
 const saltRounds = 10; 
 
+// Check authentication for all routes
+router.use(isAuthenticated);
+
 // Get all users
-router.get('/', isAuthenticated, isAdmin, async (req, res) => {
+router.get('/', isAdmin, async (req, res) => {
   try {
     const result = await db.query('SELECT * FROM users;');
     res.send(result.rows);
@@ -18,7 +21,7 @@ router.get('/', isAuthenticated, isAdmin, async (req, res) => {
 });
 
 // Get a user by ID
-router.get('/:id', isAuthenticated, async (req, res) => {
+router.get('/:id', async (req, res) => {
   const requestedUserId = parseInt(req.params.id);  // Get the ID from the URL parameter
 
   // Check if the authenticated user is the same as the requested user
@@ -39,7 +42,7 @@ router.get('/:id', isAuthenticated, async (req, res) => {
 });
 
 // Update a user
-router.put('/:id', isAuthenticated, isAdmin, async (req, res) => {
+router.put('/:id', isAdmin, async (req, res) => {
   const id = parseInt(req.params.id);
   const { username, password } = req.body;
 
@@ -76,7 +79,7 @@ router.put('/:id', isAuthenticated, isAdmin, async (req, res) => {
 });
 
 // Delete a user
-router.delete('/:id', isAuthenticated, isAdmin, async (req, res) => {
+router.delete('/:id', isAdmin, async (req, res) => {
   const id = parseInt(req.params.id);
 
   try {
