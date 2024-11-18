@@ -200,7 +200,7 @@ test('should return 400 if user for the orders does not exist', async () => {
     const res = await request(app).get(`/orders?user=${userId}`);
 
     expect(res.status).toBe(400);
-    expect(res.body.error).toEqual("Invalid user_id");
+    expect(res.body.error).toEqual("User does not exist");
 });
 
 test('should return all orders for an authenticated user', async () => {
@@ -227,7 +227,7 @@ test('should return 401 if user getting the order is not authenticated', async (
     expect(res.body.error).toEqual("Unauthorized. You need to be logged in.");
 });
 
-test('should return 403 if user tries to access an order not from them', async () => {
+test('should return 404 if user tries to access an order not from them', async () => {
     const orderId = 1;
     vi.mocked(query).mockResolvedValueOnce({
         rows: [{ user_id: 2 }]
@@ -235,21 +235,18 @@ test('should return 403 if user tries to access an order not from them', async (
 
     const res = await request(app).get(`/orders/${orderId}`);
 
-    expect(res.status).toBe(403);
-    expect(res.body.error).toEqual("Forbidden: You do not have access to this order");
+    expect(res.status).toBe(404);
+    expect(res.body.error).toEqual("Order not found or forbidden");
 });
 
 test('should return 404 if order not found by ID', async () => {
     const nonExistentOrderId = 999;
-    vi.mocked(query).mockResolvedValueOnce({
-        rows: [{ user_id: 1 }]
-    });
     vi.mocked(query).mockResolvedValueOnce({ rows: [] });
 
     const res = await request(app).get(`/orders/${nonExistentOrderId}`);
 
     expect(res.status).toBe(404);
-    expect(res.body).toEqual({ error: 'Order items not found' });
+    expect(res.body).toEqual({ error: 'Order not found or forbidden' });
 });
 
 test('should return a specific order by ID', async () => {
