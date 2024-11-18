@@ -1,7 +1,8 @@
 {
-  "name": "my-app",
-  "version": "0.1.0",
-  "private": true,
+  "name": "twm-frontend",
+  "version": "1.0.0",
+  "author": "Flavien - flavien@hey.com",
+  "license": "MIT",
   "dependencies": {
     "@gouvfr/dsfr": "^1.12.1",
     "@reduxjs/toolkit": "^2.3.0",
