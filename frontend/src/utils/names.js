@@ -1,4 +1,4 @@
-const adjectives = [
+export const adjectives = [
     "resplendent", "inimitable", "iridescent", "sinuous", "ethereal", "sonorous",
     "candescent", "celestial", "opalescent", "enigmatic", "effulgent", "ephemeral",
     "phantasmal", "majestic", "eloquent", "eccentric", "radiant", "luminous",
@@ -11,7 +11,7 @@ const adjectives = [
     "melancholy", "otherworldly", "halcyon", "sacred", "nocturnal", "secretive"
 ];
 
-const names = [
+export const names = [
     "markhor", "pangolin", "quokka", "kakapo", "fossa",
     "vaquita", "binturong", "dhole", "civet", "takin", "caracal", "axolotl",
     "genet", "saiga", "manul", "bongo", "quoll", "ibex", "kudu", "ratel",
