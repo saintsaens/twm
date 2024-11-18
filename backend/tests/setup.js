@@ -3,6 +3,7 @@ import { beforeAll, vi } from 'vitest';
 // Mock the db to prevent real database connections during tests
 vi.mock('../db/index.js', () => {
     return {
+        default: { query: vi.fn(), connect: vi.fn() },
         query: vi.fn(),
         connect: vi.fn(),
     };
