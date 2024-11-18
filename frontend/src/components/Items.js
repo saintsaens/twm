@@ -142,8 +142,9 @@ function Items() {
               dispatch(clearSelection());
               navigate("/cart");
             }}
+            disabled={!userId}
           >
-            Add to cart
+            {userId ? `Add to cart` : `Log in to add to cart`}
           </button>
         </div>
       </div>
