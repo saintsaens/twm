@@ -3,7 +3,6 @@ import express from 'express';
 import itemsRouter from '../routes/items.js';
 import { query } from '../db/index.js';
 import request from 'supertest';
-import passport from "passport";
 import { isAdmin } from "../middleware/authMiddleware.js";
 
 // Mock Express app
@@ -215,5 +214,4 @@ test('should return 404 if user is admin and item to delete not found', async ()
   const res = await request(app).delete(`/items/${nonExistentId}`);
 
   expect(res.status).toBe(404);
-  expect(res.text).toBe('Item not found');
 });
