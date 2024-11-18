@@ -1,4 +1,5 @@
 export function parseMoney(moneyString) {
+    if (!moneyString) return NaN;
     return parseFloat(moneyString.replace(/[^0-9.-]+/g, ""));
 }
 
