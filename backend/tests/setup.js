@@ -1,7 +1,7 @@
 import { beforeAll, vi } from 'vitest';
 import passport from "passport";
 
-// Mocking the db module to prevent real database connections during tests
+// Mock the db to prevent real database connections during tests
 vi.mock('../db/index.js', () => {
     return {
         query: vi.fn(),
@@ -9,6 +9,7 @@ vi.mock('../db/index.js', () => {
     };
 });
 
+// Mock the authentication middleware to prevent real calls to passport
 vi.mock('../middleware/authMiddleware.js', () => {
     return {
         isAuthenticated: vi.fn((req, res, next) => {
