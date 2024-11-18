@@ -69,7 +69,7 @@ test('should return user if authenticated user has the same ID', async () => {
   expect(res.body).toEqual(user);
 });
 
-test('should return a 403 if another authenticated user tries to access another user', async () => {
+test('should return a 403 if an authenticated user tries to access another user', async () => {
   const userId = 2;
   const user = mockUsers[0];
   vi.mocked(query).mockResolvedValue({ rows: [user] });
