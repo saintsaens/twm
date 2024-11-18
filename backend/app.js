@@ -1,55 +1,27 @@
 import express from "express";
 import mountRoutes from "./routes/index.js";
-import session from "express-session";
-import connectPgSimple from "connect-pg-simple"
-import passport from "passport";
-import morgan from "morgan";
-import cors from "cors";
-
+import corsLoader from "./loaders/corsLoader.js";
+import morganLoader from "./loaders/morganLoader.js";
+import sessionLoader from "./loaders/sessionLoader.js";
+import passportLoader from "./loaders/passportLoader.js";
 import dotenv from "dotenv";
+
 const envFile = process.env.NODE_ENV === 'render' ? '.env.render' : '.env';
 dotenv.config({ path: envFile });
 
 const port = process.env.PORT;
-
 const app = express();
 
+
+// Middleware and app configuration
 app.set('trust proxy', 1);
+app.use(express.json()); // Parse JSON request bodies
+morganLoader(app); // Log stuff
+corsLoader(app);
+sessionLoader(app);
+passportLoader(app);
 
-// Parse JSON request bodies
-app.use(express.json());
-
-// Log stuff
-if (process.env.NODE_ENV !== 'production') {
-  app.use(morgan(':method :url :status [:date]'));
-}
-
-const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',');
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,
-}));
-
-// Use sessions
-const PgSession = connectPgSimple(session);
-app.use(session({
-  store: new PgSession({
-    conString: process.env.DATABASE_URL,
-  }),
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "render",
-    sameSite: process.env.NODE_ENV === 'render' ? 'None' : 'Lax',
-    maxAge: 24 * 60 * 60 * 1000
-  }
-}));
-
-app.use(passport.initialize());
-app.use(passport.session());
-
+// Mount routes
 mountRoutes(app);
 
 app.listen(port, () => {
