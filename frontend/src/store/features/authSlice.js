@@ -80,7 +80,7 @@ const authSlice = createSlice({
             })
             .addCase(createUser.fulfilled, (state) => {
                 state.loading = false;
-                state.successMessage = 'Account created successfully! Please log in.';
+                state.successMessage = 'Account created!';
             })
             .addCase(createUser.rejected, (state, action) => {
                 state.loading = false;
