@@ -13,7 +13,8 @@ router.get('/:userId', isAuthenticated, async (req, res) => {
   }
 
   try {
-    const resultUser = await db.query('SELECT * FROM users WHERE id = $1;', [userId]);
+    const resultUser = await db.query('SELECT id, username, role FROM users WHERE id = $1;', [userId]);
+
     if (resultUser.rows.length === 0) {
       return res.status(404).json({error: 'User not found'});
     }
@@ -55,7 +56,7 @@ router.put('/add/:userId', isAuthenticated, async (req, res) => {
       }
 
       const itemExistsResult = await db.query(`
-            SELECT * FROM users_items WHERE user_id = $1 AND item_id = $2;
+            SELECT id, username, role FROM users_items WHERE user_id = $1 AND item_id = $2;
             `, [userId, item_id]);
 
       if (itemExistsResult.rows.length > 0) {

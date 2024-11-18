@@ -12,7 +12,7 @@ router.use(isAuthenticated);
 // Get all users
 router.get('/', isAdmin, async (req, res) => {
   try {
-    const result = await db.query('SELECT * FROM users;');
+    const result = await db.query('SELECT id, username, role FROM users;');
     res.send(result.rows);
   } catch (error) {
     console.error('Error retrieving users:', error);
@@ -30,7 +30,7 @@ router.get('/:id', async (req, res) => {
   }
 
   try {
-    const result = await db.query('SELECT * FROM users WHERE id = $1;', [requestedUserId]);
+    const result = await db.query('SELECT id, username, role FROM users WHERE id = $1;', [requestedUserId]);
     if (result.rows.length === 0) {
       return res.status(404).send('User not found');
     }
