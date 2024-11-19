@@ -8,6 +8,7 @@
   "type": "module",
   "scripts": {
     "test": "vitest --ui",
+    "test:no-ui": "vitest",
     "start": "NODE_ENV=development nodemon app.js",
     "start:render": "NODE_ENV=render nodemon app.js"
   },
