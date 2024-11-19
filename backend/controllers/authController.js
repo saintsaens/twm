@@ -1,10 +1,11 @@
 import passport from "passport";
 import * as authService from "../services/authService.js";
+import { sendErrorResponse } from "./utils.js";
 
 export const login = (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
         if (err) return next(err);
-        if (!user) return res.status(401).json({ message: 'Invalid credentials' });
+        if (!user) return sendErrorResponse(res, 401, "Invalid credentials");
 
         req.logIn(user, (err) => {
             if (err) return next(err);
@@ -17,29 +18,29 @@ export const signup = async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
-        return res.status(400).json({ error: 'Missing required fields' });
+        return sendErrorResponse(res, 400, "Missing required fields");
     }
-
+    
     try {
         const newUser = await authService.registerUser(username, password);
         req.login(newUser, (err) => {
             if (err) {
-                return res.status(500).json({ error: 'Failed to log in after signup' });
+                sendErrorResponse(res, 500, "Failed to log in after signup");
             }
             res.status(201).json(newUser);
         });
     } catch (err) {
         if (err.message === 'Username already exists') {
-            res.status(409).json({ error: err.message });
+            sendErrorResponse(res, 409, err.message);
         } else {
-            res.status(500).json({ error: err.message });
+            sendErrorResponse(res, 500, err.message);
         }
     }
 };
 
 export const logout = (req, res) => {
     req.logout((err) => {
-        if (err) return res.status(500).json({ message: 'Logout failed' });
+        if (err) return sendErrorResponse(res, 500, "Logout failed");
         res.json({ message: 'Logout successful' });
     });
 };
@@ -51,6 +52,6 @@ export const getUserProfile = (req, res) => {
             username: req.user.username,
         });
     } else {
-        res.status(401).json({ message: 'Not logged in' });
+        sendErrorResponse(res, 401, "Not logged in");
     }
 };
