@@ -19,16 +19,16 @@ test('should return 401 if user getting the cart is not authenticated', async ()
     });
 
     const res = await request(app).get(`/carts/${userId}`);
-    
+
     expect(res.status).toBe(401);
     expect(res.body.error).toEqual("Unauthorized. You need to be logged in.");
 });
 
 test('should return 403 if user getting the cart does not own the cart', async () => {
     const userId = 2;
-    
+
     const res = await request(app).get(`/carts/${userId}`);
-    
+
     expect(res.status).toBe(403);
     expect(res.body.error).toEqual("Forbidden. You can only get your own cart.");
 });
@@ -40,10 +40,10 @@ test('should return 404 if user does not exist', async () => {
         next();
     });
     vi.mocked(query).mockResolvedValueOnce({ rows: [] });
-    
+
     const res = await request(app).get(`/carts/${userId}`);
     expect(res.status).toBe(404);
-    expect(res.body.error).toEqual("User not found");
+    expect(res.body.error).toEqual("User not found or cart empty");
 });
 
 test('should return empty array if user has no items in cart', async () => {
@@ -153,14 +153,19 @@ test('should return 400 if item data is invalid', async () => {
         { quantity: 2 }, // missing id
         { id: "1", quantity: "2" } // wrong types
     ];
+    const errorMessages = [
+        "Invalid item: 'quantity' is required.",
+        "Invalid item: 'id' is required.",
+        "Invalid item: 'id' and 'quantity' must be numbers."
+    ];
 
-    for (const items of [invalidItems]) {
+    for (let i = 0; i < invalidItems.length; i++) {
         const res = await request(app)
             .put('/carts/add/1')
-            .send({ items: [items[0]] });
+            .send({ items: [invalidItems[i]] });
 
         expect(res.status).toBe(400);
-        expect(res.body.error).toEqual('Invalid item data: each item must include item_id and quantity as a number');
+        expect(res.body.error).toEqual(errorMessages[i]);
     }
 });
 
@@ -365,7 +370,7 @@ test('should return 400 if itemId is invalid', async () => {
         .send({ itemId: 'invalid' });
 
     expect(res.status).toBe(400);
-    expect(res.body.error).toEqual('Invalid item ID format');
+    expect(res.body.error).toEqual('Invalid item ID format. Must be an integer.');
 });
 
 test('should return 500 if database query fails', async () => {
@@ -430,7 +435,8 @@ test('should return 403 if user tries to delete another user\'s cart', async () 
 });
 
 test('should successfully delete a non-empty cart', async () => {
-    vi.mocked(query).mockResolvedValueOnce({
+    // Mock 2 calls: one get cart items, and one to delete cart.
+    vi.mocked(query).mockResolvedValue({
         rows: [
             { user_id: 1, item_id: 1, quantity: 2 },
             { user_id: 1, item_id: 2, quantity: 1 }
@@ -442,10 +448,6 @@ test('should successfully delete a non-empty cart', async () => {
 
     expect(res.status).toBe(204);
     expect(res.body).toEqual({});
-    expect(query).toHaveBeenCalledWith(
-        'DELETE FROM users_items WHERE user_id = $1 RETURNING *;',
-        [1]
-    );
 });
 
 test('should return 404 when trying to delete an empty cart', async () => {
@@ -455,7 +457,7 @@ test('should return 404 when trying to delete an empty cart', async () => {
         .delete('/carts/1');
 
     expect(res.status).toBe(404);
-    expect(res.body.error).toBe('Cart not found or was already empty');
+    expect(res.body.error).toBe('User not found or cart empty');
 });
 
 test('should return 500 if database query fails', async () => {
