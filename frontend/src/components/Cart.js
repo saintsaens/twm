@@ -11,7 +11,7 @@ import { generateName } from "../utils/names";
 function Cart() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { items, totalPrice } = useSelector((state) => state.cart);
+  const { items, totalPrice, loading, error } = useSelector((state) => state.cart);
   const { userId } = useSelector((state) => state.user);
 
   const [showMessage, setShowMessage] = useState(false);
@@ -52,7 +52,16 @@ function Cart() {
       <h1>Cart</h1>
       <Link to="/" className="fr-link">← Go back</Link>
 
-      {items.length === 0 ? (
+      {
+      loading ? (
+        <div className="fr-empty-state">
+          <p>Loading…</p>
+        </div>
+      ) : error ? (
+        <div className="fr-empty-state">
+          <p>Error loading cart! 😬</p>
+        </div>
+      ) : items.length === 0 ? (
         <div className="fr-empty-state">
           <p>Nothing in the cart.</p>
           <Link to="/" className="fr-link">← Go back</Link>

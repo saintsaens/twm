@@ -69,7 +69,7 @@ const cartSlice = createSlice({
         items: [],
         totalPrice: 0,
         totalItems: 0,
-        loading: false,
+        loading: true,
         error: null,
     },
     reducers: {
@@ -108,11 +108,11 @@ const cartSlice = createSlice({
             })
             .addCase(fetchCart.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.error.message; // Store the error message
+                state.error = action.error.message;
             })
             .addCase(addToCart.pending, (state) => {
                 state.loading = true;
-                state.error = null; // Reset error on new request
+                state.error = null;
             })
             .addCase(addToCart.fulfilled, (state, action) => {
                 state.loading = false;
@@ -122,7 +122,7 @@ const cartSlice = createSlice({
             })
             .addCase(addToCart.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.error.message; // Store the error message
+                state.error = action.error.message;
             });
     },
 });
