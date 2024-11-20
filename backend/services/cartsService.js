@@ -1,29 +1,30 @@
+import { HTTP_ERRORS } from "../controllers/errors.js";
 import * as cartsRepository from "../repositories/cartsRepository.js";
 
 export const getCart = async (userId) => {
     const userExists = await cartsRepository.checkUserExists(userId);
     if (!userExists) {
-        throw new Error("User not found or cart empty");
+        throw new Error(HTTP_ERRORS.NOT_FOUND_CART);
     }
     return await cartsRepository.getCartItems(userId);
 };
 
 export const addItemsToCart = async (userId, items) => {
     if (!Array.isArray(items)) {
-        throw new TypeError("Invalid data format: items must be an array");
+        throw new TypeError(HTTP_ERRORS.INVALID_DATA);
     }
 
     for (const item of items) {
         const { id: itemId, quantity } = item;
 
         if (itemId === undefined) {
-            throw new Error("Invalid item: 'id' is required.");
+            throw new Error(HTTP_ERRORS.INVALID_ITEM_ID);
         }
         if (quantity === undefined) {
-            throw new Error("Invalid item: 'quantity' is required.");
+            throw new Error(HTTP_ERRORS.INVALID_ITEM_QUANTITY);
         }
         if (typeof itemId !== "number" || typeof quantity !== "number") {
-            throw new TypeError("Invalid item: 'id' and 'quantity' must be numbers.");
+            throw new Error(HTTP_ERRORS.INVALID_ITEM_FORMATS);
         }
 
         const itemExists = await cartsRepository.checkCartItem(userId, itemId);
@@ -49,7 +50,7 @@ export const deleteCart = async (userId) => {
 export const checkoutCart = async (cartId) => {
     const cart = await cartsRepository.getCart(cartId);
     if (!cart) {
-        throw new Error("Cart not found");
+        throw new Error(HTTP_ERRORS.NOT_FOUND_CART);
     }
     const order = await cartsRepository.createOrder(cart);
     await cartsRepository.clearCart(cartId);

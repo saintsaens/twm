@@ -1,11 +1,10 @@
 import { test, expect, vi, describe } from 'vitest';
-import passport from "passport";
 import express from 'express';
 import authRouter from '../routes/auth.js';
 import bcrypt from "bcrypt";
 import * as authService from "../services/authService.js"
-import * as db from "../db/index.js"
 import request from 'supertest';
+import { HTTP_ERRORS } from "../controllers/errors.js";
 
 // Mock Express app
 const app = express();
@@ -34,7 +33,7 @@ describe("signup", () => {
 
         expect(missingPasswordRes.status).toBe(400);
         expect(missingPasswordRes.body).toEqual({
-            error: 'Missing required fields',
+            error: HTTP_ERRORS.MISSING_FIELDS,
         });
 
         const missingUsernameRes = await request(app)
@@ -43,7 +42,7 @@ describe("signup", () => {
 
         expect(missingUsernameRes.status).toBe(400);
         expect(missingUsernameRes.body).toEqual({
-            error: 'Missing required fields',
+            error: HTTP_ERRORS.MISSING_FIELDS,
         });
     });
 
@@ -51,7 +50,7 @@ describe("signup", () => {
         const username = 'existinguser';
         const password = 'password123';
 
-        vi.spyOn(authService, 'registerUser').mockRejectedValueOnce(new Error('Username already exists'));
+        vi.spyOn(authService, 'registerUser').mockRejectedValueOnce(new Error(HTTP_ERRORS.USERNAME_EXISTS));
 
         const res = await request(app)
             .post('/signup')
@@ -59,7 +58,7 @@ describe("signup", () => {
 
         expect(res.status).toBe(409);
         expect(res.body).toEqual({
-            error: 'Username already exists',
+            error: HTTP_ERRORS.USERNAME_EXISTS,
         });
     });
 

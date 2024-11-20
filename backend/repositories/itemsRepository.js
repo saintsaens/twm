@@ -1,3 +1,4 @@
+import { HTTP_ERRORS } from "../controllers/errors.js";
 import * as db from "../db/index.js";
 
 const findItems = async (filters) => {
@@ -59,7 +60,7 @@ const deleteItem = async (id) => {
     const query = "DELETE FROM items WHERE id = $1 RETURNING *;";
     const result = await db.query(query, [id]);
     if (!result || !result.rows || result.rows.length === 0) {
-        throw new Error('Item not found or failed to delete');
+        throw new Error(HTTP_ERRORS.FAIL_DELETE_ITEM);
     }
     return result.rows[0];
 };

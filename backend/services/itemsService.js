@@ -1,3 +1,4 @@
+import { HTTP_ERRORS } from "../controllers/errors.js";
 import itemsRepository from "../repositories/itemsRepository.js";
 
 const getItems = async (filters) => {
@@ -15,7 +16,7 @@ const getItemById = async (id) => {
 const createItem = async (newItem) => {
   const { name, type, rarity, price } = newItem;
   if (!name || !type || !rarity || !price) {
-    throw new Error("Missing required fields");
+    throw new Error(HTTP_ERRORS.MISSING_FIELDS);
   }
   return itemsRepository.insertItem({ name, type, rarity, price });
 };
