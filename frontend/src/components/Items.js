@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setQuantity, fetchItems, setRarityFilter, setTypeFilter, clearSelection } from '../store/features/itemsSlice';
-import { addItems, addToCart } from "../store/features/cartSlice";
+import { addToCart } from "../store/features/cartSlice";
 import { parseMoney, formatCurrency } from "../utils/money";
 import "../styles/App.css"
 import { useNavigate } from "react-router-dom";
@@ -137,7 +137,6 @@ function Items() {
           <button
             className="fr-btn fr-ml-2w"
             onClick={() => {
-              dispatch(addItems({ items, totalPrice }));
               dispatch(addToCart({ userId, items }));
               dispatch(clearSelection());
               navigate("/cart");
