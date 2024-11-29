@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setQuantity, fetchItems, setRarityFilter, setTypeFilter, clearSelection } from '../store/features/itemsSlice';
 import { addToCart } from "../store/features/cartSlice";
@@ -11,6 +11,9 @@ function Items() {
   const navigate = useNavigate();
   const { items, rarityFilter, typeFilter } = useSelector((state) => state.items);
   const { userId } = useSelector((state) => state.user);
+
+  const [sortColumn, setSortColumn] = useState('name');
+  const [sortOrder, setSortOrder] = useState('asc');
 
   useEffect(() => {
     dispatch(fetchItems());
@@ -33,6 +36,34 @@ function Items() {
     dispatch(setTypeFilter('All'));
   };
 
+  const handleSort = (column) => {
+    if (sortColumn === column) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortColumn(column);
+      setSortOrder('asc');
+    }
+  };
+
+  const sortedItems = [...items]
+    .filter(item =>
+      (rarityFilter === 'All' || item.rarity === rarityFilter) &&
+      (typeFilter === 'All' || item.type === typeFilter)
+    )
+    .sort((a, b) => {
+      const valueA = a[sortColumn];
+      const valueB = b[sortColumn];
+
+      if (sortColumn === 'price') {
+        return sortOrder === 'asc'
+          ? parseMoney(valueA) - parseMoney(valueB)
+          : parseMoney(valueB) - parseMoney(valueA);
+      }
+
+      if (valueA < valueB) return sortOrder === 'asc' ? -1 : 1;
+      if (valueA > valueB) return sortOrder === 'asc' ? 1 : -1;
+      return 0;
+    });
 
   const filteredItems = items.filter(item =>
     (rarityFilter === 'All' || item.rarity === rarityFilter) &&
@@ -96,15 +127,23 @@ function Items() {
               <table id="table-md">
                 <thead>
                   <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Type</th>
-                    <th scope="col">Rarity</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Quantity</th>
+                    <th onClick={() => handleSort('name')} style={{ cursor: 'pointer' }}>
+                      Name {sortColumn === 'name' && (sortOrder === 'asc' ? '↑' : '↓')}
+                    </th>
+                    <th onClick={() => handleSort('type')} style={{ cursor: 'pointer' }}>
+                      Type {sortColumn === 'type' && (sortOrder === 'asc' ? '↑' : '↓')}
+                    </th>
+                    <th onClick={() => handleSort('rarity')} style={{ cursor: 'pointer' }}>
+                      Rarity {sortColumn === 'rarity' && (sortOrder === 'asc' ? '↑' : '↓')}
+                    </th>
+                    <th onClick={() => handleSort('price')} style={{ cursor: 'pointer' }}>
+                      Price {sortColumn === 'price' && (sortOrder === 'asc' ? '↑' : '↓')}
+                    </th>
+                    <th>Quantity</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredItems.map(({ id, name, type, rarity, price, quantity = 0 }) => (
+                  {sortedItems.map(({ id, name, type, rarity, price, quantity = 0 }) => (
                     <tr key={id} id={`table-md-row-key-${id}`} data-row-key={id}>
                       <td>{name}</td>
                       <td>{type}</td>
