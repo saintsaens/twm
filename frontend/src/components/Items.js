@@ -14,6 +14,7 @@ function Items() {
 
   const [sortColumn, setSortColumn] = useState('name');
   const [sortOrder, setSortOrder] = useState('asc');
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     dispatch(fetchItems());
@@ -34,6 +35,7 @@ function Items() {
   const handleClearFilters = () => {
     dispatch(setRarityFilter('All'));
     dispatch(setTypeFilter('All'));
+    setSearchTerm('');
   };
 
   const handleSort = (column) => {
@@ -45,11 +47,13 @@ function Items() {
     }
   };
 
-  const sortedItems = [...items]
-    .filter(item =>
-      (rarityFilter === 'All' || item.rarity === rarityFilter) &&
-      (typeFilter === 'All' || item.type === typeFilter)
-    )
+  const filteredItems = items.filter(item =>
+    (rarityFilter === 'All' || item.rarity === rarityFilter) &&
+    (typeFilter === 'All' || item.type === typeFilter) &&
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const sortedItems = [...filteredItems]
     .sort((a, b) => {
       const valueA = a[sortColumn];
       const valueB = b[sortColumn];
@@ -64,11 +68,6 @@ function Items() {
       if (valueA > valueB) return sortOrder === 'asc' ? 1 : -1;
       return 0;
     });
-
-  const filteredItems = items.filter(item =>
-    (rarityFilter === 'All' || item.rarity === rarityFilter) &&
-    (typeFilter === 'All' || item.type === typeFilter)
-  );
 
   const totalPrice = filteredItems.reduce((acc, item) => {
     const itemPrice = parseMoney(item.price);
@@ -120,7 +119,28 @@ function Items() {
         </div>
       </div>
 
+      <div className="fr-search-bar" id="header-search" role="search">
+        <label className="fr-label" for="search-input">
+          Recherche
+        </label>
+        <input
+          className="fr-input"
+          placeholder="Rechercher"
+          type="search"
+          id="search-input"
+          name="search-input"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <button className="fr-btn" title="Rechercher">
+          Rechercher
+        </button>
+      </div>
+
+
       <div className="fr-table" id="table-md-component">
+        <div className="fr-table__header">
+        </div>
         <div className="fr-table__wrapper">
           <div className="fr-table__container">
             <div className="fr-table__content">
