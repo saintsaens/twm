@@ -23,20 +23,24 @@ export const createUser = createAsyncThunk('auth/createUser', async ({ username,
     }
 });
 
-export const loginUser = createAsyncThunk('auth/loginUser', async (formData) => {
-    const response = await fetch(`${baseUrl}/api/login/password`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: "include",
-        body: JSON.stringify(formData),
-    });
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message);
+export const loginUser = createAsyncThunk('auth/loginUser', async (formData, { rejectWithValue }) => {
+    try {
+        const response = await fetch(`${baseUrl}/api/login/password`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: "include",
+            body: JSON.stringify(formData),
+        });
+        if (!response.ok) {
+            const errorData = await response.json();
+            return rejectWithValue(errorData.error || 'Failed to create account.');
+        }
+        return await response.json();
+    } catch (error) {
+        return rejectWithValue('An error occurred while trying to log in.');
     }
-    return await response.json();
 });
 
 export const logoutUser = createAsyncThunk(
@@ -94,7 +98,7 @@ const authSlice = createSlice({
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.error.message;
+                state.error = action.payload;
             })
             .addCase(logoutUser.pending, (state) => {
                 state.loading = true;
