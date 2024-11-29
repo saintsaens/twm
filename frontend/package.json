@@ -17,7 +17,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "vitest --ui",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

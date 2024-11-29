@@ -7,8 +7,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "vitest --ui",
-    "test:no-ui": "vitest",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
     "start": "NODE_ENV=development nodemon app.js",
     "start:render": "NODE_ENV=render nodemon app.js"
   },
