@@ -9,7 +9,7 @@ export const login = (req, res, next) => {
 
         req.logIn(user, (err) => {
             if (err) return next(err);
-            res.json({ message: 'Login successful', user });
+            res.json({ message: 'Login successful' });
         });
     })(req, res, next);
 };
