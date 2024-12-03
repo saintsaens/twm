@@ -5,7 +5,7 @@ import { sendErrorResponse, HTTP_ERRORS } from "./errors.js";
 export const login = (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
         if (err) return next(err);
-        if (!user) return sendErrorResponse(res, 401, HTTP_ERRORS.INVALID_CREDENTIALS);
+        if (!user) return sendErrorResponse(res, 401, HTTP_ERRORS.AUTH.INVALID_CREDENTIALS);
 
         req.logIn(user, (err) => {
             if (err) return next(err);
@@ -18,7 +18,7 @@ export const signup = async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
-        return sendErrorResponse(res, 400, HTTP_ERRORS.MISSING_FIELDS);
+        return sendErrorResponse(res, 400, HTTP_ERRORS.VALIDATION.MISSING_FIELDS);
     }
     
     try {
@@ -30,7 +30,7 @@ export const signup = async (req, res) => {
             res.status(201).json(newUser);
         });
     } catch (err) {
-        if (err.message === HTTP_ERRORS.USERNAME_EXISTS) {
+        if (err.message === HTTP_ERRORS.GENERAL.USERNAME_EXISTS) {
             sendErrorResponse(res, 409, err.message);
         } else {
             sendErrorResponse(res, 500, err.message);

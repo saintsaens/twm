@@ -16,7 +16,7 @@ const getItemById = async (req, res, next) => {
         const { id } = req.params;
         const item = await itemsService.getItemById(id);
         if (!item) {
-            return sendErrorResponse(res, 404, HTTP_ERRORS.NOT_FOUND_ITEM);
+            return sendErrorResponse(res, 404, HTTP_ERRORS.ITEM.NOT_FOUND);
         }
         res.json(item);
     } catch (error) {
@@ -30,8 +30,8 @@ const createItem = async (req, res, next) => {
         const createdItem = await itemsService.createItem(newItem);
         res.status(201).json(createdItem);
     } catch (error) {
-        if (error.message === HTTP_ERRORS.MISSING_FIELDS) {
-            return sendErrorResponse(res, 400, HTTP_ERRORS.MISSING_FIELDS);
+        if (error.message === HTTP_ERRORS.VALIDATION.MISSING_FIELDS) {
+            return sendErrorResponse(res, 400, HTTP_ERRORS.VALIDATION.MISSING_FIELDS);
         }
         next(error);
     }
@@ -43,7 +43,7 @@ const updateItem = async (req, res, next) => {
         const updatedFields = req.body;
         const updatedItem = await itemsService.updateItem(id, updatedFields);
         if (!updatedItem) {
-            return sendErrorResponse(res, 404, HTTP_ERRORS.NOT_FOUND_ITEM);
+            return sendErrorResponse(res, 404, HTTP_ERRORS.ITEM.NOT_FOUND);
         }
         res.json(updatedItem);
     } catch (error) {
@@ -56,12 +56,12 @@ const deleteItem = async (req, res, next) => {
         const { id } = req.params;
         const deleted = await itemsService.deleteItem(id);
         if (!deleted) {
-            return sendErrorResponse(res, 404, HTTP_ERRORS.NOT_FOUND_ITEM);
+            return sendErrorResponse(res, 404, HTTP_ERRORS.ITEM.NOT_FOUND);
         }
         res.status(204).send();
     } catch (error) {
-        if (error.message === HTTP_ERRORS.FAIL_DELETE_ITEM) {
-            return sendErrorResponse(res, 404, HTTP_ERRORS.FAIL_DELETE_ITEM);
+        if (error.message === HTTP_ERRORS.ITEM.FAIL_DELETE) {
+            return sendErrorResponse(res, 404, HTTP_ERRORS.ITEM.FAIL_DELETE);
         }
         next(error);
     }

@@ -111,7 +111,7 @@ describe("getItem", () => {
     const res = await request(app).get(`/items/${nonExistentId}`);
 
     expect(res.status).toBe(404);
-    expect(res.body.error).toEqual(HTTP_ERRORS.NOT_FOUND_ITEM);
+    expect(res.body.error).toEqual(HTTP_ERRORS.ITEM.NOT_FOUND);
   });
 });
 
@@ -157,7 +157,7 @@ describe("createItem", () => {
     const res = await request(app).post('/items').send(incompleteItem);
 
     expect(res.status).toBe(400);
-    expect(res.body.error).toEqual(HTTP_ERRORS.MISSING_FIELDS);
+    expect(res.body.error).toEqual(HTTP_ERRORS.VALIDATION.MISSING_FIELDS);
   });
 });
 
@@ -186,7 +186,7 @@ describe("updateItem", () => {
     const res = await request(app).put(`/items/${nonExistentId}`).send(updatedItem);
 
     expect(res.status).toBe(404);
-    expect(res.body.error).toEqual(HTTP_ERRORS.NOT_FOUND_ITEM);
+    expect(res.body.error).toEqual(HTTP_ERRORS.ITEM.NOT_FOUND);
   });
 
   test('should delete an item by ID if the user is an admin', async () => {

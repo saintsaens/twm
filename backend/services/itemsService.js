@@ -16,7 +16,7 @@ const getItemById = async (id) => {
 const createItem = async (newItem) => {
   const { name, type, rarity, price } = newItem;
   if (!name || !type || !rarity || !price) {
-    throw new Error(HTTP_ERRORS.MISSING_FIELDS);
+    throw new Error(HTTP_ERRORS.VALIDATION.MISSING_FIELDS);
   }
   return itemsRepository.insertItem({ name, type, rarity, price });
 };

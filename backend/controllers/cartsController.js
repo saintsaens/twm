@@ -4,18 +4,18 @@ import { HTTP_ERRORS, sendErrorResponse } from "./errors.js";
 export const getCart = async (req, res) => {
     const userId = parseInt(req.params.userId);
     if (req.user.id !== userId) {
-        return sendErrorResponse(res, 403, HTTP_ERRORS.FORBIDDEN_CART);
+        return sendErrorResponse(res, 403, HTTP_ERRORS.CART.FORBIDDEN);
     }
 
     try {
         const cart = await cartsService.getCart(userId);
         res.json(cart);
     } catch (error) {
-        if (error.message === HTTP_ERRORS.NOT_FOUND_CART) {
-            return sendErrorResponse(res, 404, HTTP_ERRORS.NOT_FOUND_CART);
+        if (error.message === HTTP_ERRORS.CART.NOT_FOUND) {
+            return sendErrorResponse(res, 404, HTTP_ERRORS.CART.NOT_FOUND);
         }
         console.error("Error retrieving cart:", error);
-        sendErrorResponse(res, 500, HTTP_ERRORS.CART_FAIL);
+        sendErrorResponse(res, 500, HTTP_ERRORS.CART.CART_FAIL);
     }
 };
 
@@ -24,21 +24,21 @@ export const addItemsToCart = async (req, res) => {
     const { items } = req.body;
 
     if (req.user.id !== userId) {
-        return sendErrorResponse(res, 403, HTTP_ERRORS.FORBIDDEN_CART);
+        return sendErrorResponse(res, 403, HTTP_ERRORS.CART.FORBIDDEN);
     }
 
     try {
         const updatedCart = await cartsService.addItemsToCart(userId, items);
         res.json(updatedCart);
     } catch (error) {
-        if (error.message === HTTP_ERRORS.INVALID_DATA
-            || error.message === HTTP_ERRORS.INVALID_ITEM_ID
-            || error.message === HTTP_ERRORS.INVALID_ITEM_QUANTITY
-            || error.message === HTTP_ERRORS.INVALID_ITEM_FORMATS) {
+        if (error.message === HTTP_ERRORS.VALIDATION.INVALID_DATA
+            || error.message === HTTP_ERRORS.VALIDATION.INVALID_ITEM_ID
+            || error.message === HTTP_ERRORS.VALIDATION.INVALID_ITEM_QUANTITY
+            || error.message === HTTP_ERRORS.VALIDATION.INVALID_ITEM_FORMATS) {
             return sendErrorResponse(res, 400, error.message);
         }
         console.error("Error updating cart:", error);
-        sendErrorResponse(res, 500, HTTP_ERRORS.FAIL_UPDATE_CART);
+        sendErrorResponse(res, 500, HTTP_ERRORS.CART.FAIL_UPDATE);
     }
 };
 
@@ -47,13 +47,13 @@ export const removeItemFromCart = async (req, res) => {
     const { itemId } = req.body;
 
     if (req.user.id !== userId) {
-        return sendErrorResponse(res, 403, HTTP_ERRORS.FORBIDDEN_CART);
+        return sendErrorResponse(res, 403, HTTP_ERRORS.CART.FORBIDDEN);
     }
     if (!itemId) {
-        return sendErrorResponse(res, 400, HTTP_ERRORS.ITEM_ID_REQUIRED);
+        return sendErrorResponse(res, 400, HTTP_ERRORS.VALIDATION.ITEM_ID_REQUIRED);
     }
     if (!Number.isInteger(itemId)) {
-        return sendErrorResponse(res, 400, HTTP_ERRORS.INVALID_ITEM_ID_FORMAT);
+        return sendErrorResponse(res, 400, HTTP_ERRORS.VALIDATION.INVALID_ITEM_ID_FORMAT);
     }
 
     try {
@@ -61,7 +61,7 @@ export const removeItemFromCart = async (req, res) => {
         res.json(updatedCart);
     } catch (error) {
         console.error("Error removing items from cart:", error);
-        sendErrorResponse(res, 500, HTTP_ERRORS.FAIL_REMOVE_ITEMS);
+        sendErrorResponse(res, 500, HTTP_ERRORS.CART.FAIL_REMOVE_ITEMS);
     }
 };
 
@@ -69,7 +69,7 @@ export const deleteCart = async (req, res) => {
     const userId = parseInt(req.params.userId, 10);
 
     if (req.user.id !== userId) {
-        return sendErrorResponse(res, 403, HTTP_ERRORS.FORBIDDEN_CART);
+        return sendErrorResponse(res, 403, HTTP_ERRORS.CART.FORBIDDEN);
     }
 
     try {
@@ -77,11 +77,11 @@ export const deleteCart = async (req, res) => {
         await cartsService.deleteCart(userId);
         res.status(204).send();
     } catch (error) {
-        if (error.message === HTTP_ERRORS.NOT_FOUND_CART) {
+        if (error.message === HTTP_ERRORS.CART.NOT_FOUND) {
             return sendErrorResponse(res, 404, error.message);
         }
         console.error("Error deleting cart:", error);
-        sendErrorResponse(res, 500, HTTP_ERRORS.FAIL_DELETE_CART);
+        sendErrorResponse(res, 500, HTTP_ERRORS.CART.FAIL_DELETE);
     }
 };
 
@@ -93,6 +93,6 @@ export const checkoutCart = async (req, res) => {
         res.status(201).json(order);
     } catch (error) {
         console.error("Error checking out cart:", error);
-        sendErrorResponse(res, 500, HTTP_ERRORS.FAIL_CHECKOUT_CART);
+        sendErrorResponse(res, 500, HTTP_ERRORS.CART.FAIL_CHECKOUT);
     }
 };

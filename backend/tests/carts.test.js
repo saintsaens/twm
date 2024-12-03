@@ -16,13 +16,13 @@ describe("getCart", () => {
     test('should return 401 if user getting the cart is not authenticated', async () => {
         const userId = 1;
         isAuthenticated.mockImplementationOnce((req, res, next) => {
-            return sendErrorResponse(res, 401, HTTP_ERRORS.NOT_LOGGED_IN);
+            return sendErrorResponse(res, 401, HTTP_ERRORS.AUTH.NOT_LOGGED_IN);
         });
 
         const res = await request(app).get(`/carts/${userId}`);
 
         expect(res.status).toBe(401);
-        expect(res.body.error).toEqual(HTTP_ERRORS.NOT_LOGGED_IN);
+        expect(res.body.error).toEqual(HTTP_ERRORS.AUTH.NOT_LOGGED_IN);
     });
 
     test('should return 403 if user getting the cart does not own the cart', async () => {
@@ -31,7 +31,7 @@ describe("getCart", () => {
         const res = await request(app).get(`/carts/${userId}`);
 
         expect(res.status).toBe(403);
-        expect(res.body.error).toEqual(HTTP_ERRORS.FORBIDDEN_CART);
+        expect(res.body.error).toEqual(HTTP_ERRORS.CART.FORBIDDEN);
     });
 
     test('should return 404 if user does not exist', async () => {
@@ -44,7 +44,7 @@ describe("getCart", () => {
 
         const res = await request(app).get(`/carts/${userId}`);
         expect(res.status).toBe(404);
-        expect(res.body.error).toEqual(HTTP_ERRORS.NOT_FOUND_CART);
+        expect(res.body.error).toEqual(HTTP_ERRORS.CART.NOT_FOUND);
     });
 
     test('should return empty array if user has no items in cart', async () => {
@@ -108,12 +108,12 @@ describe("getCart", () => {
     });
 
     test('should return 500 if database query fails', async () => {
-        vi.mocked(query).mockRejectedValueOnce(new Error(HTTP_ERRORS.DATABASE_ERROR));
+        vi.mocked(query).mockRejectedValueOnce(new Error(HTTP_ERRORS.GENERAL.DATABASE_ERROR));
 
         const res = await request(app).get('/carts/1');
 
         expect(res.status).toBe(500);
-        expect(res.body).toEqual({ error: HTTP_ERRORS.CART_FAIL });
+        expect(res.body).toEqual({ error: HTTP_ERRORS.CART.CART_FAIL });
     });
 });
 
@@ -121,7 +121,7 @@ describe("addItemsToCart", () => {
     test('should return 401 if user adding to cart is not authenticated', async () => {
         const userId = 1;
         isAuthenticated.mockImplementationOnce((req, res, next) => {
-            return res.status(401).json({ error: HTTP_ERRORS.NOT_LOGGED_IN });
+            return res.status(401).json({ error: HTTP_ERRORS.AUTH.NOT_LOGGED_IN });
         });
         const items = [{ id: 1, quantity: 2 }];
         const res = await request(app)
@@ -129,14 +129,14 @@ describe("addItemsToCart", () => {
             .send({ items });
     
         expect(res.status).toBe(401);
-        expect(res.body.error).toEqual(HTTP_ERRORS.NOT_LOGGED_IN);
+        expect(res.body.error).toEqual(HTTP_ERRORS.AUTH.NOT_LOGGED_IN);
     });
     
     test('should return 403 if user adding to the cart does not own the cart', async () => {
         const userId = 2;
         const res = await request(app).put(`/carts/add/${userId}`);
         expect(res.status).toBe(403);
-        expect(res.body.error).toEqual(HTTP_ERRORS.FORBIDDEN_CART);
+        expect(res.body.error).toEqual(HTTP_ERRORS.CART.FORBIDDEN);
     });
     
     test('should return 400 if items is not an array', async () => {
@@ -146,7 +146,7 @@ describe("addItemsToCart", () => {
             .send({ items: "not an array" });
     
         expect(res.status).toBe(400);
-        expect(res.body.error).toEqual(HTTP_ERRORS.INVALID_DATA);
+        expect(res.body.error).toEqual(HTTP_ERRORS.VALIDATION.INVALID_DATA);
     });
     
     test('should return 400 if item data is invalid', async () => {
@@ -156,9 +156,9 @@ describe("addItemsToCart", () => {
             { id: "1", quantity: "2" } // wrong types
         ];
         const errorMessages = [
-            HTTP_ERRORS.INVALID_ITEM_QUANTITY,
-            HTTP_ERRORS.INVALID_ITEM_ID,
-            HTTP_ERRORS.INVALID_ITEM_FORMATS
+            HTTP_ERRORS.VALIDATION.INVALID_ITEM_QUANTITY,
+            HTTP_ERRORS.VALIDATION.INVALID_ITEM_ID,
+            HTTP_ERRORS.VALIDATION.INVALID_ITEM_FORMATS
         ];
     
         for (let i = 0; i < invalidItems.length; i++) {
@@ -275,7 +275,7 @@ describe("addItemsToCart", () => {
     });
     
     test('should return 500 if database query fails', async () => {
-        vi.mocked(query).mockRejectedValueOnce(new Error(HTTP_ERRORS.DATABASE_ERROR));
+        vi.mocked(query).mockRejectedValueOnce(new Error(HTTP_ERRORS.GENERAL.DATABASE_ERROR));
     
         const res = await request(app)
             .put('/carts/add/1')
@@ -284,7 +284,7 @@ describe("addItemsToCart", () => {
             });
     
         expect(res.status).toBe(500);
-        expect(res.body.error).toBe(HTTP_ERRORS.FAIL_UPDATE_CART);
+        expect(res.body.error).toBe(HTTP_ERRORS.CART.FAIL_UPDATE);
     });
 });
 
@@ -293,7 +293,7 @@ describe("removeItemFromCart", () => {
         const userId = 1;
         const itemId = 1;
         isAuthenticated.mockImplementationOnce((req, res, next) => {
-            return res.status(401).json({ error: HTTP_ERRORS.NOT_LOGGED_IN });
+            return res.status(401).json({ error: HTTP_ERRORS.AUTH.NOT_LOGGED_IN });
         });
     
         const res = await request(app)
@@ -301,7 +301,7 @@ describe("removeItemFromCart", () => {
             .send({ itemId });
     
         expect(res.status).toBe(401);
-        expect(res.body.error).toEqual(HTTP_ERRORS.NOT_LOGGED_IN);
+        expect(res.body.error).toEqual(HTTP_ERRORS.AUTH.NOT_LOGGED_IN);
     });
     
     test('should return 403 if user tries to remove from another user\'s cart', async () => {
@@ -313,7 +313,7 @@ describe("removeItemFromCart", () => {
             .send({ itemId });
     
         expect(res.status).toBe(403);
-        expect(res.body.error).toEqual(HTTP_ERRORS.FORBIDDEN_CART);
+        expect(res.body.error).toEqual(HTTP_ERRORS.CART.FORBIDDEN);
     });
     
     test('should successfully remove an item from cart and return updated cart', async () => {
@@ -364,7 +364,7 @@ describe("removeItemFromCart", () => {
             .send({});
     
         expect(res.status).toBe(400);
-        expect(res.body.error).toEqual(HTTP_ERRORS.ITEM_ID_REQUIRED);
+        expect(res.body.error).toEqual(HTTP_ERRORS.VALIDATION.ITEM_ID_REQUIRED);
     });
     
     test('should return 400 if itemId is invalid', async () => {
@@ -373,18 +373,18 @@ describe("removeItemFromCart", () => {
             .send({ itemId: 'invalid' });
     
         expect(res.status).toBe(400);
-        expect(res.body.error).toEqual(HTTP_ERRORS.INVALID_ITEM_ID_FORMAT);
+        expect(res.body.error).toEqual(HTTP_ERRORS.VALIDATION.INVALID_ITEM_ID_FORMAT);
     });
     
     test('should return 500 if database query fails', async () => {
-        vi.mocked(query).mockRejectedValueOnce(new Error(HTTP_ERRORS.DATABASE_ERROR));
+        vi.mocked(query).mockRejectedValueOnce(new Error(HTTP_ERRORS.GENERAL.DATABASE_ERROR));
     
         const res = await request(app)
             .put('/carts/remove/1')
             .send({ itemId: 1 });
     
         expect(res.status).toBe(500);
-        expect(res.body.error).toBe(HTTP_ERRORS.FAIL_REMOVE_ITEMS);
+        expect(res.body.error).toBe(HTTP_ERRORS.CART.FAIL_REMOVE_ITEMS);
     });
     
     test('should handle non-existent item removal gracefully', async () => {
@@ -418,14 +418,14 @@ describe("deleteCart", () => {
     test('should return 401 if user deleting cart is not authenticated', async () => {
         const userId = 1;
         isAuthenticated.mockImplementationOnce((req, res, next) => {
-            return res.status(401).json({ error: HTTP_ERRORS.NOT_LOGGED_IN });
+            return res.status(401).json({ error: HTTP_ERRORS.AUTH.NOT_LOGGED_IN });
         });
     
         const res = await request(app)
             .delete(`/carts/${userId}`);
     
         expect(res.status).toBe(401);
-        expect(res.body.error).toEqual(HTTP_ERRORS.NOT_LOGGED_IN);
+        expect(res.body.error).toEqual(HTTP_ERRORS.AUTH.NOT_LOGGED_IN);
     });
     
     test('should return 403 if user tries to delete another user\'s cart', async () => {
@@ -435,7 +435,7 @@ describe("deleteCart", () => {
             .delete(`/carts/${userId}`);
     
         expect(res.status).toBe(403);
-        expect(res.body.error).toEqual(HTTP_ERRORS.FORBIDDEN_CART);
+        expect(res.body.error).toEqual(HTTP_ERRORS.CART.FORBIDDEN);
     });
     
     test('should successfully delete a non-empty cart', async () => {
@@ -461,16 +461,16 @@ describe("deleteCart", () => {
             .delete('/carts/1');
     
         expect(res.status).toBe(404);
-        expect(res.body.error).toBe(HTTP_ERRORS.NOT_FOUND_CART);
+        expect(res.body.error).toBe(HTTP_ERRORS.CART.NOT_FOUND);
     });
     
     test('should return 500 if database query fails', async () => {
-        vi.mocked(query).mockRejectedValueOnce(new Error(HTTP_ERRORS.DATABASE_ERROR));
+        vi.mocked(query).mockRejectedValueOnce(new Error(HTTP_ERRORS.GENERAL.DATABASE_ERROR));
     
         const res = await request(app)
             .delete('/carts/1');
     
         expect(res.status).toBe(500);
-        expect(res.body.error).toBe(HTTP_ERRORS.FAIL_DELETE_CART);
+        expect(res.body.error).toBe(HTTP_ERRORS.CART.FAIL_DELETE);
     });
 });

@@ -33,7 +33,7 @@ describe("signup", () => {
 
         expect(missingPasswordRes.status).toBe(400);
         expect(missingPasswordRes.body).toEqual({
-            error: HTTP_ERRORS.MISSING_FIELDS,
+            error: HTTP_ERRORS.VALIDATION.MISSING_FIELDS,
         });
 
         const missingUsernameRes = await request(app)
@@ -42,7 +42,7 @@ describe("signup", () => {
 
         expect(missingUsernameRes.status).toBe(400);
         expect(missingUsernameRes.body).toEqual({
-            error: HTTP_ERRORS.MISSING_FIELDS,
+            error: HTTP_ERRORS.VALIDATION.MISSING_FIELDS,
         });
     });
 
@@ -50,7 +50,7 @@ describe("signup", () => {
         const username = 'existinguser';
         const password = 'password123';
 
-        vi.spyOn(authService, 'registerUser').mockRejectedValueOnce(new Error(HTTP_ERRORS.USERNAME_EXISTS));
+        vi.spyOn(authService, 'registerUser').mockRejectedValueOnce(new Error(HTTP_ERRORS.GENERAL.USERNAME_EXISTS));
 
         const res = await request(app)
             .post('/signup')
@@ -58,7 +58,7 @@ describe("signup", () => {
 
         expect(res.status).toBe(409);
         expect(res.body).toEqual({
-            error: HTTP_ERRORS.USERNAME_EXISTS,
+            error: HTTP_ERRORS.GENERAL.USERNAME_EXISTS,
         });
     });
 

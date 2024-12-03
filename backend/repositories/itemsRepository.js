@@ -60,7 +60,7 @@ const deleteItem = async (id) => {
     const query = "DELETE FROM items WHERE id = $1 RETURNING *;";
     const result = await db.query(query, [id]);
     if (!result || !result.rows || result.rows.length === 0) {
-        throw new Error(HTTP_ERRORS.FAIL_DELETE_ITEM);
+        throw new Error(HTTP_ERRORS.ITEM.FAIL_DELETE);
     }
     return result.rows[0];
 };
