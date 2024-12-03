@@ -3,7 +3,6 @@ import express from 'express';
 import ordersRouter from '../routes/orders.js';
 import { query } from '../db/index.js';
 import request from 'supertest';
-import passport from "passport";
 import { isAuthenticated } from "../middleware/authMiddleware.js";
 import { HTTP_ERRORS, sendErrorResponse } from "../controllers/errors.js";
 
@@ -53,7 +52,7 @@ test('should return 401 if user creating the order is not authenticated', async 
         ],
         nickname: "ugly-muck"
     };
-    isAuthenticated.mockImplementationOnce((req, res, next) => {
+    isAuthenticated.mockImplementationOnce((req, res) => {
         return sendErrorResponse(res, 401, HTTP_ERRORS.AUTH.NOT_LOGGED_IN);
     });
 
@@ -104,7 +103,7 @@ test('should return 400 if user does not exist when creating order', async () =>
     });
     vi.mocked(query).mockResolvedValueOnce({ rows: [] }); // Simulate no user found
 
-    const res = await request(app).post('/orders/999').send(newOrder);
+    const res = await request(app).post(`/orders/${userId}`).send(newOrder);
 
     expect(res.status).toBe(400);
     expect(res.body.error).toEqual(HTTP_ERRORS.VALIDATION.INVALID_USER_ID);
@@ -129,20 +128,6 @@ test('should return 201 if user successfully creates order', async () => {
         total_price: "6400.00",
         created_at: testDate,  // Use the fixed date
         nickname: "ugly-muck"
-    };
-
-    const expectedResponse = {
-        order: {
-            id: 1,
-            user_id: 1,
-            total_price: "6400.00",
-            created_at: testDate,  // Use the fixed date
-            nickname: "ugly-muck"
-        },
-        items: [
-            { item_id: 1, quantity: 2 },
-            { item_id: 2, quantity: 1 }
-        ]
     };
 
     const queryMock = vi.mocked(query);
@@ -171,7 +156,7 @@ test('should return 201 if user successfully creates order', async () => {
 // Tests for getOrders
 test('should return 401 if user getting all orders is not authenticated', async () => {
     const userId = 1;
-    isAuthenticated.mockImplementationOnce((req, res, next) => {
+    isAuthenticated.mockImplementationOnce((req, res) => {
         return sendErrorResponse(res, 401, HTTP_ERRORS.AUTH.NOT_LOGGED_IN);
     });
 
@@ -218,7 +203,7 @@ test('should return all orders for an authenticated user', async () => {
 // Tests for getOrder
 test('should return 401 if user getting the order is not authenticated', async () => {
     const orderId = 1;
-    isAuthenticated.mockImplementationOnce((req, res, next) => {
+    isAuthenticated.mockImplementationOnce((req, res) => {
         return sendErrorResponse(res, 401, HTTP_ERRORS.AUTH.NOT_LOGGED_IN);
     });
 

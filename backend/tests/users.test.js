@@ -36,7 +36,7 @@ test('should return all users if connected user is admin', async () => {
 });
 
 test('should return a 401 if an unauthenticated user tries to list all users', async () => {
-  isAuthenticated.mockImplementationOnce((req, res, next) => {
+  isAuthenticated.mockImplementationOnce((req, res) => {
     return sendErrorResponse(res, 401, HTTP_ERRORS.AUTH.NOT_LOGGED_IN);
   });
   vi.mocked(query).mockResolvedValue({ rows: mockUsers });
@@ -48,7 +48,7 @@ test('should return a 401 if an unauthenticated user tries to list all users', a
 });
 
 test('should return a 403 if a non-admin tries to list all users', async () => {
-  isAdmin.mockImplementationOnce((req, res, next) => {
+  isAdmin.mockImplementationOnce((req, res) => {
     return sendErrorResponse(res, 403, HTTP_ERRORS.AUTH.ADMINS_ONLY);
   });
   vi.mocked(query).mockResolvedValue({ rows: mockUsers });
@@ -81,7 +81,7 @@ test('should return a 403 if an authenticated user tries to access another user'
 });
 
 test('should return a 401 if unauthenticated user tries to access any user', async () => {
-  isAuthenticated.mockImplementationOnce((req, res, next) => {
+  isAuthenticated.mockImplementationOnce((req, res) => {
     return sendErrorResponse(res, 401, HTTP_ERRORS.AUTH.NOT_LOGGED_IN);
   });
   const user = mockUsers[0];
@@ -132,7 +132,7 @@ test('should return a 403 if requester is not admin and tries to update user', a
     password: 'newpassword',
   };
   const user = mockUsers[0];
-  isAdmin.mockImplementationOnce((req, res, next) => {
+  isAdmin.mockImplementationOnce((req, res) => {
     return sendErrorResponse(res, 403, HTTP_ERRORS.AUTH.ADMINS_ONLY);
   });
   const mockedHashedPassword = 'newhashedpassword';
@@ -179,7 +179,7 @@ test('should delete a user by ID and user is admin', async () => {
 test('should delete a user by ID and user is not admin', async () => {
   const user = mockUsers[0];
   vi.mocked(query).mockResolvedValue({ rows: [user] });
-  isAdmin.mockImplementationOnce((req, res, next) => {
+  isAdmin.mockImplementationOnce((req, res) => {
     return sendErrorResponse(res, 403, HTTP_ERRORS.AUTH.ADMINS_ONLY);
   });
 

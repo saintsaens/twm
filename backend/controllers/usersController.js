@@ -5,7 +5,7 @@ export const getAllUsers = async (req, res) => {
   try {
     const users = await usersService.getAllUsers();
     res.json(users);
-  } catch (error) {
+  } catch {
     sendErrorResponse(res, 500, HTTP_ERRORS.USERS.FAIL_RETRIEVE);
   }
 };

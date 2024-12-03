@@ -3,7 +3,7 @@ import * as authService from "../services/authService.js";
 import { sendErrorResponse, HTTP_ERRORS } from "./errors.js";
 
 export const login = (req, res, next) => {
-    passport.authenticate('local', (err, user, info) => {
+    passport.authenticate('local', (err, user) => {
         if (err) return next(err);
         if (!user) return sendErrorResponse(res, 401, HTTP_ERRORS.AUTH.INVALID_CREDENTIALS);
 

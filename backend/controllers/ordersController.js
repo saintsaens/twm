@@ -38,7 +38,7 @@ export const getOrdersByUser = async (req, res) => {
 
         const orders = await ordersService.getOrdersByUser(userId);
         res.json(orders);
-    } catch (error) {
+    } catch {
         return sendErrorResponse(res, 500, HTTP_ERRORS.ORDERS.FAIL_RETRIEVE);
     }
 };
