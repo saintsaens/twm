@@ -1,5 +1,4 @@
 import { test, expect, vi } from 'vitest';
-import passport from "passport";
 import express from 'express';
 import usersRouter from '../routes/users.js';
 import { query } from '../db/index.js';

@@ -20,7 +20,6 @@ export const createOrder = async (req, res) => {
         if (error.message === HTTP_ERRORS.VALIDATION.INVALID_USER_ID) {
             return sendErrorResponse(res, 400, HTTP_ERRORS.VALIDATION.INVALID_USER_ID);
         }
-        console.error('Error creating order:', error);
         return sendErrorResponse(res, 500, HTTP_ERRORS.ORDERS.FAIL_CREATE);
     }
 };

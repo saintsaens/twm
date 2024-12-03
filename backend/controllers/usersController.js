@@ -6,7 +6,6 @@ export const getAllUsers = async (req, res) => {
     const users = await usersService.getAllUsers();
     res.json(users);
   } catch (error) {
-    console.error('Error retrieving users:', error);
     sendErrorResponse(res, 500, HTTP_ERRORS.USERS.FAIL_RETRIEVE);
   }
 };
@@ -55,7 +54,6 @@ export const deleteUser = async (req, res) => {
     if (error.message === HTTP_ERRORS.USERS.NOT_FOUND) {
       return sendErrorResponse(res, 404, HTTP_ERRORS.USERS.NOT_FOUND);
     }
-    console.error('Error deleting user:', error);
     return sendErrorResponse(res, 500, HTTP_ERRORS.USERS.FAIL_DELETE);
   }
 };
