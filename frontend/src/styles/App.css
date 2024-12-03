@@ -76,3 +76,9 @@ main {
 .fr-search-bar {
     margin-left: 60%;
 }
+
+table#table-md {
+    table-layout: fixed;
+    width: 100%;
+    /* Ensures the table spans the container's width */
+}
