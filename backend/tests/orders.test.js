@@ -5,6 +5,7 @@ import { query } from '../db/index.js';
 import request from 'supertest';
 import passport from "passport";
 import { isAuthenticated } from "../middleware/authMiddleware.js";
+import { HTTP_ERRORS, sendErrorResponse } from "../controllers/errors.js";
 
 // Mock Express app
 const app = express();
@@ -53,13 +54,13 @@ test('should return 401 if user creating the order is not authenticated', async 
         nickname: "ugly-muck"
     };
     isAuthenticated.mockImplementationOnce((req, res, next) => {
-        return res.status(401).json({ error: 'Unauthorized. You need to be logged in.' });
+        return sendErrorResponse(res, 401, HTTP_ERRORS.AUTH.NOT_LOGGED_IN);
     });
 
     const res = await request(app).post('/orders/1').send(newOrder);
 
     expect(res.status).toBe(401);
-    expect(res.body.error).toEqual("Unauthorized. You need to be logged in.");
+    expect(res.body.error).toEqual(HTTP_ERRORS.AUTH.NOT_LOGGED_IN);
 });
 
 test('should return 403 if user is creating order for another user', async () => {
@@ -76,7 +77,7 @@ test('should return 403 if user is creating order for another user', async () =>
     const res = await request(app).post(`/orders/${userId}`).send(newOrder);
 
     expect(res.status).toBe(403);
-    expect(res.body.error).toEqual("Forbidden. You can only create an order for yourself.");
+    expect(res.body.error).toEqual(HTTP_ERRORS.ORDERS.FORBIDDEN);
 });
 
 test('should return 400 if required fields are missing when creating order', async () => {
@@ -85,7 +86,7 @@ test('should return 400 if required fields are missing when creating order', asy
     const res = await request(app).post('/orders/1').send(incompleteOrder);
 
     expect(res.status).toBe(400);
-    expect(res.body).toEqual({ error: 'Missing required fields or items' });
+    expect(res.body.error).toEqual(HTTP_ERRORS.VALIDATION.MISSING_FIELDS);
 });
 
 test('should return 400 if user does not exist when creating order', async () => {
@@ -106,7 +107,7 @@ test('should return 400 if user does not exist when creating order', async () =>
     const res = await request(app).post('/orders/999').send(newOrder);
 
     expect(res.status).toBe(400);
-    expect(res.body).toEqual({ error: 'Invalid user_id' });
+    expect(res.body.error).toEqual(HTTP_ERRORS.VALIDATION.INVALID_USER_ID);
 });
 
 test('should return 201 if user successfully creates order', async () => {
@@ -171,13 +172,13 @@ test('should return 201 if user successfully creates order', async () => {
 test('should return 401 if user getting all orders is not authenticated', async () => {
     const userId = 1;
     isAuthenticated.mockImplementationOnce((req, res, next) => {
-        return res.status(401).json({ error: 'Unauthorized. You need to be logged in.' });
+        return sendErrorResponse(res, 401, HTTP_ERRORS.AUTH.NOT_LOGGED_IN);
     });
 
     const res = await request(app).get(`/orders?user=${userId}`);
 
     expect(res.status).toBe(401);
-    expect(res.body.error).toEqual("Unauthorized. You need to be logged in.");
+    expect(res.body.error).toEqual(HTTP_ERRORS.AUTH.NOT_LOGGED_IN);
 });
 
 test('should return 403 if connected user is not the user for the orders', async () => {
@@ -186,7 +187,7 @@ test('should return 403 if connected user is not the user for the orders', async
     const res = await request(app).get(`/orders?user=${userId}`);
 
     expect(res.status).toBe(403);
-    expect(res.body.error).toEqual("Forbidden. You can only get your own orders.");
+    expect(res.body.error).toEqual(HTTP_ERRORS.ORDERS.NOT_FOUND);
 });
 
 test('should return 400 if user for the orders does not exist', async () => {
@@ -200,7 +201,7 @@ test('should return 400 if user for the orders does not exist', async () => {
     const res = await request(app).get(`/orders?user=${userId}`);
 
     expect(res.status).toBe(400);
-    expect(res.body.error).toEqual("User does not exist");
+    expect(res.body.error).toEqual(HTTP_ERRORS.USERS.NOT_FOUND);
 });
 
 test('should return all orders for an authenticated user', async () => {
@@ -218,13 +219,13 @@ test('should return all orders for an authenticated user', async () => {
 test('should return 401 if user getting the order is not authenticated', async () => {
     const orderId = 1;
     isAuthenticated.mockImplementationOnce((req, res, next) => {
-        return res.status(401).json({ error: 'Unauthorized. You need to be logged in.' });
+        return sendErrorResponse(res, 401, HTTP_ERRORS.AUTH.NOT_LOGGED_IN);
     });
 
     const res = await request(app).get(`/orders/${orderId}`);
 
     expect(res.status).toBe(401);
-    expect(res.body.error).toEqual("Unauthorized. You need to be logged in.");
+    expect(res.body.error).toEqual(HTTP_ERRORS.AUTH.NOT_LOGGED_IN);
 });
 
 test('should return 404 if user tries to access an order not from them', async () => {
@@ -236,7 +237,7 @@ test('should return 404 if user tries to access an order not from them', async (
     const res = await request(app).get(`/orders/${orderId}`);
 
     expect(res.status).toBe(404);
-    expect(res.body.error).toEqual("Order not found or forbidden");
+    expect(res.body.error).toEqual(HTTP_ERRORS.ORDERS.NOT_FOUND);
 });
 
 test('should return 404 if order not found by ID', async () => {
@@ -246,7 +247,7 @@ test('should return 404 if order not found by ID', async () => {
     const res = await request(app).get(`/orders/${nonExistentOrderId}`);
 
     expect(res.status).toBe(404);
-    expect(res.body).toEqual({ error: 'Order not found or forbidden' });
+    expect(res.body.error).toEqual(HTTP_ERRORS.ORDERS.NOT_FOUND);
 });
 
 test('should return a specific order by ID', async () => {
@@ -268,5 +269,5 @@ test('should return 500 if there is a database error', async () => {
     const res = await request(app).get('/orders?user=1');
 
     expect(res.status).toBe(500);
-    expect(res.body).toEqual({ error: 'Failed to retrieve orders' });
+    expect(res.body.error).toEqual(HTTP_ERRORS.ORDERS.FAIL_RETRIEVE);
 });

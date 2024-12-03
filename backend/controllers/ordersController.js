@@ -1,5 +1,7 @@
 import * as ordersService from '../services/ordersService.js';
-import * as usersRepository from "../repositories/usersRepository.js"
+import * as usersRepository from "../repositories/usersRepository.js";
+import { sendErrorResponse } from "./errors.js";
+import { HTTP_ERRORS } from "./errors.js";
 
 export const createOrder = async (req, res) => {
     const userId = parseInt(req.params.userId);
@@ -7,39 +9,38 @@ export const createOrder = async (req, res) => {
 
     try {
         if (req.user.id !== userId) {
-            return res.status(403).json({ error: 'Forbidden. You can only create an order for yourself.' });
+            return sendErrorResponse(res, 403, HTTP_ERRORS.ORDERS.FORBIDDEN);
         }
         const order = await ordersService.createOrder(userId, totalPrice, items, nickname);
         res.status(201).json(order);
     } catch (error) {
-        if (error.message === 'MISSING_FIELDS') {
-            return res.status(400).json({ error: 'Missing required fields or items' });
+        if (error.message === HTTP_ERRORS.VALIDATION.MISSING_FIELDS) {
+            return sendErrorResponse(res, 400, HTTP_ERRORS.VALIDATION.MISSING_FIELDS);
         }
-        if (error.message === 'INVALID_USER') {
-            return res.status(400).json({ error: 'Invalid user_id' });
+        if (error.message === HTTP_ERRORS.VALIDATION.INVALID_USER_ID) {
+            return sendErrorResponse(res, 400, HTTP_ERRORS.VALIDATION.INVALID_USER_ID);
         }
         console.error('Error creating order:', error);
-        res.status(500).json({ error: 'Failed to create order' });
+        return sendErrorResponse(res, 500, HTTP_ERRORS.ORDERS.FAIL_CREATE);
     }
 };
 
 export const getOrdersByUser = async (req, res) => {
     const userId = req.query.user;
-    
+
     try {
         if (req.user.id != userId) {
-            return res.status(403).json({ error: 'Forbidden. You can only get your own orders.' });
+            return sendErrorResponse(res, 403, HTTP_ERRORS.ORDERS.NOT_FOUND);
         }
         const userCheck = await usersRepository.getUserById(userId);
         if (userCheck.rows.length === 0) {
-            res.status(400).json({ error: 'User does not exist' });
+            return sendErrorResponse(res, 400, HTTP_ERRORS.USERS.NOT_FOUND);
         }
 
         const orders = await ordersService.getOrdersByUser(userId);
         res.json(orders);
     } catch (error) {
-        console.error('Error retrieving orders:', error);
-        res.status(500).json({ error: 'Failed to retrieve orders' });
+        return sendErrorResponse(res, 500, HTTP_ERRORS.ORDERS.FAIL_RETRIEVE);
     }
 };
 
@@ -50,10 +51,9 @@ export const getOrderDetails = async (req, res) => {
         const items = await ordersService.getOrderDetails(orderId, req.user.id);
         res.json(items);
     } catch (error) {
-        if (error.message === 'NOT_FOUND_OR_FORBIDDEN') {
-            return res.status(404).json({ error: 'Order not found or forbidden' });
+        if (error.message === HTTP_ERRORS.ORDERS.NOT_FOUND) {
+            return sendErrorResponse(res, 404, HTTP_ERRORS.ORDERS.NOT_FOUND);
         }
-        console.error('Error retrieving order:', error);
-        res.status(500).json({ error: 'Failed to retrieve order' });
+        return sendErrorResponse(res, 500, HTTP_ERRORS.ORDERS.FAIL_RETRIEVE);
     }
 };

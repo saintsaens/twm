@@ -1,4 +1,5 @@
 import * as usersService from '../services/usersService.js';
+import { HTTP_ERRORS, sendErrorResponse } from "./errors.js";
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -6,7 +7,7 @@ export const getAllUsers = async (req, res) => {
     res.json(users);
   } catch (error) {
     console.error('Error retrieving users:', error);
-    res.status(500).json({ error: 'Failed to retrieve users' });
+    sendErrorResponse(res, 500, HTTP_ERRORS.USERS.FAIL_RETRIEVE);
   }
 };
 
@@ -17,14 +18,13 @@ export const getUserById = async (req, res) => {
     const user = await usersService.getUserById(id, req.user.id);
     res.json(user);
   } catch (error) {
-    if (error.message === 'FORBIDDEN') {
-      return res.status(403).json({ error: 'Forbidden. You can only access your own data.' });
+    if (error.message === HTTP_ERRORS.USERS.FORBIDDEN) {
+      return sendErrorResponse(res, 403, HTTP_ERRORS.USERS.FORBIDDEN);
     }
-    if (error.message === 'NOT_FOUND') {
-      return res.status(404).send('User not found');
+    if (error.message === HTTP_ERRORS.USERS.NOT_FOUND) {
+      return sendErrorResponse(res, 404, HTTP_ERRORS.USERS.NOT_FOUND);
     }
-    console.error('Error retrieving user:', error);
-    res.status(500).json({ error: 'Failed to retrieve user' });
+    return sendErrorResponse(res, 500, HTTP_ERRORS.USERS.FAIL_RETRIEVE);
   }
 };
 
@@ -35,14 +35,13 @@ export const updateUser = async (req, res) => {
     const updatedUser = await usersService.updateUser(id, req.body);
     res.json(updatedUser);
   } catch (error) {
-    if (error.message === 'NO_FIELDS') {
-      return res.status(400).json({ error: 'No fields to update' });
+    if (error.message === HTTP_ERRORS.USERS.NO_UPDATE) {
+      return sendErrorResponse(res, 400, HTTP_ERRORS.USERS.NO_UPDATE);
     }
-    if (error.message === 'NOT_FOUND') {
-      return res.status(404).send('User not found');
+    if (error.message === HTTP_ERRORS.USERS.NOT_FOUND) {
+      return sendErrorResponse(res, 404, HTTP_ERRORS.USERS.NOT_FOUND);
     }
-    console.error('Error updating user:', error);
-    res.status(500).json({ error: 'Failed to update user' });
+    return sendErrorResponse(res, 500, HTTP_ERRORS.USERS.FAIL_UPDATE);
   }
 };
 
@@ -53,10 +52,10 @@ export const deleteUser = async (req, res) => {
     await usersService.deleteUser(id);
     res.status(204).send();
   } catch (error) {
-    if (error.message === 'NOT_FOUND') {
-      return res.status(404).send('User not found');
+    if (error.message === HTTP_ERRORS.USERS.NOT_FOUND) {
+      return sendErrorResponse(res, 404, HTTP_ERRORS.USERS.NOT_FOUND);
     }
     console.error('Error deleting user:', error);
-    res.status(500).json({ error: 'Failed to delete user' });
+    return sendErrorResponse(res, 500, HTTP_ERRORS.USERS.FAIL_DELETE);
   }
 };

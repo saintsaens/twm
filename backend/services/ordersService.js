@@ -1,3 +1,4 @@
+import { HTTP_ERRORS } from "../controllers/errors.js";
 import * as ordersRepository from '../repositories/ordersRepository.js';
 import * as usersRepository from "../repositories/usersRepository.js"
 
@@ -5,12 +6,12 @@ export const createOrder = async (userId, totalPrice, items, nickname) => {
   const createdAt = new Date().toISOString();
 
   if (!totalPrice || !nickname || !items || items.length === 0) {
-    throw new Error('MISSING_FIELDS');
+    throw new Error(HTTP_ERRORS.VALIDATION.MISSING_FIELDS);
   }
 
   const userCheck = await usersRepository.getUserById(userId);
   if (userCheck.rows.length === 0) {
-    throw new Error('INVALID_USER');
+    throw new Error(HTTP_ERRORS.VALIDATION.INVALID_USER_ID);
   }
 
   const order = await ordersRepository.insertOrder(userId, totalPrice, createdAt, nickname);
@@ -29,7 +30,7 @@ export const getOrdersByUser = async (userId) => {
 export const getOrderDetails = async (orderId, userId) => {
   const orderCheck = await ordersRepository.getOrderById(orderId);
   if (orderCheck.rows.length === 0 || orderCheck.rows[0].user_id !== userId) {
-    throw new Error('NOT_FOUND_OR_FORBIDDEN');
+    throw new Error(HTTP_ERRORS.ORDERS.NOT_FOUND);
   }
 
   const items = await ordersRepository.getOrderItems(orderId);
