@@ -1,4 +1,4 @@
-import { beforeAll, vi } from 'vitest';
+import { beforeAll, afterAll, vi } from 'vitest';
 
 // Mock the db to prevent real database connections during tests
 vi.mock('../db/index.js', () => {
