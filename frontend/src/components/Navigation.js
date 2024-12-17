@@ -23,7 +23,7 @@ function Navigation() {
   return (
     <nav className="fr-header__tools-links">
       <ul className="fr-btns-group">
-      {navLinks.map(link => (
+        {navLinks.map(link => (
           <li key={link.path}>
             <Link to={link.path} className={link.icon}>{link.label}</Link>
           </li>
