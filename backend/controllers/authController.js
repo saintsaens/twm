@@ -52,6 +52,6 @@ export const getUserProfile = (req, res) => {
             username: req.user.username,
         });
     } else {
-        sendErrorResponse(res, 401, "Not logged in");
+        sendErrorResponse(res, 401, HTTP_ERRORS.AUTH.NOT_LOGGED_IN);
     }
 };
