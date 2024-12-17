@@ -453,17 +453,7 @@ describe("deleteCart", () => {
         expect(res.status).toBe(204);
         expect(res.body).toEqual({});
     });
-    
-    test('should return 404 when trying to delete an empty cart', async () => {
-        vi.mocked(query).mockResolvedValueOnce({ rows: [] });
-    
-        const res = await request(app)
-            .delete('/carts/1');
-    
-        expect(res.status).toBe(404);
-        expect(res.body.error).toBe(HTTP_ERRORS.CART.NOT_FOUND);
-    });
-    
+        
     test('should return 500 if database query fails', async () => {
         vi.mocked(query).mockRejectedValueOnce(new Error(HTTP_ERRORS.GENERAL.DATABASE_ERROR));
     

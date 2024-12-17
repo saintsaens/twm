@@ -73,13 +73,9 @@ export const deleteCart = async (req, res) => {
     }
 
     try {
-        await cartsService.getCart(userId);
         await cartsService.deleteCart(userId);
         res.status(204).send();
     } catch (error) {
-        if (error.message === HTTP_ERRORS.CART.NOT_FOUND) {
-            return sendErrorResponse(res, 404, error.message);
-        }
         console.error("Error deleting cart:", error);
         sendErrorResponse(res, 500, HTTP_ERRORS.CART.FAIL_DELETE);
     }
