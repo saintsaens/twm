@@ -46,6 +46,7 @@ export const HTTP_ERRORS = {
     GENERAL: {
         USERNAME_EXISTS: "Username already exists.",
         DATABASE_ERROR: "Database error.",
+        NO_CONTENT: "No content."
     },
 };
 
