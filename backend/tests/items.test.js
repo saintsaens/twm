@@ -31,12 +31,6 @@ const mockItems = [
   },
 ];
 
-// Mock authenticated user middleware
-const mockUser = (role) => (req, res, next) => {
-  req.user = { role };
-  next();
-};
-
 describe("getItems", () => {
   test('should return all items', async () => {
     vi.mocked(query).mockResolvedValue({ rows: mockItems });
@@ -141,7 +135,7 @@ describe("createItem", () => {
     };
     const createdItem = { ...newItem, id: 3 };
     vi.mocked(query).mockResolvedValue({ rows: [createdItem] });
-    isAdmin.mockImplementationOnce((req, res, next) => {
+    isAdmin.mockImplementationOnce((req, res) => {
       return res.status(403).json({ error: 'Access denied: Admins only' });
     });
 
@@ -201,7 +195,7 @@ describe("updateItem", () => {
   test('should return 403 if the user is not an admin and tries to delete an item', async () => {
     const item = mockItems[0];
     vi.mocked(query).mockResolvedValue({ rows: [item] });
-    isAdmin.mockImplementationOnce((req, res, next) => {
+    isAdmin.mockImplementationOnce((req, res) => {
       return res.status(403).json({ error: 'Access denied: Admins only' });
     });
 

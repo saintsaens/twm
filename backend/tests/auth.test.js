@@ -11,20 +11,6 @@ const app = express();
 app.use(express.json());
 app.use('/', authRouter);
 
-// Mock data
-const mockUsers = [
-    {
-        id: 1,
-        username: 'johndoe',
-        hashed_pw: 'hashedpassword1',
-    },
-    {
-        id: 2,
-        username: 'janedoe',
-        hashed_pw: 'hashedpassword2',
-    },
-];
-
 describe("signup", () => {
     test('should return 400 when required fields are missing', async () => {
         const missingPasswordRes = await request(app)

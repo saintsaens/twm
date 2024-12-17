@@ -3,7 +3,6 @@ import express from 'express';
 import cartsRouter from '../routes/carts.js';
 import { query } from '../db/index.js';
 import request from 'supertest';
-import passport from "passport";
 import { isAuthenticated } from '../middleware/authMiddleware.js';
 import { HTTP_ERRORS, sendErrorResponse } from "../controllers/errors.js";
 
@@ -15,7 +14,7 @@ app.use('/carts', cartsRouter);
 describe("getCart", () => {
     test('should return 401 if user getting the cart is not authenticated', async () => {
         const userId = 1;
-        isAuthenticated.mockImplementationOnce((req, res, next) => {
+        isAuthenticated.mockImplementationOnce((req, res) => {
             return sendErrorResponse(res, 401, HTTP_ERRORS.AUTH.NOT_LOGGED_IN);
         });
 
@@ -120,7 +119,7 @@ describe("getCart", () => {
 describe("addItemsToCart", () => {
     test('should return 401 if user adding to cart is not authenticated', async () => {
         const userId = 1;
-        isAuthenticated.mockImplementationOnce((req, res, next) => {
+        isAuthenticated.mockImplementationOnce((req, res) => {
             return res.status(401).json({ error: HTTP_ERRORS.AUTH.NOT_LOGGED_IN });
         });
         const items = [{ id: 1, quantity: 2 }];
@@ -292,7 +291,7 @@ describe("removeItemFromCart", () => {
     test('should return 401 if user removing from cart is not authenticated', async () => {
         const userId = 1;
         const itemId = 1;
-        isAuthenticated.mockImplementationOnce((req, res, next) => {
+        isAuthenticated.mockImplementationOnce((req, res) => {
             return res.status(401).json({ error: HTTP_ERRORS.AUTH.NOT_LOGGED_IN });
         });
     
@@ -417,7 +416,7 @@ describe("removeItemFromCart", () => {
 describe("deleteCart", () => {
     test('should return 401 if user deleting cart is not authenticated', async () => {
         const userId = 1;
-        isAuthenticated.mockImplementationOnce((req, res, next) => {
+        isAuthenticated.mockImplementationOnce((req, res) => {
             return res.status(401).json({ error: HTTP_ERRORS.AUTH.NOT_LOGGED_IN });
         });
     
