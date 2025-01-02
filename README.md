@@ -1,6 +1,6 @@
-# TWM
+The Witcher Marketplace (TWM) is a portfolio project using the [PERN stack](https://www.geeksforgeeks.org/what-is-pern-stack/), and the [French State Design System](https://www.systeme-de-design.gouv.fr/).
 
-This is a portfolio project built with a React frontend and an Express.js backend. Follow the instructions below to set up and run the app in your local environment.
+You can access my public implementation [here](https://twm-frontend.onrender.com/), or follow the instructions below to set up and run the app in your local environment.
 
 ## Contents
 1. [Prerequisites](#prerequisites)
